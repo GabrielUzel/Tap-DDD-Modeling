@@ -1,8 +1,8 @@
 import { Uuid } from "../../shared/uuid";
-import { AggregateRoot } from "../../shared/aggregate-root.abstract";
+import { Entity } from "../../shared/entity.abstract";
 import { SaleItem } from "../value-objects/sale-item.value";
 
-export class Sale extends AggregateRoot {
+export class Sale extends Entity {
   private operatorId: Uuid;
   private catalogId: Uuid;
   private operationId: Uuid;

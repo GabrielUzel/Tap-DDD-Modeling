@@ -1,7 +1,7 @@
 import { Uuid } from "../../shared/uuid";
 import { Seller } from "../aggregrates/seller.aggregate";
 import { Operation } from "../aggregrates/operation.aggregate";
-import { Sale } from "../aggregrates/sale.aggregate";
+import { Sale } from "../entities/sale.entity";
 import { Catalog } from "../entities/catalog.entity";
 import { Email } from "../value-objects/email.value";
 import type { Role } from "../value-objects/role.value";
