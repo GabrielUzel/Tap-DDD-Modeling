@@ -4,13 +4,14 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/uuid": "^8.3.4"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "uuid": "^11.1.0",
-    "uuid-validate": "^0.0.3"
+    "uuid": "^9.0.1",
+    "uuid-validate": "latest"
   }
 }

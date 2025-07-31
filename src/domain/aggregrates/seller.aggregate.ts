@@ -25,12 +25,15 @@ export class Seller extends AggregateRoot {
     return new Seller(id, name, email);
   }
 
-  public addOperator(operatorId: Uuid) {
-    // Adicionar operator de confiança ao seu pool
-    // Verificar se o operator já faz parte do seu pool
+  public addOperator(operatorId: Uuid): void {
+    if(this.hasOperator(operatorId)) {
+      throw new Error("Operator already in the pool");
+    }
+
+    this.operators_ids.push(operatorId);
   }
 
-  public hasOperator(operatorId: Uuid) {
-    // Encontrar operator pelo seu id
+  public hasOperator(operatorId: Uuid): boolean {
+    return this.operators_ids.includes(operatorId);
   }
 }

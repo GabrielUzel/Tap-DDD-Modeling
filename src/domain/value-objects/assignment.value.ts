@@ -32,4 +32,16 @@ export class Assignment extends ValueObject<AssignmentProps> {
   public operatorCanRegisterSale(): boolean {
     return this.value.role.isCashier();
   }
+
+  public getOperatorId() {
+    return this.value.operatorId;
+  }
+
+  public getCatalogId() {
+    return this.value.catalogId;
+  }
+  
+  public getRole() {
+    return this.value.role;
+  }
 }
