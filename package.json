@@ -8,5 +8,9 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0",
+    "uuid-validate": "^0.0.3"
   }
 }
