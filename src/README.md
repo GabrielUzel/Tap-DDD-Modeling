@@ -20,4 +20,12 @@ um sistema real, essas vendas poderiam ser utilizadas no setor financeiro para a
 então este registro deve estar mesmo dentro de Operation? Ou este domínio deveria 
 comunicar com outro para a criação da sale em outro lugar?
 
+
+### 3. Relação entre entidades
+Estive com dúvida em como as entidades poderiam interagir entre si, já que para a execução 
+de certos comportamentos há a necessidade de obter informações de alguma entidade "exterior".
+Minha solução: Utilizar um domain service, que é de um contexto mais abrangente do agregado,
+o qual utiliza os agregados e entidades pertinentes a um problema e utiliza as validações 
+necessárias. Assim, cada entidade será responsável por suas regras de negócio.
+ 
 ## Fase 2
