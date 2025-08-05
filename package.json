@@ -1,0 +1,17 @@
+{
+  "name": "tap-ddd-modeling",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/uuid": "^8.3.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1",
+    "uuid-validate": "latest"
+  }
+}
