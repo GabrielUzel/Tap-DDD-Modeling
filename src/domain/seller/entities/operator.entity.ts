@@ -19,8 +19,4 @@ export class Operator extends Entity {
 
     return new Operator(id, name, email);
   }
-
-  public getId() {
-    return this.id;
-  }
 }

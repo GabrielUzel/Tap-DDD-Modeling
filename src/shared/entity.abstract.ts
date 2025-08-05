@@ -6,4 +6,8 @@ export abstract class Entity {
   constructor(id: Uuid) {
     this.id = id;
   }
+
+  public getId() {
+    return this.id;
+  }
 }

@@ -8,6 +8,11 @@ import { Catalog } from "./entities/catalog.entity";
 import { CatalogItem } from "./entities/catalog-item.entity";
 import { Sale } from "../sale/sale.aggregate";
 
+interface SaleItemInput {
+  item: CatalogItem;
+  quantity: number;
+}
+
 export class Operation extends AggregateRoot {
   private status: Status;
   private catalogs: Catalog[] = [];
@@ -72,7 +77,7 @@ export class Operation extends AggregateRoot {
 
   public assignOperator(operatorId: Uuid, catalogId: Uuid, role: Role) {
     if (!this.hasCatalog(catalogId)) {
-     throw new Error("Catalog does not belong to this operation");
+      throw new Error("Catalog does not belong to this operation");
     }
  
     // ! Operator pode estar na mesma operation mas com roles diferentes
@@ -85,14 +90,20 @@ export class Operation extends AggregateRoot {
 
   public getAssignment(operatorId: Uuid, catalogId: Uuid): Assignment | null {
     return this.assignments.find((assignment) => {
-      assignment.getOperatorId().equals(operatorId) &&
-      assignment.getCatalogId().equals(catalogId)
+      return (
+        assignment.getOperatorId().equals(operatorId) &&
+        assignment.getCatalogId().equals(catalogId)
+      );
     }) ?? null;
   }
 
-  public registerSale(operatorId: Uuid, catalogId: Uuid, items: SaleItem[]): Sale {
+  public registerSale(operatorId: Uuid, catalogId: Uuid, items: SaleItemInput[]): Sale {
     if(this.status.getStatus() !== "on_going") {
       throw new Error("Operation must be on_going to register a sale");
+    }
+
+    if (!this.hasCatalog(catalogId)) {
+     throw new Error("Catalog does not belong to this operation");
     }
 
     const assignment = this.getAssignment(operatorId, catalogId);
@@ -108,7 +119,13 @@ export class Operation extends AggregateRoot {
       throw new Error("No items provided for sale");
     }
 
-    const saleId = Uuid.random();
-    return Sale.create(saleId, operatorId, catalogId, this.id, items);
-  } 
+    // ! Essa criação pode estar aqui ou na camada de aplicação?
+    const saleId = Uuid.generate();
+    const saleItems = items.map(({item, quantity}) => SaleItem.create(item.getId(), quantity, item.getPrice()));
+    return Sale.create(saleId, operatorId, catalogId, this.id, saleItems);
+  }
+  
+  public getStatus() {
+    return this.status.getStatus();
+  }
 }

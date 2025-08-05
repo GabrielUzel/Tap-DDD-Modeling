@@ -19,4 +19,8 @@ export class CatalogItem extends Entity {
 
     return new CatalogItem(id, name, price);
   }
+
+  public getPrice() {
+    return this.price;
+  }
 }

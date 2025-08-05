@@ -7,13 +7,13 @@ export class Uuid extends ValueObject<string> {
     this.ensureIsValidUuid(value);
   }
 
-  static random(): Uuid {
+  static generate(): Uuid {
     return new Uuid(uuid());
   }
 
   private ensureIsValidUuid(id: string): void {
-    if (!validate(id)) {
-      throw new Error(`<${this.constructor.name}> does not allow the value <${id}>`);
+    if(!validate(id)) {
+      throw new Error("Invalid uuid format");
     }
   }
 }

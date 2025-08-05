@@ -29,8 +29,4 @@ export class Catalog extends Entity {
   public hasAnyItem(): boolean {
     return this.catalogItems.length > 0;
   }
-
-  public getId() {
-    return this.id;
-  }
 }

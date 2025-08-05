@@ -14,12 +14,12 @@ export class SaleItem extends ValueObject<SaleItemProps> {
   }
 
   public static create(catalogItemId: Uuid, quantity: number, salePrice: Money): SaleItem {
-    if(quantity < 0) {
-      throw new Error("Quantity must be greater than zero");
+    if(quantity < 1) {
+      throw new Error("Quantity must be greater than one");
     }
 
-    if(salePrice.getAmount() < 0) {
-      throw new Error("salePrice must be greate than zero");
+    if(quantity > 100) {
+      throw new Error("Quantity must be lower than one hundred");
     }
 
     return new SaleItem({ catalogItemId, quantity, salePrice });
