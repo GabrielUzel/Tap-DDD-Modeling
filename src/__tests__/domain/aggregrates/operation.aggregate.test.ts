@@ -1,17 +1,17 @@
 import { describe, it, expect, beforeEach } from "bun:test";
 import { Operation } from "../../../domain/operation/operation.aggregate";
 import { Uuid } from "../../../shared/uuid";
-import { Catalog } from "../../../domain/operation/entities/catalog.entity";
-import { CatalogType } from "../../../domain/operation/value-objects/catalog-type.value";
-import { CatalogItem } from "../../../domain/operation/entities/catalog-item.entity";
-import { Money } from "../../../domain/shared/money.value";
-import { Assignment } from "../../../domain/operation/value-objects/assignment.value";
+import { Catalog } from "../../../domain/entities/catalog.entity";
+import { CatalogType } from "../../../domain/value-objects/catalog-type.value";
+import { CatalogItem } from "../../../domain/entities/catalog-item.entity";
+import { Money } from "../../../domain/value-objects/money.value";
+import { Assignment } from "../../../domain/value-objects/assignment.value";
 import { Operator } from "../../../domain/seller/entities/operator.entity";
-import { Email } from "../../../domain/seller/value-objects/email.value";
-import { Role } from "../../../domain/operation/value-objects/role.value";
+import { Email } from "../../../domain/value-objects/email.value";
+import { Role } from "../../../domain/value-objects/role.value";
 import { SaleItem } from "../../../domain/shared/sale-item.value";
-import { Sale } from "../../../domain/sale/sale.aggregate";
-
+import { Sale } from "../../../domain/aggregates/sale.aggregate";
+// ! Tudo em ingles
 describe("Testes operation factory", () => {
   it("Id passado é inválido", () => {
     expect(() => Operation.create(new Uuid("Invalid id"))).toThrowError("Invalid uuid format");
@@ -48,6 +48,7 @@ describe("Testes catalog item factory", () => {
     expect(() => CatalogItem.create(Uuid.generate(), " ", Money.create(10, "BRL"))).toThrowError("Name cannot be empty");
   });
 
+  // ! Verificar se o valor é um Money de fato
   it("Preço está menor que 0", () => {
     expect(() => CatalogItem.create(Uuid.generate(), "Valid name", Money.create(-10, "BRL"))).toThrowError("Value must be greater than zero");
   });
@@ -182,7 +183,6 @@ describe("Testes register sale", () => {
 
     catalog.addItem(item);
     catalog.addItem(anotherItem);
-    operation.addCatalog(catalog);
   });
 
   it("Operation não está iniciada", () => {
@@ -192,16 +192,18 @@ describe("Testes register sale", () => {
   it("Catalog não está registrada na operation", () => {
     operation.startOperation();
 
-    expect(() => operation.registerSale(operator.getId(), Uuid.generate(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Catalog does not belong to this operation");
+    expect(() => operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Catalog does not belong to this operation");
   });
 
   it("Operator não está registrado no catalog", () => {
+    operation.addCatalog(catalog);
     operation.startOperation();
 
     expect(() => operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Operator is not assigned to this catalog");
   });
 
   it("Não há items para sale", () => {
+    operation.addCatalog(catalog);
     operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
     operation.startOperation();
 
@@ -209,6 +211,7 @@ describe("Testes register sale", () => {
   });
 
   it("Sale registrada com sucesso", () => {
+    operation.addCatalog(catalog);
     operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
     operation.startOperation();
     const sale = operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}]);

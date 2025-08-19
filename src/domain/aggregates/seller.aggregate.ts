@@ -1,7 +1,7 @@
 import { AggregateRoot } from "../../shared/aggregate-root.abstract";
 import type { Uuid } from "../../shared/uuid";
 import type { Operator } from "./entities/operator.entity";
-import type { Email } from "./value-objects/email.value";
+import type { Email } from "../value-objects/email.value";
 
 export class Seller extends AggregateRoot {
   private operators: Operator[] = [];
@@ -26,7 +26,7 @@ export class Seller extends AggregateRoot {
     return new Seller(id, name, email);
   }
 
-  public addOperator(operator: Operator) {
+  public addOperator(operator: Operator): void {
     if(this.hasOperator(operator.getId())) {
       throw new Error("Operator already in the pool");
     }
@@ -35,6 +35,6 @@ export class Seller extends AggregateRoot {
   }
 
   public hasOperator(operatorId: Uuid): boolean {
-    return this.operators.some(operator => operator.getId().equals(operatorId));;
+    return this.operators.some(operator => operator.getId().equals(operatorId));
   }
 }

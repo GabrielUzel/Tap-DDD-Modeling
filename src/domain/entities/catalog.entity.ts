@@ -1,5 +1,5 @@
-import { Entity } from "../../../shared/entity.abstract";
-import type { Uuid } from "../../../shared/uuid";
+import { Entity } from "../../shared/entity.abstract";
+import type { Uuid } from "../../shared/uuid";
 import type { CatalogType } from "../value-objects/catalog-type.value";
 import type { CatalogItem } from "./catalog-item.entity";
 

@@ -6,7 +6,8 @@ import { SaleItem } from "../shared/sale-item.value";
 import { Assignment } from "./value-objects/assignment.value";
 import { Catalog } from "./entities/catalog.entity";
 import { CatalogItem } from "./entities/catalog-item.entity";
-import { Sale } from "../sale/sale.aggregate";
+import { Sale } from "./sale.aggregate";
+import { Money } from "../value-objects/money.value";
 
 interface SaleItemInput {
   item: CatalogItem;
@@ -50,11 +51,11 @@ export class Operation extends AggregateRoot {
     return catalog;
   }
 
-  public addItemToCatalog(catalogId: Uuid, item: CatalogItem) {
+  public addItemToCatalog(catalogId: Uuid, item: CatalogItem): void {
     this.getCatalog(catalogId).addItem(item);
   }
 
-  public startOperation() { 
+  public startOperation(): void { 
     if(this.catalogs.length === 0) {
       throw new Error("No catalogs registered");
     }
@@ -75,12 +76,11 @@ export class Operation extends AggregateRoot {
     });
   }
 
-  public assignOperator(operatorId: Uuid, catalogId: Uuid, role: Role) {
+  public assignOperator(operatorId: Uuid, catalogId: Uuid, role: Role): void {
     if (!this.hasCatalog(catalogId)) {
       throw new Error("Catalog does not belong to this operation");
     }
  
-    // ! Operator pode estar na mesma operation mas com roles diferentes
     if (this.isOperatorAlreadyAssigned(operatorId, catalogId)) {
       throw new Error("Operator already assigned to this catalog");
     }
@@ -98,7 +98,7 @@ export class Operation extends AggregateRoot {
   }
 
   public registerSale(operatorId: Uuid, catalogId: Uuid, items: SaleItemInput[]): Sale {
-    if(this.status.getStatus() !== "on_going") {
+    if(this.status.isOnGoing()) { 
       throw new Error("Operation must be on_going to register a sale");
     }
 
@@ -119,13 +119,21 @@ export class Operation extends AggregateRoot {
       throw new Error("No items provided for sale");
     }
 
-    // ! Essa criação pode estar aqui ou na camada de aplicação?
     const saleId = Uuid.generate();
-    const saleItems = items.map(({item, quantity}) => SaleItem.create(item.getId(), quantity, item.getPrice()));
+    const saleItems = items.map(
+      ({item, quantity}) => {
+        return SaleItem.create(
+          item.getId(), 
+          quantity, 
+          Money.create(item.getPrice().getAmount() * quantity, item.getPrice().getSufix())
+        )
+      }
+    );
+
     return Sale.create(saleId, operatorId, catalogId, this.id, saleItems);
   }
   
-  public getStatus() {
-    return this.status.getStatus();
+  public getStatus(): string {
+    return this.status.getValue();
   }
 }

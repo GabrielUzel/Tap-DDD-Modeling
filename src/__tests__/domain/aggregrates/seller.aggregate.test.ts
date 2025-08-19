@@ -1,7 +1,7 @@
 import { describe, it, expect } from "bun:test";
-import { Seller } from "../../../domain/seller/seller.aggregate";
+import { Seller } from "../../../domain/aggregates/seller.aggregate";
 import { Uuid } from "../../../shared/uuid";
-import { Email } from "../../../domain/seller/value-objects/email.value";
+import { Email } from "../../../domain/value-objects/email.value";
 import { Operator } from "../../../domain/seller/entities/operator.entity";
 
 describe("Testes seller factory", () => {

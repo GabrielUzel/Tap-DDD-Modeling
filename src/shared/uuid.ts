@@ -1,9 +1,11 @@
 import { v4 as uuid, validate } from 'uuid';
-import { ValueObject } from './value-object.abstract';
+import type { ValueObject } from './value-object.interface';
 
-export class Uuid extends ValueObject<string> {
+export class Uuid implements ValueObject<string> {
+  private readonly value: string;
+
   constructor(value: string) {
-    super(value);
+    this.value = value;
     this.ensureIsValidUuid(value);
   }
 
@@ -15,5 +17,13 @@ export class Uuid extends ValueObject<string> {
     if(!validate(id)) {
       throw new Error("Invalid uuid format");
     }
+  }
+
+  getValue(): string {
+    return this.value;
+  }
+
+  equals(other: this): boolean {
+    return this.value === other.value;
   }
 }

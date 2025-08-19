@@ -1,6 +1,6 @@
-import { Entity } from "../../../shared/entity.abstract";
-import type { Uuid } from "../../../shared/uuid";
-import { Money } from "../../shared/money.value";
+import { Entity } from "../../shared/entity.abstract";
+import type { Uuid } from "../../shared/uuid";
+import { Money } from "../value-objects/money.value";
 
 export class CatalogItem extends Entity {
   private name: string;

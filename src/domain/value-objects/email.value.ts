@@ -1,8 +1,10 @@
-import { ValueObject } from "../../../shared/value-object.abstract";
+import type { ValueObject } from "../../shared/value-object.interface";
 
-export class Email extends ValueObject<string> {
+export class Email implements ValueObject<string> {
+  private email: string;
+
   constructor(value: string) {
-    super(value);
+    this.email = value;
   }
 
   public static create(email: string): Email {
@@ -21,5 +23,13 @@ export class Email extends ValueObject<string> {
     const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
 
     return regex.test(email);
+  }
+
+  public getValue(): string {
+    return this.email;
+  }
+
+  public equals(other: this): boolean {
+    return this.email === other.getValue();
   }
 }
