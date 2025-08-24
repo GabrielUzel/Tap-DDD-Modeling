@@ -1,5 +1,5 @@
-import { Entity } from "../../../shared/entity.abstract";
-import { Uuid } from "../../../shared/uuid";
+import { Entity } from "../../shared/entity.abstract";
+import { Uuid } from "../../shared/uuid";
 import type { Email } from "../value-objects/email.value";
 
 export class Operator extends Entity {

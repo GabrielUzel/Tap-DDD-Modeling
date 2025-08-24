@@ -1,11 +1,11 @@
 import { Uuid } from "../../shared/uuid";
-import { Status } from "./value-objects/status.value";
-import { Role } from "./value-objects/role.value";
+import { Status } from "../value-objects/status.value";
+import { Role } from "../value-objects/role.value";
 import { AggregateRoot } from "../../shared/aggregate-root.abstract";
-import { SaleItem } from "../shared/sale-item.value";
-import { Assignment } from "./value-objects/assignment.value";
-import { Catalog } from "./entities/catalog.entity";
-import { CatalogItem } from "./entities/catalog-item.entity";
+import { SaleItem } from "../value-objects/sale-item.value";
+import { Assignment } from "../value-objects/assignment.value";
+import { Catalog } from "../entities/catalog.entity";
+import { CatalogItem } from "../entities/catalog-item.entity";
 import { Sale } from "./sale.aggregate";
 import { Money } from "../value-objects/money.value";
 
@@ -98,7 +98,7 @@ export class Operation extends AggregateRoot {
   }
 
   public registerSale(operatorId: Uuid, catalogId: Uuid, items: SaleItemInput[]): Sale {
-    if(this.status.isOnGoing()) { 
+    if(!this.status.isOnGoing()) { 
       throw new Error("Operation must be on_going to register a sale");
     }
 
@@ -107,16 +107,12 @@ export class Operation extends AggregateRoot {
     }
 
     const assignment = this.getAssignment(operatorId, catalogId);
-    if(!assignment) {
+    if (!assignment) {
       throw new Error("Operator is not assigned to this catalog");
     }
 
     if (!assignment.operatorCanRegisterSale()) {
       throw new Error("Operator does not have permission to register sales");
-    }
-
-    if (items.length === 0) {
-      throw new Error("No items provided for sale");
     }
 
     const saleId = Uuid.generate();

@@ -1,5 +1,5 @@
 import { Uuid } from "../../shared/uuid";
-import { SaleItem } from "../shared/sale-item.value";
+import { SaleItem } from "../value-objects/sale-item.value";
 import { AggregateRoot } from "../../shared/aggregate-root.abstract";
 
 export class Sale extends AggregateRoot {

@@ -1,6 +1,6 @@
 import { AggregateRoot } from "../../shared/aggregate-root.abstract";
 import type { Uuid } from "../../shared/uuid";
-import type { Operator } from "./entities/operator.entity";
+import type { Operator } from "../entities/operator.entity";
 import type { Email } from "../value-objects/email.value";
 
 export class Seller extends AggregateRoot {

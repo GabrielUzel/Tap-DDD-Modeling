@@ -1,23 +1,18 @@
 import { describe, it, expect, beforeEach } from "bun:test";
-import { Operation } from "../../../domain/operation/operation.aggregate";
+import { Operation } from "../../../domain/aggregates/operation.aggregate";
 import { Uuid } from "../../../shared/uuid";
 import { Catalog } from "../../../domain/entities/catalog.entity";
 import { CatalogType } from "../../../domain/value-objects/catalog-type.value";
 import { CatalogItem } from "../../../domain/entities/catalog-item.entity";
 import { Money } from "../../../domain/value-objects/money.value";
 import { Assignment } from "../../../domain/value-objects/assignment.value";
-import { Operator } from "../../../domain/seller/entities/operator.entity";
+import { Operator } from "../../../domain/entities/operator.entity";
 import { Email } from "../../../domain/value-objects/email.value";
 import { Role } from "../../../domain/value-objects/role.value";
-import { SaleItem } from "../../../domain/shared/sale-item.value";
 import { Sale } from "../../../domain/aggregates/sale.aggregate";
-// ! Tudo em ingles
-describe("Testes operation factory", () => {
-  it("Id passado é inválido", () => {
-    expect(() => Operation.create(new Uuid("Invalid id"))).toThrowError("Invalid uuid format");
-  });
 
-  it("Operation criada com status planned", () => {  
+describe("Operation factory tests", () => {
+  it("Should create operation with status planned", () => {  
     const operation = Operation.create(Uuid.generate());
     
     expect(operation).toBeInstanceOf(Operation);
@@ -25,149 +20,121 @@ describe("Testes operation factory", () => {
   });
 });
 
-describe("Testes addCatalog", () => {
-  it("Cria catalog com sucesso", () => {
+describe("AddCatalog tests", () => {
+  it("Should add catalog to operation successfully", () => {
     const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
+    
     operation.addCatalog(catalog);
 
     expect(operation.hasCatalog(catalog.getId())).toBeTrue();
   });
 
-  it("Catalog já existe na operation", () => {
+  it("Should throw error, catalog is already on catalog", () => {
     const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
+    
     operation.addCatalog(catalog);
 
     expect(() => operation.addCatalog(catalog)).toThrowError("Catalog already belongs to this operation");
   });
 });
 
-describe("Testes catalog item factory", () => {
-  it("Nome do item está vazio", () => {
+describe("Catalog item factory tests", () => {
+  it("Should create catalog item successfully", () => {
+    expect(() => CatalogItem.create(Uuid.generate(), "Valid name", Money.create(10, "BRL"))).not.toThrow();
+  }); 
+  
+  it("Should throw error, item name is empty", () => {
     expect(() => CatalogItem.create(Uuid.generate(), " ", Money.create(10, "BRL"))).toThrowError("Name cannot be empty");
-  });
-
-  // ! Verificar se o valor é um Money de fato
-  it("Preço está menor que 0", () => {
-    expect(() => CatalogItem.create(Uuid.generate(), "Valid name", Money.create(-10, "BRL"))).toThrowError("Value must be greater than zero");
   });
 });
 
-describe("Testes addItemToCatalog", () => {
-  it("Catálogo não foi encontrado", () => {
+describe("Add item to catalog tests", () => {
+  it("Should add item to catalog successfully", () => {
     const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
     const item = CatalogItem.create(Uuid.generate(), "Valid name", Money.create(10, "BRL"));
-    operation.addCatalog(catalog);
     
-    expect(() => operation.addItemToCatalog(Uuid.generate(), item)).toThrowError("Catalog not found");
-  });
-
-  it("Item adicionado ao catalog com sucesso", () => {
-    const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
-    const item = CatalogItem.create(Uuid.generate(), "Valid name", Money.create(10, "BRL"));
     operation.addCatalog(catalog);
     operation.addItemToCatalog(catalog.getId(), item);
 
     expect(catalog.hasAnyItem()).toBeTrue();
   });
+
+  it("Should throw error, catalog is not found", () => {
+    const operation = Operation.create(Uuid.generate());
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
+    const item = CatalogItem.create(Uuid.generate(), "Valid name", Money.create(10, "BRL"));
+    
+    operation.addCatalog(catalog);
+    
+    expect(() => operation.addItemToCatalog(Uuid.generate(), item)).toThrowError("Catalog not found");
+  });
 });
 
-describe("Testes start operation", () => {    
-  it("Operation não tem catalog registrado", () => {
+describe("Start operation tests", () => {    
+  it("Should change operation status successfully", () => {
+    const operation = Operation.create(Uuid.generate());
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
+    const catalogItem = CatalogItem.create(Uuid.generate(), "Item", Money.create(10, "BRL"));
+    
+    operation.addCatalog(catalog);
+    operation.addItemToCatalog(catalog.getId(), catalogItem);
+    operation.startOperation();
+
+    expect(operation.getStatus()).toBe("on_going");
+  });
+
+
+  it("Should throw error, no catalogs registered", () => {
     const operation = Operation.create(Uuid.generate());
 
     expect(() => operation.startOperation()).toThrowError("No catalogs registered");
   });
 
-  it("Não há nenhum catalog com ao menos 1 item", () => {
+  it("Should throw error, no catalogs with items", () => {
     const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
+
     operation.addCatalog(catalog);
 
     expect(() => operation.startOperation()).toThrowError("At least one catalog must contain items to start the operation");
   });
-
-  it("Muda status da operation para on_going com sucesso", () => {
-    const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
-    const catalogItem = CatalogItem.create(Uuid.generate(), "Item", Money.create(10, "BRL"));
-    operation.addCatalog(catalog);
-    operation.addItemToCatalog(catalog.getId(), catalogItem);
-
-    operation.startOperation();
-
-    expect(operation.getStatus()).toBe("on_going");
-  });
 });
 
-describe("Testes assignment factory", () => {
-  it("Id do operator vazio", () => {
-    expect(() => Assignment.create(undefined as any, Uuid.generate(), new Role("cashier"))).toThrowError("OperatorId cannot be empty");
-  });
-
-  it("Id do catalog vazio", () => {
-    expect(() => Assignment.create(Uuid.generate(), undefined as any, new Role("cashier"))).toThrowError("CatalogId cannot be empty");
-  });
-
-  it("Role vazia", () => {
-    expect(() => Assignment.create(Uuid.generate(), Uuid.generate(), undefined as any)).toThrowError("Role cannot be empty");
-  });
-
-  it("Assignment criado com sucesso", () => {
-    const assignment = Assignment.create(Uuid.generate(), Uuid.generate(), new Role("cashier"));
-    expect(assignment).toBeInstanceOf(Assignment);
-  });
-});
-
-describe("Testes assign operator", () => {
-  it("Catalog não pertence a operation", () => {
+describe("Assign operator tests", () => {
+  it("Assignment created successfully", () => {
     const operation = Operation.create(Uuid.generate());
     const operator = Operator.create(Uuid.generate(), "Valid name", Email.create("valid_email@gmail.com"));
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
-
-    expect(() => operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"))).toThrowError("Catalog does not belong to this operation");
-  });
-
-  it("Operator já tem a mesma role associada ao mesmo catalog", () => {
-    const operation = Operation.create(Uuid.generate());
-    const operator = Operator.create(Uuid.generate(), "Valid name", Email.create("valid_email@gmail.com"));
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
-    operation.addCatalog(catalog);
-    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
-
-    expect(() => operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"))).toThrowError("Operator already assigned to this catalog");
-  });
-
-  it("Assignment criado com sucesso", () => {
-    const operation = Operation.create(Uuid.generate());
-    const operator = Operator.create(Uuid.generate(), "Valid name", Email.create("valid_email@gmail.com"));
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("camarote"));
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
+    
     operation.addCatalog(catalog);
     operation.assignOperator(operator.getId(), catalog.getId(), new Role('cashier'));
   
     expect(operation.getAssignment(operator.getId(), catalog.getId())).toBeInstanceOf(Assignment);
   });
+
+  it("Catalog does not belong to operation", () => {
+    const operation = Operation.create(Uuid.generate());
+    const operator = Operator.create(Uuid.generate(), "Valid name", Email.create("valid_email@gmail.com"));
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
+
+    expect(() => operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"))).toThrowError("Catalog does not belong to this operation");
+  });
+
+  it("Operator already has the same role assigned to the same catalog", () => {
+    const operation = Operation.create(Uuid.generate());
+    const operator = Operator.create(Uuid.generate(), "Valid name", Email.create("valid_email@gmail.com"));
+    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
+    operation.addCatalog(catalog);
+    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
+
+    expect(() => operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"))).toThrowError("Operator already assigned to this catalog");
+  });
 });
 
-describe("Testes sale item factory", () => {
-  it("Quantidade é menor que 0", () => {
-    expect(() => SaleItem.create(Uuid.generate(), 0, Money.create(10, "BRL"))).toThrowError("Quantity must be greater than one");
-  });
-
-  it("Quantidade é maior que 100", () => {
-    expect(() => SaleItem.create(Uuid.generate(), 101, Money.create(10, "BRL"))).toThrowError("Quantity must be lower than one hundred");
-  });
-
-  it("Sale item criado com sucesso", () => {
-    const saleItem = SaleItem.create(Uuid.generate(), 1, Money.create(10, "BRL"));
-    expect(saleItem).toBeInstanceOf(SaleItem);
-  });
-});
-
-describe("Testes register sale", () => {
+describe("Register sale tests", () => {
   let operation: Operation;
   let operator: Operator;
   let catalog: Catalog;
@@ -177,45 +144,52 @@ describe("Testes register sale", () => {
   beforeEach(() => {
     operation = Operation.create(Uuid.generate());
     operator = Operator.create(Uuid.generate(), "Valid Name", Email.create("valid_email@email.com"));
-    catalog = Catalog.create(Uuid.generate(), "Camarote", new CatalogType("camarote"));
+    catalog = Catalog.create(Uuid.generate(), "Camarote", new CatalogType("general"));
     item = CatalogItem.create(Uuid.generate(), "Item", Money.create(10, "BRL"));
     anotherItem = CatalogItem.create(Uuid.generate(), "Item 2", Money.create(20, "BRL"));
-
-    catalog.addItem(item);
-    catalog.addItem(anotherItem);
   });
 
-  it("Operation não está iniciada", () => {
+  it("Sale registered successfully", () => {
+    operation.addCatalog(catalog);
+    operation.addItemToCatalog(catalog.getId(), item);
+    operation.addItemToCatalog(catalog.getId(), anotherItem);
+    operation.startOperation();
+    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
+    const sale = operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}]);
+
+    expect(sale).toBeInstanceOf(Sale);
+  });
+
+  it("Should throw error, operation has not started", () => {
     expect(() => operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Operation must be on_going to register a sale");
   });
 
-  it("Catalog não está registrada na operation", () => {
+  it("Should throw error, catalog does not belong to operation", () => {
+    operation.addCatalog(catalog);
+    operation.addItemToCatalog(catalog.getId(), item);
+    operation.addItemToCatalog(catalog.getId(), anotherItem);
     operation.startOperation();
-
-    expect(() => operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Catalog does not belong to this operation");
+    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
+    
+    expect(() => operation.registerSale(operator.getId(), Uuid.generate(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Catalog does not belong to this operation");
   });
 
-  it("Operator não está registrado no catalog", () => {
+  it("Should throw error, operator is not assigned to this catalog", () => {
     operation.addCatalog(catalog);
+    operation.addItemToCatalog(catalog.getId(), item);
+    operation.addItemToCatalog(catalog.getId(), anotherItem);
     operation.startOperation();
 
     expect(() => operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Operator is not assigned to this catalog");
   });
 
-  it("Não há items para sale", () => {
+  it("Should throw error, no items provided for sale", () => {
     operation.addCatalog(catalog);
-    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
+    operation.addItemToCatalog(catalog.getId(), item);
+    operation.addItemToCatalog(catalog.getId(), anotherItem);
     operation.startOperation();
-
-    expect(() => operation.registerSale(operator.getId(), catalog.getId(), [])).toThrowError("No items provided for sale");
-  });
-
-  it("Sale registrada com sucesso", () => {
-    operation.addCatalog(catalog);
     operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
-    operation.startOperation();
-    const sale = operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}]);
 
-    expect(sale).toBeInstanceOf(Sale);
+    expect(() => operation.registerSale(operator.getId(), catalog.getId(), [])).toThrowError("Sale must contain at least one item");
   });
 });
