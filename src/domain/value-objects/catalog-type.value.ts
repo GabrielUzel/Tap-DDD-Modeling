@@ -1,27 +1,33 @@
-import type { ValueObject } from "../../shared/value-object.interface";
+export type CatalogTypeOptions = "lounge" | "general";
 
-export type CatalogTypeOptions = "lounge" | "general"
+export class CatalogType {
+  static readonly LOUNGE: CatalogTypeOptions = "lounge";
+  static readonly GENERAL: CatalogTypeOptions = "general";
+  static readonly values: CatalogTypeOptions[] = [CatalogType.LOUNGE, CatalogType.GENERAL];
 
-export class CatalogType implements ValueObject<CatalogTypeOptions> {
-  private catalogType: CatalogTypeOptions
+  private readonly catalogType: CatalogTypeOptions;
 
-  constructor(catalogType: CatalogTypeOptions) {
-    this.catalogType = catalogType;
+  constructor(catalogType: string) {
+    if (!CatalogType.values.includes(catalogType as CatalogTypeOptions)) {
+      throw new Error("Invalid catalog type");
+    }
+    
+    this.catalogType = catalogType as CatalogTypeOptions;
   }
 
-  public getValue() {
+  public getValue(): CatalogTypeOptions {
     return this.catalogType;
   }
 
-  public equals(other: this): boolean {
+  public equals(other: CatalogType): boolean {
     return this.catalogType === other.getValue();
   }
 
-  public isLounge() {
-    return this.catalogType === "lounge";
+  public isLounge(): boolean {
+    return this.catalogType === CatalogType.LOUNGE;
   }
 
-  public isGeneral() {
-    return this.catalogType === "general";
+  public isGeneral(): boolean {
+    return this.catalogType === CatalogType.GENERAL;
   }
 }

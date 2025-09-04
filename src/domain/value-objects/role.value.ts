@@ -3,13 +3,21 @@ import type { ValueObject } from "../../shared/value-object.interface";
 export type RoleType = "cashier" | "manager" | "admin";
 
 export class Role implements ValueObject<RoleType> {
-  private role: RoleType;
+  static readonly CASHIER: RoleType = "cashier";
+  static readonly MANAGER: RoleType = "manager";
+  static readonly ADMIN: RoleType = "admin";
+  static readonly values: RoleType[] = [Role.CASHIER, Role.MANAGER, Role.ADMIN];
 
-  constructor(role: RoleType) {
-    this.role = role;
+  private readonly role: RoleType;
+
+  constructor(role: string) {
+    if (!Role.values.includes(role as RoleType)) {
+      throw new Error("Invalid role type");
+    }
+    this.role = role as RoleType;
   }
 
-  public getValue() {
+  public getValue(): RoleType {
     return this.role;
   }
 
@@ -17,15 +25,15 @@ export class Role implements ValueObject<RoleType> {
     return this.role === other.getValue();
   }
 
-  public isCashier() {
-    return this.role === "cashier";
+  public isCashier(): boolean {
+    return this.role === Role.CASHIER;
   }
 
-  public isManager() {
-    return this.role === "manager";
+  public isManager(): boolean {
+    return this.role === Role.MANAGER;
   }
 
-  public isAdmin() {
-    return this.role === "admin";
+  public isAdmin(): boolean {
+    return this.role === Role.ADMIN;
   }
 }

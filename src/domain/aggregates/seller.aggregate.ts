@@ -8,13 +8,21 @@ export class Seller extends AggregateRoot {
   private name: string;
   private email: Email;
 
-  constructor(id: Uuid, name: string, email: Email) {
+  constructor(
+    id: Uuid, 
+    name: string, 
+    email: Email
+  ) {
     super(id);
     this.name = name;
     this.email = email;
   }
 
-  public static create(id: Uuid, name: string, email: Email) {
+  public static create(
+    id: Uuid, 
+    name: string, 
+    email: Email
+  ) {
     if(!name.trim()) {
       throw new Error("Name cannot be empty");
     }

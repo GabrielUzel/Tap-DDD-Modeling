@@ -21,3 +21,14 @@ então este registro deve estar mesmo dentro de Operation? Ou este domínio deve
 comunicar com outro para a criação da sale em outro lugar?
  
 ## Fase 2
+### 1. Sobre a relação entre Seller e Operation
+Em relação a adição de sellers, catálogos, items a catálogos, adição de operators a 
+pool de algum seller e criação de assingments tenho uma dúvida. Quando eu quero relacionar 
+um seller a uma operation, relação esta que é criada quando eu crio um operationSeller 
+dentro da operation, as relações desse seller já existem ou devem ser criadas após ele já 
+estar relacionado a uma operation? Por exemplo, tenho um operator A que está relacionado 
+a um seller B. Este seller B ainda não está relacionado a operation C. Caso eu queira 
+criar a relação entre operation C e seller B, devo passar o operator A para OperationSeller 
+que foi criada com id do seller B? Ou então, essa relação entre seller B e operator A só é 
+criada dentro da operation, isto é, um seller pode estar em diferentes operations e ter 
+pools de operators diferentes para cada operation?

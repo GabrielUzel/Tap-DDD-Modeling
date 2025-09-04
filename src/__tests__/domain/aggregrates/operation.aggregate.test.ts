@@ -5,191 +5,265 @@ import { Catalog } from "../../../domain/entities/catalog.entity";
 import { CatalogType } from "../../../domain/value-objects/catalog-type.value";
 import { CatalogItem } from "../../../domain/entities/catalog-item.entity";
 import { Money } from "../../../domain/value-objects/money.value";
-import { Assignment } from "../../../domain/value-objects/assignment.value";
-import { Operator } from "../../../domain/entities/operator.entity";
-import { Email } from "../../../domain/value-objects/email.value";
 import { Role } from "../../../domain/value-objects/role.value";
-import { Sale } from "../../../domain/aggregates/sale.aggregate";
+import { OperationSeller } from "../../../domain/entities/operation-seller.child-entity";
+import { isLeft, isRight } from "../../../shared/either.protocol";
 
-describe("Operation factory tests", () => {
-  it("Should create operation with status planned", () => {  
-    const operation = Operation.create(Uuid.generate());
-    
-    expect(operation).toBeInstanceOf(Operation);
-    expect(operation.getStatus()).toBe("planned");
-  });
-});
-
-describe("AddCatalog tests", () => {
-  it("Should add catalog to operation successfully", () => {
-    const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-    
-    operation.addCatalog(catalog);
-
-    expect(operation.hasCatalog(catalog.getId())).toBeTrue();
-  });
-
-  it("Should throw error, catalog is already on catalog", () => {
-    const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-    
-    operation.addCatalog(catalog);
-
-    expect(() => operation.addCatalog(catalog)).toThrowError("Catalog already belongs to this operation");
-  });
-});
-
-describe("Catalog item factory tests", () => {
-  it("Should create catalog item successfully", () => {
-    expect(() => CatalogItem.create(Uuid.generate(), "Valid name", Money.create(10, "BRL"))).not.toThrow();
-  }); 
-  
-  it("Should throw error, item name is empty", () => {
-    expect(() => CatalogItem.create(Uuid.generate(), " ", Money.create(10, "BRL"))).toThrowError("Name cannot be empty");
-  });
-});
-
-describe("Add item to catalog tests", () => {
-  it("Should add item to catalog successfully", () => {
-    const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-    const item = CatalogItem.create(Uuid.generate(), "Valid name", Money.create(10, "BRL"));
-    
-    operation.addCatalog(catalog);
-    operation.addItemToCatalog(catalog.getId(), item);
-
-    expect(catalog.hasAnyItem()).toBeTrue();
-  });
-
-  it("Should throw error, catalog is not found", () => {
-    const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-    const item = CatalogItem.create(Uuid.generate(), "Valid name", Money.create(10, "BRL"));
-    
-    operation.addCatalog(catalog);
-    
-    expect(() => operation.addItemToCatalog(Uuid.generate(), item)).toThrowError("Catalog not found");
-  });
-});
-
-describe("Start operation tests", () => {    
-  it("Should change operation status successfully", () => {
-    const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-    const catalogItem = CatalogItem.create(Uuid.generate(), "Item", Money.create(10, "BRL"));
-    
-    operation.addCatalog(catalog);
-    operation.addItemToCatalog(catalog.getId(), catalogItem);
-    operation.startOperation();
-
-    expect(operation.getStatus()).toBe("on_going");
-  });
-
-
-  it("Should throw error, no catalogs registered", () => {
-    const operation = Operation.create(Uuid.generate());
-
-    expect(() => operation.startOperation()).toThrowError("No catalogs registered");
-  });
-
-  it("Should throw error, no catalogs with items", () => {
-    const operation = Operation.create(Uuid.generate());
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-
-    operation.addCatalog(catalog);
-
-    expect(() => operation.startOperation()).toThrowError("At least one catalog must contain items to start the operation");
-  });
-});
-
-describe("Assign operator tests", () => {
-  it("Assignment created successfully", () => {
-    const operation = Operation.create(Uuid.generate());
-    const operator = Operator.create(Uuid.generate(), "Valid name", Email.create("valid_email@gmail.com"));
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-    
-    operation.addCatalog(catalog);
-    operation.assignOperator(operator.getId(), catalog.getId(), new Role('cashier'));
-  
-    expect(operation.getAssignment(operator.getId(), catalog.getId())).toBeInstanceOf(Assignment);
-  });
-
-  it("Catalog does not belong to operation", () => {
-    const operation = Operation.create(Uuid.generate());
-    const operator = Operator.create(Uuid.generate(), "Valid name", Email.create("valid_email@gmail.com"));
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-
-    expect(() => operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"))).toThrowError("Catalog does not belong to this operation");
-  });
-
-  it("Operator already has the same role assigned to the same catalog", () => {
-    const operation = Operation.create(Uuid.generate());
-    const operator = Operator.create(Uuid.generate(), "Valid name", Email.create("valid_email@gmail.com"));
-    const catalog = Catalog.create(Uuid.generate(), "Valid name", new CatalogType("general"));
-    operation.addCatalog(catalog);
-    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
-
-    expect(() => operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"))).toThrowError("Operator already assigned to this catalog");
-  });
-});
-
-describe("Register sale tests", () => {
+describe("Operation aggregate tests", () => {
   let operation: Operation;
-  let operator: Operator;
+  let sellerId: Uuid;
+  let anotherSellerId: Uuid;
+  let operatorId: Uuid;
+  let anotherOperatorId: Uuid;
   let catalog: Catalog;
+  let anotherCatalog: Catalog;
   let item: CatalogItem;
   let anotherItem: CatalogItem;
 
   beforeEach(() => {
-    operation = Operation.create(Uuid.generate());
-    operator = Operator.create(Uuid.generate(), "Valid Name", Email.create("valid_email@email.com"));
-    catalog = Catalog.create(Uuid.generate(), "Camarote", new CatalogType("general"));
+    operation = Operation.create(Uuid.generate(), "Operation");
+    sellerId = Uuid.generate();
+    anotherSellerId = Uuid.generate();
+    operatorId = Uuid.generate();
+    anotherOperatorId = Uuid.generate();
+    catalog = Catalog.create(Uuid.generate(), "Catálogo", new CatalogType("general"));
+    anotherCatalog = Catalog.create(Uuid.generate(), "Another Catalog", new CatalogType("general"));
     item = CatalogItem.create(Uuid.generate(), "Item", Money.create(10, "BRL"));
-    anotherItem = CatalogItem.create(Uuid.generate(), "Item 2", Money.create(20, "BRL"));
+    anotherItem = CatalogItem.create(Uuid.generate(), "Another Item", Money.create(15, "BRL"));
   });
 
-  it("Sale registered successfully", () => {
-    operation.addCatalog(catalog);
-    operation.addItemToCatalog(catalog.getId(), item);
-    operation.addItemToCatalog(catalog.getId(), anotherItem);
-    operation.startOperation();
-    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
-    const sale = operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}]);
-
-    expect(sale).toBeInstanceOf(Sale);
+  describe("Operation factory tests", () => {
+    it("Should create operation with status planned", () => {  
+      const operation = Operation.create(Uuid.generate(), "Operation");
+      
+      expect(operation).toBeInstanceOf(Operation);
+      expect(operation.getStatus()).toBe("planned");
+    });
   });
 
-  it("Should throw error, operation has not started", () => {
-    expect(() => operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Operation must be on_going to register a sale");
+  describe("Add seller tests", () => {
+    it("Should add seller to operation", () =>{
+      operation.addSeller(sellerId);
+      expect(operation.findSeller(sellerId)).toBeInstanceOf(OperationSeller);
+    });
+
+    it("Should throw exception, duplicate seller", () => {
+      operation.addSeller(sellerId);
+      expect(() => operation.addSeller(sellerId)).toThrowError("Seller already added to the operation");
+    });
+
+    it("Should throw error when adding catalog to non-existent seller", () => {
+      expect(() => operation.addCatalogToSeller(sellerId, catalog)).toThrowError("Seller not found");
+    });
+
+    it("Should throw error when adding item to non-existent seller", () => {
+      expect(() => operation.addItemToCatalogOfSeller(sellerId, catalog.getId(), item)).toThrowError("Seller not found");
+    });
+
+    it("Should throw error when adding operator to non-existent seller", () => {
+      expect(() => operation.addOperatorToSeller(sellerId, operatorId)).toThrowError("Seller not found");
+    });
+
+    it("Should throw error when adding assignment to non-existent seller", () => {
+      expect(() => operation.addAssignmentToSeller(sellerId, operatorId, catalog.getId(), new Role("cashier"))).toThrowError("Seller not found");
+    });
   });
 
-  it("Should throw error, catalog does not belong to operation", () => {
-    operation.addCatalog(catalog);
-    operation.addItemToCatalog(catalog.getId(), item);
-    operation.addItemToCatalog(catalog.getId(), anotherItem);
-    operation.startOperation();
-    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
+  describe("AddCatalog tests", () => {
+    it("Should add catalog to operation successfully", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+
+      expect(operation.findSeller(sellerId).getCatalogs()).toContain(catalog);
+    });
+
+    it("Should throw error, catalog is already on operation", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+
+      expect(() => operation.addCatalogToSeller(sellerId, catalog)).toThrowError("Catalog already belongs to this operation");
+    });
+  });
+
+  describe("Catalog item factory tests", () => {
+    it("Should create catalog item successfully", () => {
+      expect(() => CatalogItem.create(Uuid.generate(), "Valid name", Money.create(10, "BRL"))).not.toThrow();
+    }); 
     
-    expect(() => operation.registerSale(operator.getId(), Uuid.generate(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Catalog does not belong to this operation");
+    it("Should throw error, item name is empty", () => {
+      expect(() => CatalogItem.create(Uuid.generate(), " ", Money.create(10, "BRL"))).toThrowError("Name cannot be empty");
+    });
   });
 
-  it("Should throw error, operator is not assigned to this catalog", () => {
-    operation.addCatalog(catalog);
-    operation.addItemToCatalog(catalog.getId(), item);
-    operation.addItemToCatalog(catalog.getId(), anotherItem);
-    operation.startOperation();
+  describe("Add item to catalog tests", () => {
+    it("Should add item to catalog successfully", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addItemToCatalogOfSeller(sellerId, catalog.getId(), item);
 
-    expect(() => operation.registerSale(operator.getId(), catalog.getId(), [{ item, quantity: 1 }, { item: anotherItem, quantity: 2}])).toThrowError("Operator is not assigned to this catalog");
+      expect(catalog.hasAnyItem()).toBeTrue();
+    });
+
+    it("Should throw error, catalog is not found", () => {
+      operation.addSeller(sellerId);
+
+      expect(() => operation.addItemToCatalogOfSeller(sellerId, Uuid.generate(), item)).toThrowError("Catalog not found");
+    });
   });
 
-  it("Should throw error, no items provided for sale", () => {
-    operation.addCatalog(catalog);
-    operation.addItemToCatalog(catalog.getId(), item);
-    operation.addItemToCatalog(catalog.getId(), anotherItem);
-    operation.startOperation();
-    operation.assignOperator(operator.getId(), catalog.getId(), new Role("cashier"));
+  describe("Start operation tests", () => {    
+    it("Should change operation status successfully", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addItemToCatalogOfSeller(sellerId, catalog.getId(), item);
+      operation.addItemToCatalogOfSeller(sellerId, catalog.getId(), anotherItem);
+      operation.startOperation();
 
-    expect(() => operation.registerSale(operator.getId(), catalog.getId(), [])).toThrowError("Sale must contain at least one item");
+      expect(operation.getStatus()).toBe("on_going");
+    });
+
+
+    it("Should throw error, no catalogs registered", () => {
+      operation.addSeller(sellerId);
+
+      expect(() => operation.startOperation()).toThrowError("No catalogs registered");
+    });
+
+    it("Should throw error, no catalogs with items", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+
+      expect(() => operation.startOperation()).toThrowError("At least one catalog must contain items to start the operation");
+    });
+  });
+
+  describe("Add operator tests", () => {
+    it("Should add operator to seller sucessfully", () => {
+      operation.addSeller(sellerId);
+      operation.addOperatorToSeller(sellerId, operatorId);
+
+      expect(operation.findSeller(sellerId).operatorIsInPool(operatorId)).toBeTrue();
+    });
+
+    it("Should throw exception, operator already in pool", () => {
+      operation.addSeller(sellerId);
+      operation.addOperatorToSeller(sellerId, operatorId);
+
+      expect(() => operation.addOperatorToSeller(sellerId, operatorId)).toThrowError("Operator already in pool");
+    });
+  });
+
+  describe("Assign operator tests", () => {
+    it("Should create assignment successfully", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addOperatorToSeller(sellerId, operatorId);
+      operation.addAssignmentToSeller(sellerId, operatorId, catalog.getId(), new Role("cashier"));
+
+      expect(operation.findSeller(sellerId).isOperatorAlreadyAssigned(operatorId, catalog.getId())).toBeTrue();
+    });
+
+    it("Should throw exception, catalog does not belong to operation", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addOperatorToSeller(sellerId, operatorId);
+
+      expect(() => operation.addAssignmentToSeller(sellerId, operatorId, Uuid.generate(), new Role("cashier"))).toThrowError("Catalog does not belong to this operation");
+    });
+
+    it("Should throw exception, operator already has the same role assigned to the same catalog", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addOperatorToSeller(sellerId, operatorId);
+      operation.addAssignmentToSeller(sellerId, operatorId, catalog.getId(), new Role("cashier"));
+
+      expect(() => operation.addAssignmentToSeller(sellerId, operatorId, catalog.getId(), new Role("cashier"))).toThrowError("Operator already assigned to this catalog");
+    });
+  });
+
+  describe("Seller context isolation tests", () => {
+    it("Should add catalog to both sellers and isolate them", () => {
+      operation.addSeller(sellerId);
+      operation.addSeller(anotherSellerId);
+
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addCatalogToSeller(anotherSellerId, anotherCatalog);
+
+      expect(operation.findSeller(sellerId).getCatalogs()).toContain(catalog);
+      expect(operation.findSeller(anotherSellerId).getCatalogs()).toContain(anotherCatalog);
+      expect(operation.findSeller(sellerId).getCatalogs()).not.toContain(anotherCatalog);
+      expect(operation.findSeller(anotherSellerId).getCatalogs()).not.toContain(catalog);
+    });
+
+    it("Should add item to both sellers catalogs and isolate them", () => {
+      operation.addSeller(sellerId);
+      operation.addSeller(anotherSellerId);
+
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addCatalogToSeller(anotherSellerId, anotherCatalog);
+
+      operation.addItemToCatalogOfSeller(sellerId, catalog.getId(), item);
+      operation.addItemToCatalogOfSeller(anotherSellerId, anotherCatalog.getId(), anotherItem);
+
+      expect(operation.findSeller(sellerId).getCatalog(catalog.getId()).findItem(item.getId())).toBeTruthy();
+      expect(operation.findSeller(anotherSellerId).getCatalog(anotherCatalog.getId()).findItem(anotherItem.getId())).toBeTruthy();
+      expect(() => operation.findSeller(sellerId).getCatalog(catalog.getId()).findItem(anotherItem.getId())).toThrowError("Item not found");
+      expect(() => operation.findSeller(anotherSellerId).getCatalog(anotherCatalog.getId()).findItem(item.getId())).toThrowError("Item not found");
+    });
+
+    it("Should add operator to both sellers and isolate them", () => {
+      operation.addSeller(sellerId);
+      operation.addSeller(anotherSellerId);
+
+      operation.addOperatorToSeller(sellerId, operatorId);
+      operation.addOperatorToSeller(anotherSellerId, anotherOperatorId);
+
+      expect(operation.findSeller(sellerId).operatorIsInPool(operatorId)).toBeTrue();
+      expect(operation.findSeller(anotherSellerId).operatorIsInPool(anotherOperatorId)).toBeTrue();
+      expect(operation.findSeller(sellerId).operatorIsInPool(anotherOperatorId)).toBeFalse();
+      expect(operation.findSeller(anotherSellerId).operatorIsInPool(operatorId)).toBeFalse();
+    });
+
+    it("Should add assignment to both sellers and isolate them", () => {
+      operation.addSeller(sellerId);
+      operation.addSeller(anotherSellerId);
+      
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addCatalogToSeller(anotherSellerId, anotherCatalog);
+
+      operation.addOperatorToSeller(sellerId, operatorId);
+      operation.addOperatorToSeller(anotherSellerId, anotherOperatorId);
+
+      operation.addAssignmentToSeller(sellerId, operatorId, catalog.getId(), new Role("cashier"));
+      operation.addAssignmentToSeller(anotherSellerId, anotherOperatorId, anotherCatalog.getId(), new Role("admin"));
+
+      expect(operation.findSeller(sellerId).isOperatorAlreadyAssigned(operatorId, catalog.getId())).toBeTrue();
+      expect(operation.findSeller(anotherSellerId).isOperatorAlreadyAssigned(anotherOperatorId, anotherCatalog.getId())).toBeTrue();
+      expect(operation.findSeller(sellerId).isOperatorAlreadyAssigned(anotherOperatorId, catalog.getId())).toBeFalse();
+      expect(operation.findSeller(anotherSellerId).isOperatorAlreadyAssigned(operatorId, anotherCatalog.getId())).toBeFalse();
+    });
+  });
+
+  describe("Register sale validation tests", () => {
+    it("Should validate register sale, sale can be registered", () => {
+      operation.addSeller(sellerId);
+      operation.addCatalogToSeller(sellerId, catalog);
+      operation.addItemToCatalogOfSeller(sellerId, catalog.getId(), item);
+      operation.addItemToCatalogOfSeller(sellerId, catalog.getId(), anotherItem);
+      operation.addOperatorToSeller(sellerId, operatorId);
+      operation.addAssignmentToSeller(sellerId, operatorId, catalog.getId(), new Role("cashier"));
+      operation.startOperation();
+      const result = operation.canRegisterSale(sellerId, operatorId, catalog.getId());
+
+      expect(isRight(result)).toBeTrue();
+    });
+
+    it("Should not validate register sale, operation has not started", () => {
+      operation.addSeller(sellerId);
+      const result = operation.canRegisterSale(sellerId, operatorId, catalog.getId());
+
+      expect(isLeft(result)).toBeTrue();
+      expect(result.left?.message).toBe("Operation must be on_going to register a sale");
+    });
   });
 });

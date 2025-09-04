@@ -3,10 +3,18 @@ import type { ValueObject } from "../../shared/value-object.interface";
 export type StatusType = "planned" | "on_going" | "finished";
 
 export class Status implements ValueObject<StatusType> {
-  private status: StatusType;
+  static readonly PLANNED: StatusType = "planned";
+  static readonly ON_GOING: StatusType = "on_going";
+  static readonly FINISHED: StatusType = "finished";
+  static readonly values: StatusType[] = [Status.PLANNED, Status.ON_GOING, Status.FINISHED];
 
-  constructor(status: StatusType) {
-    this.status = status;
+  private readonly status: StatusType;
+
+  constructor(status: string) {
+    if (!Status.values.includes(status as StatusType)) {
+      throw new Error("Invalid status type");
+    }
+    this.status = status as StatusType;
   }
 
   public getValue(): StatusType {
@@ -17,15 +25,15 @@ export class Status implements ValueObject<StatusType> {
     return this.status === other.getValue();
   }
 
-  public isPlanned() {
-    return this.status === "planned";
+  public isPlanned(): boolean {
+    return this.status === Status.PLANNED;
   }
 
-  public isOnGoing() {
-    return this.status === "on_going";
+  public isOnGoing(): boolean {
+    return this.status === Status.ON_GOING;
   }
 
-  public isFinished() {
-    return this.status === "finished";
+  public isFinished(): boolean {
+    return this.status === Status.FINISHED;
   }
 }

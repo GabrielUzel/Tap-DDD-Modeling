@@ -29,4 +29,18 @@ export class Catalog extends Entity {
   public hasAnyItem(): boolean {
     return this.catalogItems.length > 0;
   }
+
+  public findItem(itemId: Uuid): CatalogItem {
+    const item = this.catalogItems.find(item => item.getId() === itemId);
+    
+    if(!item) {
+      throw new Error("Item not found");
+    }
+    
+    return item;
+  }
+
+  public getItems(): CatalogItem[] {
+    return this.catalogItems;
+  }
 }

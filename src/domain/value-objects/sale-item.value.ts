@@ -39,6 +39,10 @@ export class SaleItem implements ValueObject<SaleItemProps> {
     };
   }
 
+  public getTotal(): number {
+    return this.quantity * this.salePrice.getAmount();
+  }
+
   public equals(other: this): boolean {
     return (
       this.catalogItemId.equals(other.catalogItemId) &&

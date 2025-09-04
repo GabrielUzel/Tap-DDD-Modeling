@@ -11,6 +11,10 @@ export class Money implements ValueObject<MoneyProps> {
   private readonly amount: number;
   private readonly sufix: MoneySufix;
 
+  static readonly BRL: MoneySufix = "BRL";
+  static readonly USD: MoneySufix = "USD";
+  static readonly values: MoneySufix[] = [Money.BRL, Money.USD];
+
   constructor(props: MoneyProps) {
     this.amount = props.amount;
     this.sufix = props.sufix;
@@ -19,6 +23,10 @@ export class Money implements ValueObject<MoneyProps> {
   public static create(amount: number, sufix: MoneySufix): Money {
     if(amount < 0) {
       throw new Error("Value must be greater than zero");
+    }
+
+    if (!Money.values.includes(sufix as MoneySufix)) {
+      throw new Error("Invalid money suffix");
     }
 
     return new Money({ amount, sufix });
