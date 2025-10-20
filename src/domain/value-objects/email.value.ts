@@ -1,4 +1,4 @@
-import type { ValueObject } from "../../shared/value-object.interface";
+import type { ValueObject } from "../../utils/value-object.interface";
 
 export class Email implements ValueObject<string> {
   private email: string;
@@ -8,11 +8,11 @@ export class Email implements ValueObject<string> {
   }
 
   public static create(email: string): Email {
-    if(!email) {
+    if (!email) {
       throw new Error("Email cannot be empty");
     }
-    
-    if(!this.emailIsValid(email)) {
+
+    if (!this.emailIsValid(email)) {
       throw new Error("Email format invalid");
     }
 
@@ -20,7 +20,7 @@ export class Email implements ValueObject<string> {
   }
 
   private static emailIsValid(email: string): boolean {
-    const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+    const regex = new RegExp("[a-z0-9]+@[a-z]+\.[a-z]{2,3}");
 
     return regex.test(email);
   }

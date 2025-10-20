@@ -1,12 +1,18 @@
-import type { ValueObject } from "../../shared/value-object.interface";
+import type { ValueObject } from "../../utils/value-object.interface";
 
-export type RoleType = "cashier" | "manager" | "admin";
+export type RoleType = "cashier" | "manager" | "admin" | "stocker";
 
 export class Role implements ValueObject<RoleType> {
   static readonly CASHIER: RoleType = "cashier";
   static readonly MANAGER: RoleType = "manager";
   static readonly ADMIN: RoleType = "admin";
-  static readonly values: RoleType[] = [Role.CASHIER, Role.MANAGER, Role.ADMIN];
+  static readonly STOCKER: RoleType = "stocker";
+  static readonly values: RoleType[] = [
+    Role.CASHIER,
+    Role.MANAGER,
+    Role.ADMIN,
+    Role.STOCKER,
+  ];
 
   private readonly role: RoleType;
 
@@ -35,5 +41,9 @@ export class Role implements ValueObject<RoleType> {
 
   public isAdmin(): boolean {
     return this.role === Role.ADMIN;
+  }
+
+  public isStocker(): boolean {
+    return this.role === Role.STOCKER;
   }
 }

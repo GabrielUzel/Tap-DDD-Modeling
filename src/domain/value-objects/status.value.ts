@@ -1,4 +1,4 @@
-import type { ValueObject } from "../../shared/value-object.interface";
+import type { ValueObject } from "../../utils/value-object.interface";
 
 export type StatusType = "planned" | "on_going" | "finished";
 
@@ -6,7 +6,11 @@ export class Status implements ValueObject<StatusType> {
   static readonly PLANNED: StatusType = "planned";
   static readonly ON_GOING: StatusType = "on_going";
   static readonly FINISHED: StatusType = "finished";
-  static readonly values: StatusType[] = [Status.PLANNED, Status.ON_GOING, Status.FINISHED];
+  static readonly values: StatusType[] = [
+    Status.PLANNED,
+    Status.ON_GOING,
+    Status.FINISHED,
+  ];
 
   private readonly status: StatusType;
 

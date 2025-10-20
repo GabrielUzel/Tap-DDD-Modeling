@@ -1,6 +1,6 @@
-import { Uuid } from "../../shared/uuid";
+import { Uuid } from "../../utils/uuid";
 import { SaleItem } from "../value-objects/sale-item.value";
-import { AggregateRoot } from "../../shared/aggregate-root.abstract";
+import { AggregateRoot } from "../../utils/aggregate-root.abstract";
 
 export class Sale extends AggregateRoot {
   private sellerId: Uuid;
@@ -17,7 +17,7 @@ export class Sale extends AggregateRoot {
     catalogId: Uuid,
     operationId: Uuid,
     items: SaleItem[],
-    totalAmount: number
+    totalAmount: number,
   ) {
     super(id);
     this.sellerId = sellerId;
@@ -34,14 +34,22 @@ export class Sale extends AggregateRoot {
     operatorId: Uuid,
     catalogId: Uuid,
     operationId: Uuid,
-    items: SaleItem[]
+    items: SaleItem[],
   ): Sale {
     if (items.length === 0) {
       throw new Error("Sale must contain at least one item");
     }
 
     const total = items.reduce((sum, item) => sum + item.getTotal(), 0);
-    return new Sale(id, sellerId, operatorId, catalogId, operationId, items, total);
+    return new Sale(
+      id,
+      sellerId,
+      operatorId,
+      catalogId,
+      operationId,
+      items,
+      total,
+    );
   }
 
   public getTotalAmount(): number {

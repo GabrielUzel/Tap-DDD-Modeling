@@ -1,11 +1,11 @@
-import type { Uuid } from "../../shared/uuid";
-import type { ValueObject } from "../../shared/value-object.interface";
+import type { Uuid } from "../../utils/uuid";
+import type { ValueObject } from "../../utils/value-object.interface";
 import type { Money } from "../value-objects/money.value";
 
 interface SaleItemProps {
-  catalogItemId: Uuid
-  quantity: number
-  salePrice: Money
+  catalogItemId: Uuid;
+  quantity: number;
+  salePrice: Money;
 }
 
 export class SaleItem implements ValueObject<SaleItemProps> {
@@ -19,12 +19,16 @@ export class SaleItem implements ValueObject<SaleItemProps> {
     this.salePrice = salePrice;
   }
 
-  public static create(catalogItemId: Uuid, quantity: number, salePrice: Money): SaleItem {
-    if(quantity < 1) {
+  public static create(
+    catalogItemId: Uuid,
+    quantity: number,
+    salePrice: Money,
+  ): SaleItem {
+    if (quantity < 1) {
       throw new Error("Quantity must be greater than one");
     }
 
-    if(quantity > 100) {
+    if (quantity > 100) {
       throw new Error("Quantity must be lower than one hundred");
     }
 
@@ -35,7 +39,7 @@ export class SaleItem implements ValueObject<SaleItemProps> {
     return {
       catalogItemId: this.catalogItemId,
       quantity: this.quantity,
-      salePrice: this.salePrice
+      salePrice: this.salePrice,
     };
   }
 

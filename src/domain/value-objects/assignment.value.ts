@@ -1,6 +1,6 @@
 import { Role } from "../value-objects/role.value";
-import type { ValueObject } from "../../shared/value-object.interface";
-import { Uuid } from "../../shared/uuid";
+import type { ValueObject } from "../../utils/value-object.interface";
+import { Uuid } from "../../utils/uuid";
 
 interface AssignmentProps {
   operatorId: Uuid;
@@ -19,16 +19,20 @@ export class Assignment implements ValueObject<AssignmentProps> {
     this.role = role;
   }
 
-  public static create(operatorId: Uuid, catalogId: Uuid, role: Role): Assignment {
-    if(!operatorId) {
+  public static create(
+    operatorId: Uuid,
+    catalogId: Uuid,
+    role: Role,
+  ): Assignment {
+    if (!operatorId) {
       throw new Error("OperatorId cannot be empty");
     }
 
-    if(!catalogId) {
+    if (!catalogId) {
       throw new Error("CatalogId cannot be empty");
     }
 
-    if(!role) {
+    if (!role) {
       throw new Error("Role cannot be empty");
     }
 

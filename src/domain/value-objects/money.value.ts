@@ -1,4 +1,4 @@
-import type { ValueObject } from "../../shared/value-object.interface";
+import type { ValueObject } from "../../utils/value-object.interface";
 
 export type MoneySufix = "BRL" | "USD";
 
@@ -21,7 +21,7 @@ export class Money implements ValueObject<MoneyProps> {
   }
 
   public static create(amount: number, sufix: MoneySufix): Money {
-    if(amount < 0) {
+    if (amount < 0) {
       throw new Error("Value must be greater than zero");
     }
 
@@ -43,7 +43,7 @@ export class Money implements ValueObject<MoneyProps> {
   public getValue(): MoneyProps {
     return {
       amount: this.amount,
-      sufix: this.sufix
+      sufix: this.sufix,
     };
   }
 

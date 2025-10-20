@@ -1,5 +1,5 @@
-import { Entity } from "../../shared/entity.abstract";
-import type { Uuid } from "../../shared/uuid";
+import { Entity } from "../../utils/entity.abstract";
+import type { Uuid } from "../../utils/uuid";
 import { Money } from "../value-objects/money.value";
 
 export class CatalogItem extends Entity {
@@ -13,7 +13,7 @@ export class CatalogItem extends Entity {
   }
 
   public static create(id: Uuid, name: string, price: Money): CatalogItem {
-    if(!name.trim()) {
+    if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
 

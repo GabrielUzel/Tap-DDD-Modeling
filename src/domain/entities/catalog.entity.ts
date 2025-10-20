@@ -1,5 +1,5 @@
-import { Entity } from "../../shared/entity.abstract";
-import type { Uuid } from "../../shared/uuid";
+import { Entity } from "../../utils/entity.abstract";
+import type { Uuid } from "../../utils/uuid";
 import type { CatalogType } from "../value-objects/catalog-type.value";
 import type { CatalogItem } from "./catalog-item.entity";
 
@@ -15,7 +15,7 @@ export class Catalog extends Entity {
   }
 
   public static create(id: Uuid, name: string, type: CatalogType): Catalog {
-    if(!name.trim()) {
+    if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
 
@@ -31,12 +31,12 @@ export class Catalog extends Entity {
   }
 
   public findItem(itemId: Uuid): CatalogItem {
-    const item = this.catalogItems.find(item => item.getId() === itemId);
-    
-    if(!item) {
+    const item = this.catalogItems.find((item) => item.getId() === itemId);
+
+    if (!item) {
       throw new Error("Item not found");
     }
-    
+
     return item;
   }
 

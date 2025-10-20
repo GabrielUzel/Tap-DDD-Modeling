@@ -1,5 +1,5 @@
-import { Entity } from "../../shared/entity.abstract";
-import { Uuid } from "../../shared/uuid";
+import { Entity } from "../../utils/entity.abstract";
+import { Uuid } from "../../utils/uuid";
 import type { Email } from "../value-objects/email.value";
 
 export class Operator extends Entity {
@@ -13,7 +13,7 @@ export class Operator extends Entity {
   }
 
   public static create(id: Uuid, name: string, email: Email): Operator {
-    if(!name.trim()) {
+    if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
 

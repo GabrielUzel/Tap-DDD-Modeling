@@ -255,7 +255,59 @@ describe("Sale service tests", () => {
       expect(result.left?.message).toBe("Operator is not assigned to this operation");
     });
 
-    it("Should not register a sale, operator not assigned to catalog", async () => {
+    it("Should not register a sale, operator does not have suficient role", async () => {
+      const anotherOperator = await operatorService.createOperator({
+        name: "Another Operator",
+        email: "another@example.com",
+      });
+
+      await sellerService.addOperatorToSellerPool({
+        sellerId: seller.right!.sellerId,
+        operatorId: anotherOperator.right!.operatorId,
+      });
+
+      await operationService.addOperator({
+        operationId: operation.right!.operationId,
+        sellerId: seller.right!.sellerId,
+        operatorId: anotherOperator.right!.operatorId,
+      });
+
+      await operationService.addAssignment({
+        operationId: operation.right!.operationId,
+        sellerId: seller.right!.sellerId,
+        assignment: {
+          operatorId: anotherOperator.right!.operatorId,
+          catalogId: catalog.right!.catalogId,
+          role: "stocker",
+        },
+      });
+
+      await operationService.startOperation({
+        operationId: operation.right!.operationId,
+      });
+      
+      const input = {
+        sellerId: seller.right!.sellerId,
+        operationId: operation.right!.operationId,
+        operatorId: anotherOperator.right!.operatorId,
+        catalogId: catalog.right!.catalogId,
+        items: [
+          {
+            itemId: catalogItem.right!.itemId,
+            quantity: 2,
+          },
+          {
+            itemId: anotherCatalogItem.right!.itemId,
+            quantity: 1,
+          },
+        ],
+      };
+
+      const result = await saleService.registerSale(input);
+      expect(result.left?.message).toBe("Operator does not have permission to register sales");
+    });
+
+    it("Should not register a sale, item does not belong to catalog", async () => {
       const anotherCatalog = await operationService.addCatalog({
         operationId: operation.right!.operationId,
         sellerId: seller.right!.sellerId,

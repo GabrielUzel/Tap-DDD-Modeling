@@ -1,6 +1,5 @@
 import type { RegisterSaleInput, RegisterSaleOutput } from "../dtos/sale/register-sale.dto";
 import { Uuid } from "../../shared/uuid";
-import { Sale } from "../../domain/aggregates/sale.aggregate";
 import { SaleItem } from "../../domain/value-objects/sale-item.value";
 import { OperationRepository } from "../repositories/operation.repository";
 import { SellerRepository } from "../repositories/seller.repository";
@@ -51,14 +50,10 @@ export class SaleService {
         return left(new Error("Seller not found"));
       }
       const seller = sellerResult.right;
-  
-      const canRegisterResult = operation.canRegisterSale(sellerId, new Uuid(input.operatorId), new Uuid(input.catalogId));
-      if (isLeft(canRegisterResult)) {
-        return left(canRegisterResult.left);
-      }
-  
+      
+      // ! Deveria estar dentro de operation?
+      // ! Não gostei dessa implementação, é necessário?
       const items: SaleItem[] = [];
-  
       for (const item of input.items) {
         const catalogResult = await this.catalogRepository.findById(catalogId);
 
@@ -67,7 +62,6 @@ export class SaleService {
         }
 
         const catalog = catalogResult.right;
-
         const catalogItemResult = await this.catalogItemRepository.findById(new Uuid(item.itemId));
         
         if (isLeft(catalogItemResult)) {
@@ -75,7 +69,7 @@ export class SaleService {
         }
 
         const catalogItem = catalogItemResult.right;
-        const itemExistsInCatalog = catalog.getItems().some((index: CatalogItem) => catalogItem.getId().equals(index.getId()));
+        const itemExistsInCatalog = catalog.getItems().some((index: CatalogItem) => catalogItem.getId().equals(index.getId())); // ! Pode usar map
 
         if (!itemExistsInCatalog) {
           return left(new Error("Catalog item does not belong to this catalog"));
@@ -83,24 +77,20 @@ export class SaleService {
 
         items.push(SaleItem.create(new Uuid(item.itemId), item.quantity, catalogItem.getPrice()));
       }
-  
-      const saleId = Uuid.generate();
-      const sale = Sale.create(
-        saleId,
-        seller.getId(),
-        operatorId,
-        catalogId,
-        operation.getId(),
-        items,
-      );
-  
-      await this.saleRepository.save(sale);
-  
+
+      const sale = operation.registerSale(operationId, sellerId, operatorId, catalogId, items);
+
+      if (isLeft(sale)) {
+        return left(sale.left);
+      }
+
+      await this.saleRepository.save(sale.right);
+
       return right({
-        saleId: sale.getId().getValue(),
+        saleId: sale.right.getId().getValue(),
         sellerId: seller.getId().getValue(),
         operationId: operation.getId().getValue(),
-        totalAmount: sale.getTotalAmount(),
+        totalAmount: sale.right.getTotalAmount(),
       });
     } catch (error: unknown) {
       if (error instanceof Error) {

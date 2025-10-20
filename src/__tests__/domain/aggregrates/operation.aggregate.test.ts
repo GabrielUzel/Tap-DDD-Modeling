@@ -4,7 +4,8 @@ import { Uuid } from "../../../shared/uuid";
 import { Catalog } from "../../../domain/entities/catalog.entity";
 import { CatalogType } from "../../../domain/value-objects/catalog-type.value";
 import { CatalogItem } from "../../../domain/entities/catalog-item.entity";
-import { Money } from "../../../domain/value-objects/money.value";
+import { SaleItem } from "../../../domain/value-objects/sale-item.value";
+import { Money, type MoneySufix } from "../../../domain/value-objects/money.value";
 import { Role } from "../../../domain/value-objects/role.value";
 import { OperationSeller } from "../../../domain/entities/operation-seller.child-entity";
 import { isLeft, isRight } from "../../../shared/either.protocol";
@@ -253,14 +254,27 @@ describe("Operation aggregate tests", () => {
       operation.addOperatorToSeller(sellerId, operatorId);
       operation.addAssignmentToSeller(sellerId, operatorId, catalog.getId(), new Role("cashier"));
       operation.startOperation();
-      const result = operation.canRegisterSale(sellerId, operatorId, catalog.getId());
+
+      const moneySuffix = "BRL" as MoneySufix;
+      const items = [
+        new SaleItem(item.getId(), 1, new Money({ amount: 100, sufix: moneySuffix })),
+        new SaleItem(anotherItem.getId(), 2, new Money({ amount: 200, sufix: moneySuffix }))
+      ];
+
+      const result = operation.registerSale(operatorId, sellerId, operatorId, catalog.getId(), items);
 
       expect(isRight(result)).toBeTrue();
     });
 
     it("Should not validate register sale, operation has not started", () => {
       operation.addSeller(sellerId);
-      const result = operation.canRegisterSale(sellerId, operatorId, catalog.getId());
+      const moneySuffix = "BRL" as MoneySufix;
+      const items = [
+        new SaleItem(item.getId(), 1, new Money({ amount: 100, sufix: moneySuffix })),
+        new SaleItem(anotherItem.getId(), 2, new Money({ amount: 200, sufix: moneySuffix }))
+      ];
+
+      const result = operation.registerSale(operatorId, sellerId, operatorId, catalog.getId(), items);
 
       expect(isLeft(result)).toBeTrue();
       expect(result.left?.message).toBe("Operation must be on_going to register a sale");
