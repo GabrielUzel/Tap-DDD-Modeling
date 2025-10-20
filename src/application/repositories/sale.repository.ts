@@ -1,4 +1,3 @@
-// application/repositories/sale.repository.ts
 import { Uuid } from "../../utils/uuid";
 import { Sale } from "../../domain/aggregates/sale.aggregate";
 
