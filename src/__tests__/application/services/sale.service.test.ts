@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach } from "bun:test";
 import ServicesFactory from "../../../application/services/services.factory";
 import { SaleService } from "../../../application/services/sale.service";
 import type { SellerService } from "../../../application/services/seller.service";
-import { isRight } from "../../../shared/either.protocol";
-import { Uuid } from "../../../shared/uuid";
+import { isRight } from "../../../utils/either.protocol";
+import { Uuid } from "../../../utils/uuid";
 import type { OperationService } from "../../../application/services/operation.service";
 import type { OperatorService } from "../../../application/services/operator.service";
 import type { CatalogService } from "../../../application/services/catalog.service";
@@ -13,7 +13,7 @@ describe("Sale service tests", () => {
   let operationService: OperationService;
   let sellerService: SellerService;
   let operatorService: OperatorService;
-  let catalogService: CatalogService; 
+  let catalogService: CatalogService;
 
   beforeEach(() => {
     const services = ServicesFactory.create();
@@ -113,7 +113,7 @@ describe("Sale service tests", () => {
       await operationService.startOperation({
         operationId: operation.right!.operationId,
       });
-      
+
       const input = {
         sellerId: seller.right!.sellerId,
         operationId: operation.right!.operationId,
@@ -154,7 +154,9 @@ describe("Sale service tests", () => {
       };
 
       const result = await saleService.registerSale(input);
-      expect(result.left?.message).toBe("Operation must be on_going to register a sale");
+      expect(result.left?.message).toBe(
+        "Operation must be on_going to register a sale",
+      );
     });
 
     it("Should not register a sale, seller not part of operation", async () => {
@@ -162,11 +164,11 @@ describe("Sale service tests", () => {
         name: "Another Seller",
         email: "another@example.com",
       });
-      
+
       await operationService.startOperation({
         operationId: operation.right!.operationId,
       });
-      
+
       const input = {
         sellerId: anotherSeller.right!.sellerId,
         operationId: operation.right!.operationId,
@@ -185,7 +187,9 @@ describe("Sale service tests", () => {
       };
 
       const result = await saleService.registerSale(input);
-      expect(result.left?.message).toBe("Seller does not belong to this operation");
+      expect(result.left?.message).toBe(
+        "Seller does not belong to this operation",
+      );
     });
 
     it("Should not register a sale, catalog does not belong to operation or seller", async () => {
@@ -216,7 +220,9 @@ describe("Sale service tests", () => {
       };
 
       const result = await saleService.registerSale(input);
-      expect(result.left?.message).toBe("Catalog does not belong to this seller");
+      expect(result.left?.message).toBe(
+        "Catalog does not belong to this seller",
+      );
     });
 
     it("Should not register a sale, operator not assigned to operation", async () => {
@@ -252,7 +258,9 @@ describe("Sale service tests", () => {
       };
 
       const result = await saleService.registerSale(input);
-      expect(result.left?.message).toBe("Operator is not assigned to this operation");
+      expect(result.left?.message).toBe(
+        "Operator is not assigned to this operation",
+      );
     });
 
     it("Should not register a sale, operator does not have suficient role", async () => {
@@ -285,7 +293,7 @@ describe("Sale service tests", () => {
       await operationService.startOperation({
         operationId: operation.right!.operationId,
       });
-      
+
       const input = {
         sellerId: seller.right!.sellerId,
         operationId: operation.right!.operationId,
@@ -304,7 +312,9 @@ describe("Sale service tests", () => {
       };
 
       const result = await saleService.registerSale(input);
-      expect(result.left?.message).toBe("Operator does not have permission to register sales");
+      expect(result.left?.message).toBe(
+        "Operator does not have permission to register sales",
+      );
     });
 
     it("Should not register a sale, item does not belong to catalog", async () => {
@@ -316,7 +326,6 @@ describe("Sale service tests", () => {
           type: "general",
         },
       });
-
 
       await operationService.startOperation({
         operationId: operation.right!.operationId,
@@ -340,10 +349,12 @@ describe("Sale service tests", () => {
       };
 
       const result = await saleService.registerSale(input);
-      expect(result.left?.message).toBe("Operator is not assigned to this catalog");
+      expect(result.left?.message).toBe(
+        "Operator is not assigned to this catalog",
+      );
     });
 
-    it("Should not register a sale, item does not belong to catalog", async () => {      
+    it("Should not register a sale, item does not belong to catalog", async () => {
       const anotherCatalog = await operationService.addCatalog({
         operationId: operation.right!.operationId,
         sellerId: seller.right!.sellerId,
@@ -384,7 +395,9 @@ describe("Sale service tests", () => {
       };
 
       const result = await saleService.registerSale(input);
-      expect(result.left?.message).toBe("Catalog item does not belong to this catalog");
+      expect(result.left?.message).toBe(
+        "Catalog item does not belong to this catalog",
+      );
     });
 
     it("Should not register a sale, item does not exist", async () => {

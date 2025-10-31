@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from "bun:test";
-import { Uuid } from "../../../shared/uuid";
+import { Uuid } from "../../../utils/uuid";
 import ServicesFactory from "../../../application/services/services.factory";
 import { OperationService } from "../../../application/services/operation.service";
 import { OperatorService } from "../../../application/services/operator.service";
 import { SellerService } from "../../../application/services/seller.service";
-import { isLeft, isRight } from "../../../shared/either.protocol";
+import { isLeft, isRight } from "../../../utils/either.protocol";
 
 describe("Operation service tests", () => {
   let operationService: OperationService;
@@ -51,7 +51,7 @@ describe("Operation service tests", () => {
       const input = {
         operationId: operation.right.operationId,
         sellerId: Uuid.generate().getValue(),
-      }
+      };
 
       const result = await operationService.addSeller({
         operationId: input.operationId,
@@ -62,17 +62,17 @@ describe("Operation service tests", () => {
     });
 
     it("Should return left, operation not found", async () => {
-        const input = {
-          operationId: Uuid.generate().getValue(),
-          sellerId: Uuid.generate().getValue(),
-        }
+      const input = {
+        operationId: Uuid.generate().getValue(),
+        sellerId: Uuid.generate().getValue(),
+      };
 
-        const result = await operationService.addSeller({
-          operationId: input.operationId,
-          sellerId: input.sellerId,
-        });
+      const result = await operationService.addSeller({
+        operationId: input.operationId,
+        sellerId: input.sellerId,
+      });
 
-        expect(isLeft(result)).toBe(true);
+      expect(isLeft(result)).toBe(true);
     });
   });
 
@@ -183,7 +183,7 @@ describe("Operation service tests", () => {
           name: "Test Catalog",
           type: "general",
         },
-      }; 
+      };
 
       const result = await operationService.addCatalog(input);
 
@@ -524,7 +524,6 @@ describe("Operation service tests", () => {
         email: "test@example.com",
       });
 
-
       if (!sellerResult.right) {
         throw new Error("Seller creation failed");
       }
@@ -542,7 +541,7 @@ describe("Operation service tests", () => {
         operationId: operationResult.right.operationId,
         sellerId: sellerResult.right.sellerId,
       });
-      
+
       await sellerService.addOperatorToSellerPool({
         sellerId: sellerResult.right.sellerId,
         operatorId: operatorResult.right.operatorId,
@@ -729,7 +728,9 @@ describe("Operation service tests", () => {
 
       const result = await operationService.addAssignment(input);
 
-      expect(result.left?.message).toBe("Catalog does not belong to this operation");
+      expect(result.left?.message).toBe(
+        "Catalog does not belong to this operation",
+      );
     });
 
     it("Should return left, role is invalid", async () => {
@@ -763,7 +764,7 @@ describe("Operation service tests", () => {
         operationId: operationResult.right.operationId,
         sellerId: sellerResult.right.sellerId,
       });
-      
+
       await sellerService.addOperatorToSellerPool({
         sellerId: sellerResult.right.sellerId,
         operatorId: operatorResult.right.operatorId,
@@ -801,7 +802,7 @@ describe("Operation service tests", () => {
       const result = await operationService.addAssignment(input);
 
       expect(result.left?.message).toBe("Invalid role type");
-    });    
+    });
   });
 
   describe("Start operation tests", () => {
@@ -944,7 +945,9 @@ describe("Operation service tests", () => {
       };
 
       const result = await operationService.startOperation(input);
-      expect(result.left?.message).toBe("At least one catalog must contain items to start the operation");
+      expect(result.left?.message).toBe(
+        "At least one catalog must contain items to start the operation",
+      );
     });
   });
 });

@@ -1,0 +1,265 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddAssignmentInput {
+  catalogId: String!
+  operationId: String!
+  operatorId: String!
+  role: String!
+  sellerId: String!
+}
+
+type AddAssignmentOutput {
+  catalogId: String!
+  operationId: String!
+  operatorId: String!
+  role: String!
+  sellerId: String!
+}
+
+input AddCatalogInput {
+  catalogName: String!
+  catalogType: String!
+  operationId: String!
+  sellerId: String!
+}
+
+input AddCatalogItemInput {
+  catalogId: String!
+  itemName: String!
+  itemPriceAmount: Float!
+  itemPriceSufix: String!
+  operationId: String!
+  sellerId: String!
+}
+
+type AddCatalogItemOutput {
+  catalogId: String!
+  itemId: String!
+  operationId: String!
+  sellerId: String!
+}
+
+type AddCatalogOutput {
+  catalogId: String!
+  operationId: String!
+  sellerId: String!
+}
+
+input AddOperatorToSellerPoolInput {
+  operatorEmail: String!
+  operatorName: String!
+  sellerId: String!
+}
+
+type AddOperatorToSellerPoolOutput {
+  operatorId: String!
+  sellerId: String!
+}
+
+input AddSellerInput {
+  operationId: String!
+  sellerId: String!
+}
+
+type AddSellerOutput {
+  operationId: String!
+  sellerId: String!
+}
+
+type CatalogItemType {
+  itemId: String!
+  itemName: String!
+  itemPrice: Float!
+}
+
+type CatalogType {
+  catalogId: String!
+  catalogName: String!
+  catalogType: String!
+  items: [CatalogItemType!]!
+}
+
+input CreateOperationInput {
+  name: String!
+}
+
+type CreateOperationOutput {
+  operationId: String!
+}
+
+input CreateSellerInput {
+  email: String!
+  name: String!
+}
+
+type CreateSellerOutput {
+  sellerId: String!
+}
+
+input GetCatalogInput {
+  catalogId: String!
+  sellerId: String!
+}
+
+type GetCatalogOutput {
+  catalog: CatalogType!
+}
+
+input GetOperationInput {
+  operationId: String!
+}
+
+type GetOperationOutput {
+  name: String!
+  operationId: String!
+  status: String!
+}
+
+type GetOperationsOutput {
+  operations: [OperationType!]!
+}
+
+input GetOperatorsInput {
+  sellerId: String!
+}
+
+type GetOperatorsOutput {
+  operators: [OperatorType!]!
+}
+
+input GetSaleInput {
+  saleId: String!
+}
+
+type GetSaleOutput {
+  catalogId: String!
+  items: [SaleItemOutput!]!
+  operationId: String!
+  operatorId: String!
+  saleId: String!
+  sellerId: String!
+  totalAmount: Float!
+}
+
+input GetSellerInput {
+  sellerId: String!
+}
+
+type GetSellerOutput {
+  email: String!
+  name: String!
+  sellerId: String!
+}
+
+input GetSellersInput {
+  operationId: String!
+}
+
+type GetSellersOutput {
+  operationId: String!
+  sellers: [SellerType!]!
+}
+
+type Mutation {
+  addAssignment(input: AddAssignmentInput!): AddAssignmentOutput!
+  addCatalog(input: AddCatalogInput!): AddCatalogOutput!
+  addCatalogItem(input: AddCatalogItemInput!): AddCatalogItemOutput!
+  addOperatorToSellerPool(input: AddOperatorToSellerPoolInput!): AddOperatorToSellerPoolOutput!
+  addSeller(input: AddSellerInput!): AddSellerOutput!
+  createOperation(input: CreateOperationInput!): CreateOperationOutput!
+  createSeller(input: CreateSellerInput!): CreateSellerOutput!
+  registerSale(input: RegisterSaleInput!): RegisterSaleOutput!
+  startOperation(input: StartOperationInput!): StartOperationOutput!
+  updateCatalog(input: UpdateCatalogInput!): UpdateCatalogOutput!
+}
+
+type OperationType {
+  name: String!
+  operationId: String!
+  status: String!
+}
+
+type OperatorType {
+  operatorEmail: String!
+  operatorId: String!
+  operatorName: String!
+}
+
+type Query {
+  getCatalog(input: GetCatalogInput!): GetCatalogOutput!
+  getOperation(input: GetOperationInput!): GetOperationOutput!
+  getOperations: GetOperationsOutput!
+  getOperators(input: GetOperatorsInput!): GetOperatorsOutput!
+  getSale(input: GetSaleInput!): GetSaleOutput!
+  getSeller(input: GetSellerInput!): GetSellerOutput!
+  getSellers(input: GetSellersInput!): GetSellersOutput!
+  sellerHasOperator(input: SellerHasOperatorInput!): SellerHasOperatorOutput!
+}
+
+input RegisterSaleInput {
+  catalogId: String!
+  items: [RegisterSaleItemInput!]!
+  operationId: String!
+  operatorId: String!
+  sellerId: String!
+}
+
+input RegisterSaleItemInput {
+  itemId: String!
+  quantity: Int!
+}
+
+type RegisterSaleOutput {
+  saleId: String!
+  totalAmount: Float!
+}
+
+type SaleItemOutput {
+  itemId: String!
+  quantity: Int!
+  salePrice: Float!
+  total: Float!
+}
+
+input SellerHasOperatorInput {
+  operatorId: String!
+  sellerId: String!
+}
+
+type SellerHasOperatorOutput {
+  hasOperator: Boolean!
+}
+
+type SellerType {
+  email: String!
+  name: String!
+  sellerId: String!
+}
+
+input StartOperationInput {
+  operationId: String!
+}
+
+type StartOperationOutput {
+  operationId: String!
+}
+
+input UpdateCatalogInput {
+  catalogId: String!
+  catalogName: String
+  catalogType: String
+  items: [UpdateCatalogItemInput!]
+  sellerId: String!
+}
+
+input UpdateCatalogItemInput {
+  itemId: String!
+  itemName: String!
+  itemPrice: Float!
+}
+
+type UpdateCatalogOutput {
+  sellerId: String!
+}

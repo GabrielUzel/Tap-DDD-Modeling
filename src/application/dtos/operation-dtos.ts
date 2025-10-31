@@ -1,18 +1,43 @@
-// === AddAssignment ===
-export interface AddAssignmentInput {
-  operationId: string;
-  sellerId: string;
-  operatorId: string;
-  catalogId: string;
-  role: string;
+// === CreateOperation ===
+export interface CreateOperationInput {
+  name: string;
 }
 
-export interface AddAssignmentOutput {
+export interface CreateOperationOutput {
+  operationId: string;
+}
+
+export interface GetOperationsOutput {
+  operations: {
+    operationId: string;
+    name: string;
+    status: string;
+  }[];
+}
+
+// === AddSeller ===
+export interface AddSellerInput {
   operationId: string;
   sellerId: string;
-  operatorId: string;
+}
+
+export interface AddSellerOutput {
+  operationId: string;
+  sellerId: string;
+}
+
+// === AddCatalog ===
+export interface AddCatalogInput {
+  operationId: string;
+  sellerId: string;
+  catalogName: string;
+  catalogType: string;
+}
+
+export interface AddCatalogOutput {
+  operationId: string;
+  sellerId: string;
   catalogId: string;
-  role: string;
 }
 
 // === AddCatalogItem ===
@@ -32,54 +57,54 @@ export interface AddCatalogItemOutput {
   itemId: string;
 }
 
-// === AddCatalog ===
-export interface AddCatalogInput {
+// === AddAssignment ===
+export interface AddAssignmentInput {
   operationId: string;
   sellerId: string;
-  catalogName: string;
-  catalogType: string;
-}
-
-export interface AddCatalogOutput {
-  operationId: string;
-  sellerId: string;
+  operatorId: string;
   catalogId: string;
+  role: string;
 }
 
-// === AddOperator ===
-export interface AddOperatorInput {
+export interface AddAssignmentOutput {
   operationId: string;
   sellerId: string;
   operatorId: string;
-}
-
-export interface AddOperatorOutput {
-  operationId: string;
-  sellerId: string;
-  operatorId: string;
-}
-
-// === AddSeller ===
-export interface AddSellerInput {
-  operationId: string;
-  sellerId: string;
-}
-
-export interface AddSellerOutput {
-  operationId: string;
-  sellerId: string;
-}
-
-// === CreateOperation ===
-export interface CreateOperationInput {
-  name: string;
-}
-
-export interface CreateOperationOutput {
-  operationId: string;
+  catalogId: string;
+  role: string;
 }
 
 // === StartOperation ===
 export interface StartOperationInput {
   operationId: string;
+}
+
+export interface StartOperationOutput {
+  operationId: string;
+}
+
+// === GetOperationInput ===
+export interface GetOperationInput {
+  operationId: string;
+}
+
+// === GetOperationOutput ===
+export interface GetOperationOutput {
+  operationId: string;
+  name: string;
+  status: string;
+}
+
+// === GetSellers ===
+export interface GetSellersInput {
+  operationId: string;
+}
+
+export interface GetSellersOutput {
+  operationId: string;
+  sellers: {
+    sellerId: string;
+    name: string;
+    email: string;
+  }[];
 }

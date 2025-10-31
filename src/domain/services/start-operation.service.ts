@@ -1,4 +1,4 @@
-import { Seller } from "../aggregates/seller.aggregate";
+import { Seller } from "../seller/seller.aggregate";
 
 export class StartOperationDomainService {
   validateOperationCanStart(sellers: Seller[]): void {

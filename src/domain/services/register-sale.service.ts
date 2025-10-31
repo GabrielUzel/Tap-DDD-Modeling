@@ -1,5 +1,5 @@
-import { Seller } from "../aggregates/seller.aggregate";
-import { Uuid } from "../../utils/uuid";
+import { Seller } from "../seller/seller.aggregate";
+import { Uuid } from "../@shared/interfaces/uuid";
 
 export class RegisterSaleDomainService {
   validateCanRegisterSale(

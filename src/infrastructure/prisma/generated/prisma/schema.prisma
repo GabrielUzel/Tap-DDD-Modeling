@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Operation {
+  id        String   @id
+  name      String
+  status    String
+  sellerIds String[]
+  sales     Sale[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("operations")
+}
+
+model Seller {
+  id          String       @id
+  name        String
+  email       String       @unique
+  operators   Operator[]
+  catalogs    Catalog[]
+  assignments Assignment[]
+  sales       Sale[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("sellers")
+}
+
+model Operator {
+  id        String   @id
+  name      String
+  email     String
+  sellerId  String
+  seller    Seller   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sellerId])
+  @@map("operators")
+}
+
+model Catalog {
+  id        String        @id
+  name      String
+  type      String
+  sellerId  String
+  seller    Seller        @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  items     CatalogItem[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("catalogs")
+}
+
+model CatalogItem {
+  id          String   @id
+  name        String
+  priceAmount Int
+  priceSuffix String
+  catalogId   String
+  catalog     Catalog  @relation(fields: [catalogId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("catalog_items")
+}
+
+model Assignment {
+  id         String   @id @default(uuid())
+  operatorId String
+  catalogId  String
+  role       String
+  sellerId   String
+  seller     Seller   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([operatorId, catalogId, sellerId])
+  @@index([sellerId])
+  @@map("assignments")
+}
+
+model Sale {
+  id          String     @id
+  sellerId    String
+  seller      Seller     @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  operatorId  String
+  catalogId   String
+  operationId String
+  operation   Operation  @relation(fields: [operationId], references: [id], onDelete: Restrict)
+  totalAmount Int
+  items       SaleItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([operationId])
+  @@index([sellerId])
+  @@map("sales")
+}
+
+model SaleItem {
+  id          String   @id @default(uuid())
+  itemId      String
+  quantity    Int
+  priceAmount Int
+  priceSuffix String
+  saleId      String
+  sale        Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([saleId])
+  @@map("sale_items")
+}

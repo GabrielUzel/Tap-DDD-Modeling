@@ -1,16 +1,35 @@
 {
   "name": "tap-ddd-modeling",
   "module": "index.ts",
-  "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "nest start --watch",
+    "start": "nest start",
+    "db:generate": "prisma generate --schema=src/infrastructure/prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema=src/infrastructure/prisma/schema.prisma",
+    "db:studio": "prisma studio --schema=src/infrastructure/prisma/schema.prisma",
+    "build": "nest build"
+  },
   "devDependencies": {
+    "@nestjs/cli": "^11.0.10",
     "@types/bun": "latest",
+    "@types/node": "^24.9.0",
     "@types/uuid": "^8.3.4"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@apollo/server": "^5.0.0",
+    "@as-integrations/fastify": "^3.1.0",
+    "@nestjs/apollo": "^13.2.1",
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/graphql": "^13.2.0",
+    "@nestjs/platform-fastify": "^11.1.6",
+    "@prisma/client": "^6.17.1",
+    "graphql": "^16.11.0",
+    "prisma": "^6.17.1",
     "uuid": "^9.0.1",
     "uuid-validate": "latest"
   }
