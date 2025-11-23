@@ -15,10 +15,15 @@ import {
   GetCatalogOutput,
   UpdateCatalogInput,
   UpdateCatalogOutput,
+  AddCatalogItemToCatalogInput,
+  AddCatalogItemToCatalogOutput,
+  RemoveCatalogItemFromCatalogInput,
+  RemoveCatalogItemFromCatalogOutput,
 } from "../types/seller.types";
 import { CreateSellerCommand } from "src/application/services/commands/dtos/create-seller.command";
 import { AddOperatorToSellerPoolCommand } from "src/application/services/commands/dtos/add-operator-to-seller-pool.command";
 import { UpdateCatalogCommand } from "src/application/services/commands/dtos/update-catalog.command";
+import { RemoveCatalogItemFromCatalogCommand } from "src/application/services/commands/dtos/remove-catalog-item-from-catalog.command";
 import { GetSellerQuery } from "src/application/services/queries/dtos/get-seller.query";
 import { SellerHasOperatorQuery } from "src/application/services/queries/dtos/seller-has-operator.query";
 import { GetOperatorsQuery } from "src/application/services/queries/dtos/get-operators.query";
@@ -63,7 +68,19 @@ export class SellerResolver {
         input.catalogId,
         input.catalogName,
         input.catalogType,
-        input.items,
+      ),
+    );
+  }
+
+  @Mutation(() => RemoveCatalogItemFromCatalogOutput)
+  async removeCatalogItemFromCatalog(
+    @Args("input") input: RemoveCatalogItemFromCatalogInput,
+  ): Promise<RemoveCatalogItemFromCatalogOutput> {
+    return this.commandBus.execute(
+      new RemoveCatalogItemFromCatalogCommand(
+        input.sellerId,
+        input.catalogId,
+        input.itemId,
       ),
     );
   }

@@ -22,8 +22,8 @@ export class SaleResolver {
   ): Promise<RegisterSaleOutput> {
     return this.commandBus.execute(
       new RegisterSaleCommand(
-        input.operationId,
         input.sellerId,
+        input.operationId,
         input.operatorId,
         input.catalogId,
         input.items,

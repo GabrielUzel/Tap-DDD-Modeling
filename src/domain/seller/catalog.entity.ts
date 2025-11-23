@@ -28,6 +28,18 @@ export class Catalog extends Entity {
     this._catalogItems.push(catalogItem);
   }
 
+  public removeItem(itemId: Uuid): void {
+    const index = this._catalogItems.findIndex((item) =>
+      item.getId().equals(itemId),
+    );
+
+    if (index === -1) {
+      throw new Error("Item not found");
+    }
+
+    this._catalogItems.splice(index, 1);
+  }
+
   public hasAnyItem(): boolean {
     return this._catalogItems.length > 0;
   }

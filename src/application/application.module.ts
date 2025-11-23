@@ -9,9 +9,11 @@ import {
   AddOperatorToSellerPoolHandler,
   AddSellerToOperationHandler,
   CreateOperationHandler,
+  CreateSellerHandler,
   RegisterSaleHandler,
   StartOperationHandler,
   UpdateCatalogHandler,
+  RemoveCatalogItemFromCatalogHandler,
 } from "./services/commands/__index__";
 
 import {
@@ -32,9 +34,11 @@ const COMMAND_HANDLERS = [
   AddOperatorToSellerPoolHandler,
   AddSellerToOperationHandler,
   CreateOperationHandler,
+  CreateSellerHandler,
   RegisterSaleHandler,
   StartOperationHandler,
   UpdateCatalogHandler,
+  RemoveCatalogItemFromCatalogHandler,
 ];
 
 const QUERY_HANDLERS = [

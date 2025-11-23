@@ -4,6 +4,8 @@ export { CreateCatalogHandler } from "./create-catalog.handler";
 export { AddOperatorToSellerPoolHandler } from "./add-operator-to-seller-pool.handler";
 export { AddSellerToOperationHandler } from "./add-seller-to-operation.handler";
 export { CreateOperationHandler } from "./create-operation.handler";
+export { CreateSellerHandler } from "./create-seller.handler";
 export { RegisterSaleHandler } from "./register-sale.handler";
 export { StartOperationHandler } from "./start-operation.handler";
 export { UpdateCatalogHandler } from "./update-catalog.handler";
+export { RemoveCatalogItemFromCatalogHandler } from "./remove-catalog-item-from-catalog.handler";

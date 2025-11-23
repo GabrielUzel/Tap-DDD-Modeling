@@ -171,6 +171,7 @@ type Mutation {
   createOperation(input: CreateOperationInput!): CreateOperationOutput!
   createSeller(input: CreateSellerInput!): CreateSellerOutput!
   registerSale(input: RegisterSaleInput!): RegisterSaleOutput!
+  removeCatalogItemFromCatalog(input: RemoveCatalogItemFromCatalogInput!): RemoveCatalogItemFromCatalogOutput!
   startOperation(input: StartOperationInput!): StartOperationOutput!
   updateCatalog(input: UpdateCatalogInput!): UpdateCatalogOutput!
 }
@@ -209,6 +210,17 @@ input RegisterSaleInput {
 type RegisterSaleOutput {
   saleId: String!
   totalAmountInCents: Int!
+}
+
+input RemoveCatalogItemFromCatalogInput {
+  catalogId: String!
+  itemId: String!
+  sellerId: String!
+}
+
+type RemoveCatalogItemFromCatalogOutput {
+  catalogId: String!
+  itemId: String!
 }
 
 type SaleItem {
@@ -250,16 +262,9 @@ input UpdateCatalogInput {
   catalogId: String!
   catalogName: String
   catalogType: String
-  items: [UpdateCatalogItemInput!]
   sellerId: String!
-}
-
-input UpdateCatalogItemInput {
-  itemId: String!
-  itemName: String!
-  itemPrice: Int!
 }
 
 type UpdateCatalogOutput {
-  sellerId: String!
+  catalogId: String!
 }

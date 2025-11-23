@@ -76,18 +76,6 @@ export class AddOperatorToSellerPoolOutput {
 }
 
 @InputType()
-export class UpdateCatalogItemInput {
-  @Field()
-  itemId!: string;
-
-  @Field()
-  itemName!: string;
-
-  @Field(() => Int)
-  itemPrice!: number;
-}
-
-@InputType()
 export class UpdateCatalogInput {
   @Field()
   sellerId!: string;
@@ -100,9 +88,12 @@ export class UpdateCatalogInput {
 
   @Field({ nullable: true })
   catalogType?: string;
+}
 
-  @Field(() => [UpdateCatalogItemInput], { nullable: true })
-  items?: UpdateCatalogItemInput[];
+@ObjectType()
+export class UpdateCatalogOutput {
+  @Field()
+  catalogId!: string;
 }
 
 @InputType()
@@ -165,8 +156,59 @@ export class GetCatalogOutput {
   catalog!: CatalogType;
 }
 
-@ObjectType()
-export class UpdateCatalogOutput {
+@InputType()
+export class AddCatalogItemToCatalogInput {
+  @Field()
+  operationId!: string;
+
   @Field()
   sellerId!: string;
+
+  @Field()
+  catalogId!: string;
+
+  @Field()
+  itemName!: string;
+
+  @Field(() => Int)
+  itemPriceAmount!: number;
+
+  @Field()
+  itemPriceSufix!: string;
+}
+
+@ObjectType()
+export class AddCatalogItemToCatalogOutput {
+  @Field()
+  operationId!: string;
+
+  @Field()
+  sellerId!: string;
+
+  @Field()
+  catalogId!: string;
+
+  @Field()
+  itemId!: string;
+}
+
+@InputType()
+export class RemoveCatalogItemFromCatalogInput {
+  @Field()
+  sellerId!: string;
+
+  @Field()
+  catalogId!: string;
+
+  @Field()
+  itemId!: string;
+}
+
+@ObjectType()
+export class RemoveCatalogItemFromCatalogOutput {
+  @Field()
+  catalogId!: string;
+
+  @Field()
+  itemId!: string;
 }

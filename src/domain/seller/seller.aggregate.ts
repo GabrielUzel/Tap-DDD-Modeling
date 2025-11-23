@@ -84,6 +84,11 @@ export class Seller extends AggregateRoot {
     catalog.addItem(item);
   }
 
+  public removeItemFromCatalog(catalogId: Uuid, itemId: Uuid): void {
+    const catalog = this.getCatalog(catalogId);
+    catalog.removeItem(itemId);
+  }
+
   public hasCatalogWithItems(): boolean {
     return this._catalogs.some((catalog) => catalog.hasAnyItem());
   }
