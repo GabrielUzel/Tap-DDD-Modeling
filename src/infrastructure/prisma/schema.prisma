@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Operation {
@@ -61,14 +60,14 @@ model Catalog {
 }
 
 model CatalogItem {
-  id          String   @id
-  name        String
-  priceAmount Int
-  priceSuffix String
-  catalogId   String
-  catalog     Catalog  @relation(fields: [catalogId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                 String   @id
+  name               String
+  priceAmountInCents Int
+  priceSuffix        String
+  catalogId          String
+  catalog            Catalog  @relation(fields: [catalogId], references: [id], onDelete: Cascade)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@map("catalog_items")
 }
@@ -89,17 +88,17 @@ model Assignment {
 }
 
 model Sale {
-  id          String     @id
-  sellerId    String
-  seller      Seller     @relation(fields: [sellerId], references: [id], onDelete: Restrict)
-  operatorId  String
-  catalogId   String
-  operationId String
-  operation   Operation  @relation(fields: [operationId], references: [id], onDelete: Restrict)
-  totalAmount Int
-  items       SaleItem[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id                 String     @id
+  sellerId           String
+  seller             Seller     @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  operatorId         String
+  catalogId          String
+  operationId        String
+  operation          Operation  @relation(fields: [operationId], references: [id], onDelete: Restrict)
+  totalAmountInCents Int
+  items              SaleItem[]
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 
   @@index([operationId])
   @@index([sellerId])
@@ -107,15 +106,15 @@ model Sale {
 }
 
 model SaleItem {
-  id          String   @id @default(uuid())
-  itemId      String
-  quantity    Int
-  priceAmount Int
-  priceSuffix String
-  saleId      String
-  sale        Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                 String   @id @default(uuid())
+  catalogItemId      String
+  quantity           Int
+  priceAmountInCents Int
+  priceSuffix        String
+  saleId             String
+  sale               Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([saleId])
   @@map("sale_items")

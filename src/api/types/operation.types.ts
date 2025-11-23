@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType, Float } from "@nestjs/graphql";
+import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
 
 @ObjectType()
 export class OperationType {
@@ -36,47 +36,8 @@ export class CreateOperationOutput {
   operationId!: string;
 }
 
-@ObjectType()
-export class GetOperationsOutput {
-  @Field(() => [OperationType])
-  operations!: OperationType[];
-}
-
 @InputType()
-export class GetOperationInput {
-  @Field()
-  operationId!: string;
-}
-
-@ObjectType()
-export class GetOperationOutput {
-  @Field()
-  operationId!: string;
-
-  @Field()
-  name!: string;
-
-  @Field()
-  status!: string;
-}
-
-@InputType()
-export class GetSellersInput {
-  @Field()
-  operationId!: string;
-}
-
-@ObjectType()
-export class GetSellersOutput {
-  @Field()
-  operationId!: string;
-
-  @Field(() => [SellerType])
-  sellers!: SellerType[];
-}
-
-@InputType()
-export class AddSellerInput {
+export class AddSellerToOperationInput {
   @Field()
   operationId!: string;
 
@@ -85,7 +46,7 @@ export class AddSellerInput {
 }
 
 @ObjectType()
-export class AddSellerOutput {
+export class AddSellerToOperationOutput {
   @Field()
   operationId!: string;
 
@@ -94,7 +55,7 @@ export class AddSellerOutput {
 }
 
 @InputType()
-export class AddCatalogInput {
+export class CreateCatalogInput {
   @Field()
   operationId!: string;
 
@@ -109,7 +70,7 @@ export class AddCatalogInput {
 }
 
 @ObjectType()
-export class AddCatalogOutput {
+export class CreateCatalogOutput {
   @Field()
   operationId!: string;
 
@@ -121,7 +82,7 @@ export class AddCatalogOutput {
 }
 
 @InputType()
-export class AddCatalogItemInput {
+export class CreateCatalogItemInput {
   @Field()
   operationId!: string;
 
@@ -134,7 +95,7 @@ export class AddCatalogItemInput {
   @Field()
   itemName!: string;
 
-  @Field(() => Float)
+  @Field(() => Int)
   itemPriceAmount!: number;
 
   @Field()
@@ -142,7 +103,7 @@ export class AddCatalogItemInput {
 }
 
 @ObjectType()
-export class AddCatalogItemOutput {
+export class CreateCatalogItemOutput {
   @Field()
   operationId!: string;
 
@@ -157,7 +118,7 @@ export class AddCatalogItemOutput {
 }
 
 @InputType()
-export class AddAssignmentInput {
+export class CreateAssignmentInput {
   @Field()
   operationId!: string;
 
@@ -175,7 +136,7 @@ export class AddAssignmentInput {
 }
 
 @ObjectType()
-export class AddAssignmentOutput {
+export class CreateAssignmentOutput {
   @Field()
   operationId!: string;
 
@@ -202,4 +163,43 @@ export class StartOperationInput {
 export class StartOperationOutput {
   @Field()
   operationId!: string;
+}
+
+@ObjectType()
+export class GetOperationsOutput {
+  @Field(() => [OperationType])
+  operations!: OperationType[];
+}
+
+@InputType()
+export class GetOperationByIdInput {
+  @Field()
+  operationId!: string;
+}
+
+@ObjectType()
+export class GetOperationByIdOutput {
+  @Field()
+  operationId!: string;
+
+  @Field()
+  name!: string;
+
+  @Field()
+  status!: string;
+}
+
+@InputType()
+export class GetSellersInput {
+  @Field()
+  operationId!: string;
+}
+
+@ObjectType()
+export class GetSellersOutput {
+  @Field()
+  operationId!: string;
+
+  @Field(() => [SellerType])
+  sellers!: SellerType[];
 }

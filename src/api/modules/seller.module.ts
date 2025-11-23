@@ -1,20 +1,9 @@
 import { Module } from "@nestjs/common";
 import { SellerResolver } from "../resolvers/seller.resolver";
-import { SellerQueries } from "src/application/services/queries/seller.queries";
-import { SellerCommands } from "src/application/services/commands/seller.commands";
-import { SellerRepository } from "src/application/repositories/seller.repository";
-import { PrismaService } from "src/infrastructure/prisma/prisma.service";
+import { ApplicationModule } from "src/application/application.module";
 
 @Module({
-  providers: [
-    SellerResolver,
-    SellerQueries,
-    SellerCommands,
-    PrismaService,
-    {
-      provide: "SellerRepository",
-      useClass: SellerRepository,
-    },
-  ],
+  imports: [ApplicationModule],
+  providers: [SellerResolver],
 })
 export class SellerModule {}

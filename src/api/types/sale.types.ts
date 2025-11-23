@@ -1,7 +1,22 @@
-import { Field, InputType, ObjectType, Int, Float } from "@nestjs/graphql";
+import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
+
+@ObjectType()
+export class SaleItem {
+  @Field()
+  catalogItemId!: string;
+
+  @Field(() => Int)
+  quantity!: number;
+
+  @Field(() => Int)
+  salePriceInCents!: number;
+
+  @Field(() => Int)
+  total!: number;
+}
 
 @InputType()
-export class RegisterSaleItemInput {
+export class SaleItemToRegister {
   @Field()
   itemId!: string;
 
@@ -23,8 +38,8 @@ export class RegisterSaleInput {
   @Field()
   catalogId!: string;
 
-  @Field(() => [RegisterSaleItemInput])
-  items!: RegisterSaleItemInput[];
+  @Field(() => [SaleItemToRegister])
+  items!: SaleItemToRegister[];
 }
 
 @ObjectType()
@@ -32,29 +47,14 @@ export class RegisterSaleOutput {
   @Field()
   saleId!: string;
 
-  @Field(() => Float)
-  totalAmount!: number;
+  @Field(() => Int)
+  totalAmountInCents!: number;
 }
 
 @InputType()
 export class GetSaleInput {
   @Field()
   saleId!: string;
-}
-
-@ObjectType()
-export class SaleItemOutput {
-  @Field()
-  itemId!: string;
-
-  @Field(() => Int)
-  quantity!: number;
-
-  @Field(() => Float)
-  salePrice!: number;
-
-  @Field(() => Float)
-  total!: number;
 }
 
 @ObjectType()
@@ -74,9 +74,9 @@ export class GetSaleOutput {
   @Field()
   operationId!: string;
 
-  @Field(() => Float)
-  totalAmount!: number;
+  @Field(() => Int)
+  totalAmountInCents!: number;
 
-  @Field(() => [SaleItemOutput])
-  items!: SaleItemOutput[];
+  @Field(() => [SaleItem])
+  items!: SaleItem[];
 }

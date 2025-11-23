@@ -6,11 +6,11 @@ export class SaleItem implements ValueObject<SaleItemProps> {
   constructor(
     private _catalogItemId: Uuid,
     private _quantity: number,
-    private _salePrice: Money,
+    private _salePriceInCents: Money,
   ) {
     this._catalogItemId = _catalogItemId;
     this._quantity = _quantity;
-    this._salePrice = _salePrice;
+    this._salePriceInCents = _salePriceInCents;
   }
 
   public static create(
@@ -33,19 +33,19 @@ export class SaleItem implements ValueObject<SaleItemProps> {
     return {
       catalogItemId: this._catalogItemId,
       quantity: this._quantity,
-      salePrice: this._salePrice,
+      salePrice: this._salePriceInCents,
     };
   }
 
   public getTotal(): number {
-    return this._quantity * this._salePrice.getAmount();
+    return this._quantity * this._salePriceInCents.getAmount();
   }
 
   public equals(other: this): boolean {
     return (
       this._catalogItemId.equals(other._catalogItemId) &&
       this._quantity === other._quantity &&
-      this._salePrice.equals(other._salePrice)
+      this._salePriceInCents.equals(other._salePriceInCents)
     );
   }
 }

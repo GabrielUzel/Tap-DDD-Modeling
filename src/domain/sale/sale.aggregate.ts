@@ -10,7 +10,7 @@ export class Sale extends AggregateRoot {
     private _catalogId: Uuid,
     private _operationId: Uuid,
     private _items: SaleItem[],
-    private _totalAmount: number,
+    private _totalAmountInCents: number,
   ) {
     super(id);
     this._sellerId = _sellerId;
@@ -18,7 +18,7 @@ export class Sale extends AggregateRoot {
     this._catalogId = _catalogId;
     this._operationId = _operationId;
     this._items = _items;
-    this._totalAmount = _totalAmount;
+    this._totalAmountInCents = _totalAmountInCents;
   }
 
   public static create(
@@ -66,7 +66,7 @@ export class Sale extends AggregateRoot {
     return this._items;
   }
 
-  get totalAmount(): number {
-    return this._totalAmount;
+  get totalAmountInCents(): number {
+    return this._totalAmountInCents;
   }
 }

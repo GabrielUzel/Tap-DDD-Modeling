@@ -1,91 +1,127 @@
 import { Mutation, Query, Resolver, Args } from "@nestjs/graphql";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
   CreateOperationInput,
   CreateOperationOutput,
-  AddSellerInput,
-  AddSellerOutput,
-  AddCatalogInput,
-  AddCatalogOutput,
-  AddCatalogItemInput,
-  AddCatalogItemOutput,
-  AddAssignmentInput,
-  AddAssignmentOutput,
+  AddSellerToOperationInput,
+  AddSellerToOperationOutput,
+  CreateCatalogInput,
+  CreateCatalogOutput,
+  CreateCatalogItemInput,
+  CreateCatalogItemOutput,
+  CreateAssignmentInput,
+  CreateAssignmentOutput,
   StartOperationInput,
   StartOperationOutput,
   GetOperationsOutput,
-  GetOperationInput,
-  GetOperationOutput,
+  GetOperationByIdInput,
+  GetOperationByIdOutput,
   GetSellersInput,
   GetSellersOutput,
 } from "../types/operation.types";
-import { OperationQueries } from "src/application/services/queries/operation.queries";
-import { OperationCommands } from "src/application/services/commands/operation.commands";
+import { CreateOperationCommand } from "src/application/services/commands/dtos/create-operation.command";
+import { AddSellerToOperationCommand } from "src/application/services/commands/dtos/add-seller-to-operation.command";
+import { CreateCatalogCommand } from "src/application/services/commands/dtos/create-catalog.command";
+import { CreateCatalogItemCommand } from "src/application/services/commands/dtos/create-catalog-item.command";
+import { CreateAssignmentCommand } from "src/application/services/commands/dtos/create-assignment.command";
+import { StartOperationCommand } from "src/application/services/commands/dtos/start-operation.command";
+import { GetOperationsQuery } from "src/application/services/queries/dtos/get-operations.query";
+import { GetOperationByIdQuery } from "src/application/services/queries/dtos/get-operation-by-id.query";
+import { GetSellersQuery } from "src/application/services/queries/dtos/get-sellers.query";
 
 @Resolver()
 export class OperationResolver {
   constructor(
-    private readonly operationQueries: OperationQueries,
-    private readonly operationCommands: OperationCommands,
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {}
 
   @Mutation(() => CreateOperationOutput)
   async createOperation(
     @Args("input") input: CreateOperationInput,
   ): Promise<CreateOperationOutput> {
-    return await this.operationCommands.createOperation(input);
+    return this.commandBus.execute(new CreateOperationCommand(input.name));
   }
 
-  @Mutation(() => AddSellerOutput)
-  async addSeller(
-    @Args("input") input: AddSellerInput,
-  ): Promise<AddSellerOutput> {
-    return await this.operationCommands.addSeller(input);
+  @Mutation(() => AddSellerToOperationOutput)
+  async addSellerToOperation(
+    @Args("input") input: AddSellerToOperationInput,
+  ): Promise<AddSellerToOperationOutput> {
+    return this.commandBus.execute(
+      new AddSellerToOperationCommand(input.operationId, input.sellerId),
+    );
   }
 
-  @Mutation(() => AddCatalogOutput)
-  async addCatalog(
-    @Args("input") input: AddCatalogInput,
-  ): Promise<AddCatalogOutput> {
-    return await this.operationCommands.addCatalog(input);
+  @Mutation(() => CreateCatalogOutput)
+  async createCatalog(
+    @Args("input") input: CreateCatalogInput,
+  ): Promise<CreateCatalogOutput> {
+    return this.commandBus.execute(
+      new CreateCatalogCommand(
+        input.operationId,
+        input.sellerId,
+        input.catalogName,
+        input.catalogType,
+      ),
+    );
   }
 
-  @Mutation(() => AddCatalogItemOutput)
-  async addCatalogItem(
-    @Args("input") input: AddCatalogItemInput,
-  ): Promise<AddCatalogItemOutput> {
-    return await this.operationCommands.addCatalogItem(input);
+  @Mutation(() => CreateCatalogItemOutput)
+  async createCatalogItem(
+    @Args("input") input: CreateCatalogItemInput,
+  ): Promise<CreateCatalogItemOutput> {
+    return this.commandBus.execute(
+      new CreateCatalogItemCommand(
+        input.operationId,
+        input.sellerId,
+        input.catalogId,
+        input.itemName,
+        input.itemPriceAmount,
+        input.itemPriceSufix,
+      ),
+    );
   }
 
-  @Mutation(() => AddAssignmentOutput)
-  async addAssignment(
-    @Args("input") input: AddAssignmentInput,
-  ): Promise<AddAssignmentOutput> {
-    return await this.operationCommands.addAssignment(input);
+  @Mutation(() => CreateAssignmentOutput)
+  async createAssignment(
+    @Args("input") input: CreateAssignmentInput,
+  ): Promise<CreateAssignmentOutput> {
+    return this.commandBus.execute(
+      new CreateAssignmentCommand(
+        input.operationId,
+        input.sellerId,
+        input.operatorId,
+        input.catalogId,
+        input.role,
+      ),
+    );
   }
 
   @Mutation(() => StartOperationOutput)
   async startOperation(
     @Args("input") input: StartOperationInput,
   ): Promise<StartOperationOutput> {
-    return await this.operationCommands.startOperation(input);
+    return this.commandBus.execute(
+      new StartOperationCommand(input.operationId),
+    );
   }
 
   @Query(() => GetOperationsOutput)
   async getOperations(): Promise<GetOperationsOutput> {
-    return await this.operationQueries.getOperations();
+    return this.queryBus.execute(new GetOperationsQuery());
   }
 
-  @Query(() => GetOperationOutput)
-  async getOperation(
-    @Args("input") input: GetOperationInput,
-  ): Promise<GetOperationOutput> {
-    return await this.operationQueries.getOperation(input);
+  @Query(() => GetOperationByIdOutput)
+  async getOperationById(
+    @Args("input") input: GetOperationByIdInput,
+  ): Promise<GetOperationByIdOutput> {
+    return this.queryBus.execute(new GetOperationByIdQuery(input.operationId));
   }
 
   @Query(() => GetSellersOutput)
   async getSellers(
     @Args("input") input: GetSellersInput,
   ): Promise<GetSellersOutput> {
-    return await this.operationQueries.getSellers(input);
+    return this.queryBus.execute(new GetSellersQuery(input.operationId));
   }
 }

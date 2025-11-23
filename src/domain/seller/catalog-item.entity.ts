@@ -6,11 +6,11 @@ export class CatalogItem extends Entity {
   constructor(
     id: Uuid,
     private _name: string,
-    private _price: Money,
+    private _priceInCents: Money,
   ) {
     super(id);
     this._name = _name;
-    this._price = _price;
+    this._priceInCents = _priceInCents;
   }
 
   public static create(id: Uuid, name: string, price: Money): CatalogItem {
@@ -25,7 +25,7 @@ export class CatalogItem extends Entity {
     return this._name;
   }
 
-  get price() {
-    return this._price;
+  get priceInCents() {
+    return this._priceInCents;
   }
 }

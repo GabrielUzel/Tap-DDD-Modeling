@@ -25,11 +25,12 @@
     "@nestjs/apollo": "^13.2.1",
     "@nestjs/common": "^11.1.6",
     "@nestjs/core": "^11.1.6",
+    "@nestjs/cqrs": "^11.0.3",
     "@nestjs/graphql": "^13.2.0",
     "@nestjs/platform-fastify": "^11.1.6",
-    "@prisma/client": "^6.17.1",
+    "@prisma/client": "^7.0.0",
     "graphql": "^16.11.0",
-    "prisma": "^6.17.1",
+    "prisma": "^7.0.0",
     "uuid": "^9.0.1",
     "uuid-validate": "latest"
   }

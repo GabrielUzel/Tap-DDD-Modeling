@@ -6065,17 +6065,17 @@ export namespace Prisma {
   }
 
   export type CatalogItemAvgAggregateOutputType = {
-    priceAmount: number | null
+    priceAmountInCents: number | null
   }
 
   export type CatalogItemSumAggregateOutputType = {
-    priceAmount: number | null
+    priceAmountInCents: number | null
   }
 
   export type CatalogItemMinAggregateOutputType = {
     id: string | null
     name: string | null
-    priceAmount: number | null
+    priceAmountInCents: number | null
     priceSuffix: string | null
     catalogId: string | null
     createdAt: Date | null
@@ -6085,7 +6085,7 @@ export namespace Prisma {
   export type CatalogItemMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    priceAmount: number | null
+    priceAmountInCents: number | null
     priceSuffix: string | null
     catalogId: string | null
     createdAt: Date | null
@@ -6095,7 +6095,7 @@ export namespace Prisma {
   export type CatalogItemCountAggregateOutputType = {
     id: number
     name: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: number
     catalogId: number
     createdAt: number
@@ -6105,17 +6105,17 @@ export namespace Prisma {
 
 
   export type CatalogItemAvgAggregateInputType = {
-    priceAmount?: true
+    priceAmountInCents?: true
   }
 
   export type CatalogItemSumAggregateInputType = {
-    priceAmount?: true
+    priceAmountInCents?: true
   }
 
   export type CatalogItemMinAggregateInputType = {
     id?: true
     name?: true
-    priceAmount?: true
+    priceAmountInCents?: true
     priceSuffix?: true
     catalogId?: true
     createdAt?: true
@@ -6125,7 +6125,7 @@ export namespace Prisma {
   export type CatalogItemMaxAggregateInputType = {
     id?: true
     name?: true
-    priceAmount?: true
+    priceAmountInCents?: true
     priceSuffix?: true
     catalogId?: true
     createdAt?: true
@@ -6135,7 +6135,7 @@ export namespace Prisma {
   export type CatalogItemCountAggregateInputType = {
     id?: true
     name?: true
-    priceAmount?: true
+    priceAmountInCents?: true
     priceSuffix?: true
     catalogId?: true
     createdAt?: true
@@ -6232,7 +6232,7 @@ export namespace Prisma {
   export type CatalogItemGroupByOutputType = {
     id: string
     name: string
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     catalogId: string
     createdAt: Date
@@ -6261,7 +6261,7 @@ export namespace Prisma {
   export type CatalogItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    priceAmount?: boolean
+    priceAmountInCents?: boolean
     priceSuffix?: boolean
     catalogId?: boolean
     createdAt?: boolean
@@ -6272,7 +6272,7 @@ export namespace Prisma {
   export type CatalogItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    priceAmount?: boolean
+    priceAmountInCents?: boolean
     priceSuffix?: boolean
     catalogId?: boolean
     createdAt?: boolean
@@ -6283,7 +6283,7 @@ export namespace Prisma {
   export type CatalogItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    priceAmount?: boolean
+    priceAmountInCents?: boolean
     priceSuffix?: boolean
     catalogId?: boolean
     createdAt?: boolean
@@ -6294,14 +6294,14 @@ export namespace Prisma {
   export type CatalogItemSelectScalar = {
     id?: boolean
     name?: boolean
-    priceAmount?: boolean
+    priceAmountInCents?: boolean
     priceSuffix?: boolean
     catalogId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CatalogItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "priceAmount" | "priceSuffix" | "catalogId" | "createdAt" | "updatedAt", ExtArgs["result"]["catalogItem"]>
+  export type CatalogItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "priceAmountInCents" | "priceSuffix" | "catalogId" | "createdAt" | "updatedAt", ExtArgs["result"]["catalogItem"]>
   export type CatalogItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     catalog?: boolean | CatalogDefaultArgs<ExtArgs>
   }
@@ -6320,7 +6320,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      priceAmount: number
+      priceAmountInCents: number
       priceSuffix: string
       catalogId: string
       createdAt: Date
@@ -6751,7 +6751,7 @@ export namespace Prisma {
   interface CatalogItemFieldRefs {
     readonly id: FieldRef<"CatalogItem", 'String'>
     readonly name: FieldRef<"CatalogItem", 'String'>
-    readonly priceAmount: FieldRef<"CatalogItem", 'Int'>
+    readonly priceAmountInCents: FieldRef<"CatalogItem", 'Int'>
     readonly priceSuffix: FieldRef<"CatalogItem", 'String'>
     readonly catalogId: FieldRef<"CatalogItem", 'String'>
     readonly createdAt: FieldRef<"CatalogItem", 'DateTime'>
@@ -8267,11 +8267,11 @@ export namespace Prisma {
   }
 
   export type SaleAvgAggregateOutputType = {
-    totalAmount: number | null
+    totalAmountInCents: number | null
   }
 
   export type SaleSumAggregateOutputType = {
-    totalAmount: number | null
+    totalAmountInCents: number | null
   }
 
   export type SaleMinAggregateOutputType = {
@@ -8280,7 +8280,7 @@ export namespace Prisma {
     operatorId: string | null
     catalogId: string | null
     operationId: string | null
-    totalAmount: number | null
+    totalAmountInCents: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8291,7 +8291,7 @@ export namespace Prisma {
     operatorId: string | null
     catalogId: string | null
     operationId: string | null
-    totalAmount: number | null
+    totalAmountInCents: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8302,7 +8302,7 @@ export namespace Prisma {
     operatorId: number
     catalogId: number
     operationId: number
-    totalAmount: number
+    totalAmountInCents: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8310,11 +8310,11 @@ export namespace Prisma {
 
 
   export type SaleAvgAggregateInputType = {
-    totalAmount?: true
+    totalAmountInCents?: true
   }
 
   export type SaleSumAggregateInputType = {
-    totalAmount?: true
+    totalAmountInCents?: true
   }
 
   export type SaleMinAggregateInputType = {
@@ -8323,7 +8323,7 @@ export namespace Prisma {
     operatorId?: true
     catalogId?: true
     operationId?: true
-    totalAmount?: true
+    totalAmountInCents?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8334,7 +8334,7 @@ export namespace Prisma {
     operatorId?: true
     catalogId?: true
     operationId?: true
-    totalAmount?: true
+    totalAmountInCents?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8345,7 +8345,7 @@ export namespace Prisma {
     operatorId?: true
     catalogId?: true
     operationId?: true
-    totalAmount?: true
+    totalAmountInCents?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8443,7 +8443,7 @@ export namespace Prisma {
     operatorId: string
     catalogId: string
     operationId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt: Date
     updatedAt: Date
     _count: SaleCountAggregateOutputType | null
@@ -8473,7 +8473,7 @@ export namespace Prisma {
     operatorId?: boolean
     catalogId?: boolean
     operationId?: boolean
-    totalAmount?: boolean
+    totalAmountInCents?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     seller?: boolean | SellerDefaultArgs<ExtArgs>
@@ -8488,7 +8488,7 @@ export namespace Prisma {
     operatorId?: boolean
     catalogId?: boolean
     operationId?: boolean
-    totalAmount?: boolean
+    totalAmountInCents?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     seller?: boolean | SellerDefaultArgs<ExtArgs>
@@ -8501,7 +8501,7 @@ export namespace Prisma {
     operatorId?: boolean
     catalogId?: boolean
     operationId?: boolean
-    totalAmount?: boolean
+    totalAmountInCents?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     seller?: boolean | SellerDefaultArgs<ExtArgs>
@@ -8514,12 +8514,12 @@ export namespace Prisma {
     operatorId?: boolean
     catalogId?: boolean
     operationId?: boolean
-    totalAmount?: boolean
+    totalAmountInCents?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SaleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "operatorId" | "catalogId" | "operationId" | "totalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["sale"]>
+  export type SaleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sellerId" | "operatorId" | "catalogId" | "operationId" | "totalAmountInCents" | "createdAt" | "updatedAt", ExtArgs["result"]["sale"]>
   export type SaleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seller?: boolean | SellerDefaultArgs<ExtArgs>
     operation?: boolean | OperationDefaultArgs<ExtArgs>
@@ -8548,7 +8548,7 @@ export namespace Prisma {
       operatorId: string
       catalogId: string
       operationId: string
-      totalAmount: number
+      totalAmountInCents: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["sale"]>
@@ -8982,7 +8982,7 @@ export namespace Prisma {
     readonly operatorId: FieldRef<"Sale", 'String'>
     readonly catalogId: FieldRef<"Sale", 'String'>
     readonly operationId: FieldRef<"Sale", 'String'>
-    readonly totalAmount: FieldRef<"Sale", 'Int'>
+    readonly totalAmountInCents: FieldRef<"Sale", 'Int'>
     readonly createdAt: FieldRef<"Sale", 'DateTime'>
     readonly updatedAt: FieldRef<"Sale", 'DateTime'>
   }
@@ -9437,19 +9437,19 @@ export namespace Prisma {
 
   export type SaleItemAvgAggregateOutputType = {
     quantity: number | null
-    priceAmount: number | null
+    priceAmountInCents: number | null
   }
 
   export type SaleItemSumAggregateOutputType = {
     quantity: number | null
-    priceAmount: number | null
+    priceAmountInCents: number | null
   }
 
   export type SaleItemMinAggregateOutputType = {
     id: string | null
-    itemId: string | null
+    catalogItemId: string | null
     quantity: number | null
-    priceAmount: number | null
+    priceAmountInCents: number | null
     priceSuffix: string | null
     saleId: string | null
     createdAt: Date | null
@@ -9458,9 +9458,9 @@ export namespace Prisma {
 
   export type SaleItemMaxAggregateOutputType = {
     id: string | null
-    itemId: string | null
+    catalogItemId: string | null
     quantity: number | null
-    priceAmount: number | null
+    priceAmountInCents: number | null
     priceSuffix: string | null
     saleId: string | null
     createdAt: Date | null
@@ -9469,9 +9469,9 @@ export namespace Prisma {
 
   export type SaleItemCountAggregateOutputType = {
     id: number
-    itemId: number
+    catalogItemId: number
     quantity: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: number
     saleId: number
     createdAt: number
@@ -9482,19 +9482,19 @@ export namespace Prisma {
 
   export type SaleItemAvgAggregateInputType = {
     quantity?: true
-    priceAmount?: true
+    priceAmountInCents?: true
   }
 
   export type SaleItemSumAggregateInputType = {
     quantity?: true
-    priceAmount?: true
+    priceAmountInCents?: true
   }
 
   export type SaleItemMinAggregateInputType = {
     id?: true
-    itemId?: true
+    catalogItemId?: true
     quantity?: true
-    priceAmount?: true
+    priceAmountInCents?: true
     priceSuffix?: true
     saleId?: true
     createdAt?: true
@@ -9503,9 +9503,9 @@ export namespace Prisma {
 
   export type SaleItemMaxAggregateInputType = {
     id?: true
-    itemId?: true
+    catalogItemId?: true
     quantity?: true
-    priceAmount?: true
+    priceAmountInCents?: true
     priceSuffix?: true
     saleId?: true
     createdAt?: true
@@ -9514,9 +9514,9 @@ export namespace Prisma {
 
   export type SaleItemCountAggregateInputType = {
     id?: true
-    itemId?: true
+    catalogItemId?: true
     quantity?: true
-    priceAmount?: true
+    priceAmountInCents?: true
     priceSuffix?: true
     saleId?: true
     createdAt?: true
@@ -9612,9 +9612,9 @@ export namespace Prisma {
 
   export type SaleItemGroupByOutputType = {
     id: string
-    itemId: string
+    catalogItemId: string
     quantity: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     saleId: string
     createdAt: Date
@@ -9642,9 +9642,9 @@ export namespace Prisma {
 
   export type SaleItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    itemId?: boolean
+    catalogItemId?: boolean
     quantity?: boolean
-    priceAmount?: boolean
+    priceAmountInCents?: boolean
     priceSuffix?: boolean
     saleId?: boolean
     createdAt?: boolean
@@ -9654,9 +9654,9 @@ export namespace Prisma {
 
   export type SaleItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    itemId?: boolean
+    catalogItemId?: boolean
     quantity?: boolean
-    priceAmount?: boolean
+    priceAmountInCents?: boolean
     priceSuffix?: boolean
     saleId?: boolean
     createdAt?: boolean
@@ -9666,9 +9666,9 @@ export namespace Prisma {
 
   export type SaleItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    itemId?: boolean
+    catalogItemId?: boolean
     quantity?: boolean
-    priceAmount?: boolean
+    priceAmountInCents?: boolean
     priceSuffix?: boolean
     saleId?: boolean
     createdAt?: boolean
@@ -9678,16 +9678,16 @@ export namespace Prisma {
 
   export type SaleItemSelectScalar = {
     id?: boolean
-    itemId?: boolean
+    catalogItemId?: boolean
     quantity?: boolean
-    priceAmount?: boolean
+    priceAmountInCents?: boolean
     priceSuffix?: boolean
     saleId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SaleItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "itemId" | "quantity" | "priceAmount" | "priceSuffix" | "saleId" | "createdAt" | "updatedAt", ExtArgs["result"]["saleItem"]>
+  export type SaleItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "catalogItemId" | "quantity" | "priceAmountInCents" | "priceSuffix" | "saleId" | "createdAt" | "updatedAt", ExtArgs["result"]["saleItem"]>
   export type SaleItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sale?: boolean | SaleDefaultArgs<ExtArgs>
   }
@@ -9705,9 +9705,9 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      itemId: string
+      catalogItemId: string
       quantity: number
-      priceAmount: number
+      priceAmountInCents: number
       priceSuffix: string
       saleId: string
       createdAt: Date
@@ -10137,9 +10137,9 @@ export namespace Prisma {
    */
   interface SaleItemFieldRefs {
     readonly id: FieldRef<"SaleItem", 'String'>
-    readonly itemId: FieldRef<"SaleItem", 'String'>
+    readonly catalogItemId: FieldRef<"SaleItem", 'String'>
     readonly quantity: FieldRef<"SaleItem", 'Int'>
-    readonly priceAmount: FieldRef<"SaleItem", 'Int'>
+    readonly priceAmountInCents: FieldRef<"SaleItem", 'Int'>
     readonly priceSuffix: FieldRef<"SaleItem", 'String'>
     readonly saleId: FieldRef<"SaleItem", 'String'>
     readonly createdAt: FieldRef<"SaleItem", 'DateTime'>
@@ -10622,7 +10622,7 @@ export namespace Prisma {
   export const CatalogItemScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    priceAmount: 'priceAmount',
+    priceAmountInCents: 'priceAmountInCents',
     priceSuffix: 'priceSuffix',
     catalogId: 'catalogId',
     createdAt: 'createdAt',
@@ -10651,7 +10651,7 @@ export namespace Prisma {
     operatorId: 'operatorId',
     catalogId: 'catalogId',
     operationId: 'operationId',
-    totalAmount: 'totalAmount',
+    totalAmountInCents: 'totalAmountInCents',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10661,9 +10661,9 @@ export namespace Prisma {
 
   export const SaleItemScalarFieldEnum: {
     id: 'id',
-    itemId: 'itemId',
+    catalogItemId: 'catalogItemId',
     quantity: 'quantity',
-    priceAmount: 'priceAmount',
+    priceAmountInCents: 'priceAmountInCents',
     priceSuffix: 'priceSuffix',
     saleId: 'saleId',
     createdAt: 'createdAt',
@@ -11006,7 +11006,7 @@ export namespace Prisma {
     NOT?: CatalogItemWhereInput | CatalogItemWhereInput[]
     id?: StringFilter<"CatalogItem"> | string
     name?: StringFilter<"CatalogItem"> | string
-    priceAmount?: IntFilter<"CatalogItem"> | number
+    priceAmountInCents?: IntFilter<"CatalogItem"> | number
     priceSuffix?: StringFilter<"CatalogItem"> | string
     catalogId?: StringFilter<"CatalogItem"> | string
     createdAt?: DateTimeFilter<"CatalogItem"> | Date | string
@@ -11017,7 +11017,7 @@ export namespace Prisma {
   export type CatalogItemOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     catalogId?: SortOrder
     createdAt?: SortOrder
@@ -11031,7 +11031,7 @@ export namespace Prisma {
     OR?: CatalogItemWhereInput[]
     NOT?: CatalogItemWhereInput | CatalogItemWhereInput[]
     name?: StringFilter<"CatalogItem"> | string
-    priceAmount?: IntFilter<"CatalogItem"> | number
+    priceAmountInCents?: IntFilter<"CatalogItem"> | number
     priceSuffix?: StringFilter<"CatalogItem"> | string
     catalogId?: StringFilter<"CatalogItem"> | string
     createdAt?: DateTimeFilter<"CatalogItem"> | Date | string
@@ -11042,7 +11042,7 @@ export namespace Prisma {
   export type CatalogItemOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     catalogId?: SortOrder
     createdAt?: SortOrder
@@ -11060,7 +11060,7 @@ export namespace Prisma {
     NOT?: CatalogItemScalarWhereWithAggregatesInput | CatalogItemScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"CatalogItem"> | string
     name?: StringWithAggregatesFilter<"CatalogItem"> | string
-    priceAmount?: IntWithAggregatesFilter<"CatalogItem"> | number
+    priceAmountInCents?: IntWithAggregatesFilter<"CatalogItem"> | number
     priceSuffix?: StringWithAggregatesFilter<"CatalogItem"> | string
     catalogId?: StringWithAggregatesFilter<"CatalogItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"CatalogItem"> | Date | string
@@ -11142,7 +11142,7 @@ export namespace Prisma {
     operatorId?: StringFilter<"Sale"> | string
     catalogId?: StringFilter<"Sale"> | string
     operationId?: StringFilter<"Sale"> | string
-    totalAmount?: IntFilter<"Sale"> | number
+    totalAmountInCents?: IntFilter<"Sale"> | number
     createdAt?: DateTimeFilter<"Sale"> | Date | string
     updatedAt?: DateTimeFilter<"Sale"> | Date | string
     seller?: XOR<SellerScalarRelationFilter, SellerWhereInput>
@@ -11156,7 +11156,7 @@ export namespace Prisma {
     operatorId?: SortOrder
     catalogId?: SortOrder
     operationId?: SortOrder
-    totalAmount?: SortOrder
+    totalAmountInCents?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     seller?: SellerOrderByWithRelationInput
@@ -11173,7 +11173,7 @@ export namespace Prisma {
     operatorId?: StringFilter<"Sale"> | string
     catalogId?: StringFilter<"Sale"> | string
     operationId?: StringFilter<"Sale"> | string
-    totalAmount?: IntFilter<"Sale"> | number
+    totalAmountInCents?: IntFilter<"Sale"> | number
     createdAt?: DateTimeFilter<"Sale"> | Date | string
     updatedAt?: DateTimeFilter<"Sale"> | Date | string
     seller?: XOR<SellerScalarRelationFilter, SellerWhereInput>
@@ -11187,7 +11187,7 @@ export namespace Prisma {
     operatorId?: SortOrder
     catalogId?: SortOrder
     operationId?: SortOrder
-    totalAmount?: SortOrder
+    totalAmountInCents?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SaleCountOrderByAggregateInput
@@ -11206,7 +11206,7 @@ export namespace Prisma {
     operatorId?: StringWithAggregatesFilter<"Sale"> | string
     catalogId?: StringWithAggregatesFilter<"Sale"> | string
     operationId?: StringWithAggregatesFilter<"Sale"> | string
-    totalAmount?: IntWithAggregatesFilter<"Sale"> | number
+    totalAmountInCents?: IntWithAggregatesFilter<"Sale"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Sale"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Sale"> | Date | string
   }
@@ -11216,9 +11216,9 @@ export namespace Prisma {
     OR?: SaleItemWhereInput[]
     NOT?: SaleItemWhereInput | SaleItemWhereInput[]
     id?: StringFilter<"SaleItem"> | string
-    itemId?: StringFilter<"SaleItem"> | string
+    catalogItemId?: StringFilter<"SaleItem"> | string
     quantity?: IntFilter<"SaleItem"> | number
-    priceAmount?: IntFilter<"SaleItem"> | number
+    priceAmountInCents?: IntFilter<"SaleItem"> | number
     priceSuffix?: StringFilter<"SaleItem"> | string
     saleId?: StringFilter<"SaleItem"> | string
     createdAt?: DateTimeFilter<"SaleItem"> | Date | string
@@ -11228,9 +11228,9 @@ export namespace Prisma {
 
   export type SaleItemOrderByWithRelationInput = {
     id?: SortOrder
-    itemId?: SortOrder
+    catalogItemId?: SortOrder
     quantity?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     saleId?: SortOrder
     createdAt?: SortOrder
@@ -11243,9 +11243,9 @@ export namespace Prisma {
     AND?: SaleItemWhereInput | SaleItemWhereInput[]
     OR?: SaleItemWhereInput[]
     NOT?: SaleItemWhereInput | SaleItemWhereInput[]
-    itemId?: StringFilter<"SaleItem"> | string
+    catalogItemId?: StringFilter<"SaleItem"> | string
     quantity?: IntFilter<"SaleItem"> | number
-    priceAmount?: IntFilter<"SaleItem"> | number
+    priceAmountInCents?: IntFilter<"SaleItem"> | number
     priceSuffix?: StringFilter<"SaleItem"> | string
     saleId?: StringFilter<"SaleItem"> | string
     createdAt?: DateTimeFilter<"SaleItem"> | Date | string
@@ -11255,9 +11255,9 @@ export namespace Prisma {
 
   export type SaleItemOrderByWithAggregationInput = {
     id?: SortOrder
-    itemId?: SortOrder
+    catalogItemId?: SortOrder
     quantity?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     saleId?: SortOrder
     createdAt?: SortOrder
@@ -11274,9 +11274,9 @@ export namespace Prisma {
     OR?: SaleItemScalarWhereWithAggregatesInput[]
     NOT?: SaleItemScalarWhereWithAggregatesInput | SaleItemScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"SaleItem"> | string
-    itemId?: StringWithAggregatesFilter<"SaleItem"> | string
+    catalogItemId?: StringWithAggregatesFilter<"SaleItem"> | string
     quantity?: IntWithAggregatesFilter<"SaleItem"> | number
-    priceAmount?: IntWithAggregatesFilter<"SaleItem"> | number
+    priceAmountInCents?: IntWithAggregatesFilter<"SaleItem"> | number
     priceSuffix?: StringWithAggregatesFilter<"SaleItem"> | string
     saleId?: StringWithAggregatesFilter<"SaleItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"SaleItem"> | Date | string
@@ -11553,7 +11553,7 @@ export namespace Prisma {
   export type CatalogItemCreateInput = {
     id: string
     name: string
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11563,7 +11563,7 @@ export namespace Prisma {
   export type CatalogItemUncheckedCreateInput = {
     id: string
     name: string
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     catalogId: string
     createdAt?: Date | string
@@ -11573,7 +11573,7 @@ export namespace Prisma {
   export type CatalogItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11583,7 +11583,7 @@ export namespace Prisma {
   export type CatalogItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11593,7 +11593,7 @@ export namespace Prisma {
   export type CatalogItemCreateManyInput = {
     id: string
     name: string
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     catalogId: string
     createdAt?: Date | string
@@ -11603,7 +11603,7 @@ export namespace Prisma {
   export type CatalogItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11612,7 +11612,7 @@ export namespace Prisma {
   export type CatalogItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11692,7 +11692,7 @@ export namespace Prisma {
     id: string
     operatorId: string
     catalogId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
     seller: SellerCreateNestedOneWithoutSalesInput
@@ -11706,7 +11706,7 @@ export namespace Prisma {
     operatorId: string
     catalogId: string
     operationId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: SaleItemUncheckedCreateNestedManyWithoutSaleInput
@@ -11716,7 +11716,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seller?: SellerUpdateOneRequiredWithoutSalesNestedInput
@@ -11730,7 +11730,7 @@ export namespace Prisma {
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
     operationId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: SaleItemUncheckedUpdateManyWithoutSaleNestedInput
@@ -11742,7 +11742,7 @@ export namespace Prisma {
     operatorId: string
     catalogId: string
     operationId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11751,7 +11751,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11762,16 +11762,16 @@ export namespace Prisma {
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
     operationId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SaleItemCreateInput = {
     id?: string
-    itemId: string
+    catalogItemId: string
     quantity: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11780,9 +11780,9 @@ export namespace Prisma {
 
   export type SaleItemUncheckedCreateInput = {
     id?: string
-    itemId: string
+    catalogItemId: string
     quantity: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     saleId: string
     createdAt?: Date | string
@@ -11791,9 +11791,9 @@ export namespace Prisma {
 
   export type SaleItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    itemId?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11802,9 +11802,9 @@ export namespace Prisma {
 
   export type SaleItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    itemId?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     saleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11813,9 +11813,9 @@ export namespace Prisma {
 
   export type SaleItemCreateManyInput = {
     id?: string
-    itemId: string
+    catalogItemId: string
     quantity: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     saleId: string
     createdAt?: Date | string
@@ -11824,9 +11824,9 @@ export namespace Prisma {
 
   export type SaleItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    itemId?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11834,9 +11834,9 @@ export namespace Prisma {
 
   export type SaleItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    itemId?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     saleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12086,7 +12086,7 @@ export namespace Prisma {
   export type CatalogItemCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     catalogId?: SortOrder
     createdAt?: SortOrder
@@ -12094,13 +12094,13 @@ export namespace Prisma {
   }
 
   export type CatalogItemAvgOrderByAggregateInput = {
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
   }
 
   export type CatalogItemMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     catalogId?: SortOrder
     createdAt?: SortOrder
@@ -12110,7 +12110,7 @@ export namespace Prisma {
   export type CatalogItemMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     catalogId?: SortOrder
     createdAt?: SortOrder
@@ -12118,7 +12118,7 @@ export namespace Prisma {
   }
 
   export type CatalogItemSumOrderByAggregateInput = {
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -12194,13 +12194,13 @@ export namespace Prisma {
     operatorId?: SortOrder
     catalogId?: SortOrder
     operationId?: SortOrder
-    totalAmount?: SortOrder
+    totalAmountInCents?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SaleAvgOrderByAggregateInput = {
-    totalAmount?: SortOrder
+    totalAmountInCents?: SortOrder
   }
 
   export type SaleMaxOrderByAggregateInput = {
@@ -12209,7 +12209,7 @@ export namespace Prisma {
     operatorId?: SortOrder
     catalogId?: SortOrder
     operationId?: SortOrder
-    totalAmount?: SortOrder
+    totalAmountInCents?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12220,13 +12220,13 @@ export namespace Prisma {
     operatorId?: SortOrder
     catalogId?: SortOrder
     operationId?: SortOrder
-    totalAmount?: SortOrder
+    totalAmountInCents?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SaleSumOrderByAggregateInput = {
-    totalAmount?: SortOrder
+    totalAmountInCents?: SortOrder
   }
 
   export type SaleScalarRelationFilter = {
@@ -12236,9 +12236,9 @@ export namespace Prisma {
 
   export type SaleItemCountOrderByAggregateInput = {
     id?: SortOrder
-    itemId?: SortOrder
+    catalogItemId?: SortOrder
     quantity?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     saleId?: SortOrder
     createdAt?: SortOrder
@@ -12247,14 +12247,14 @@ export namespace Prisma {
 
   export type SaleItemAvgOrderByAggregateInput = {
     quantity?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
   }
 
   export type SaleItemMaxOrderByAggregateInput = {
     id?: SortOrder
-    itemId?: SortOrder
+    catalogItemId?: SortOrder
     quantity?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     saleId?: SortOrder
     createdAt?: SortOrder
@@ -12263,9 +12263,9 @@ export namespace Prisma {
 
   export type SaleItemMinOrderByAggregateInput = {
     id?: SortOrder
-    itemId?: SortOrder
+    catalogItemId?: SortOrder
     quantity?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
     priceSuffix?: SortOrder
     saleId?: SortOrder
     createdAt?: SortOrder
@@ -12274,7 +12274,7 @@ export namespace Prisma {
 
   export type SaleItemSumOrderByAggregateInput = {
     quantity?: SortOrder
-    priceAmount?: SortOrder
+    priceAmountInCents?: SortOrder
   }
 
   export type OperationCreatesellerIdsInput = {
@@ -12792,7 +12792,7 @@ export namespace Prisma {
     id: string
     operatorId: string
     catalogId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
     seller: SellerCreateNestedOneWithoutSalesInput
@@ -12804,7 +12804,7 @@ export namespace Prisma {
     sellerId: string
     operatorId: string
     catalogId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: SaleItemUncheckedCreateNestedManyWithoutSaleInput
@@ -12845,7 +12845,7 @@ export namespace Prisma {
     operatorId?: StringFilter<"Sale"> | string
     catalogId?: StringFilter<"Sale"> | string
     operationId?: StringFilter<"Sale"> | string
-    totalAmount?: IntFilter<"Sale"> | number
+    totalAmountInCents?: IntFilter<"Sale"> | number
     createdAt?: DateTimeFilter<"Sale"> | Date | string
     updatedAt?: DateTimeFilter<"Sale"> | Date | string
   }
@@ -12936,7 +12936,7 @@ export namespace Prisma {
     id: string
     operatorId: string
     catalogId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
     operation: OperationCreateNestedOneWithoutSalesInput
@@ -12948,7 +12948,7 @@ export namespace Prisma {
     operatorId: string
     catalogId: string
     operationId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: SaleItemUncheckedCreateNestedManyWithoutSaleInput
@@ -13155,7 +13155,7 @@ export namespace Prisma {
   export type CatalogItemCreateWithoutCatalogInput = {
     id: string
     name: string
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13164,7 +13164,7 @@ export namespace Prisma {
   export type CatalogItemUncheckedCreateWithoutCatalogInput = {
     id: string
     name: string
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13235,7 +13235,7 @@ export namespace Prisma {
     NOT?: CatalogItemScalarWhereInput | CatalogItemScalarWhereInput[]
     id?: StringFilter<"CatalogItem"> | string
     name?: StringFilter<"CatalogItem"> | string
-    priceAmount?: IntFilter<"CatalogItem"> | number
+    priceAmountInCents?: IntFilter<"CatalogItem"> | number
     priceSuffix?: StringFilter<"CatalogItem"> | string
     catalogId?: StringFilter<"CatalogItem"> | string
     createdAt?: DateTimeFilter<"CatalogItem"> | Date | string
@@ -13406,9 +13406,9 @@ export namespace Prisma {
 
   export type SaleItemCreateWithoutSaleInput = {
     id?: string
-    itemId: string
+    catalogItemId: string
     quantity: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13416,9 +13416,9 @@ export namespace Prisma {
 
   export type SaleItemUncheckedCreateWithoutSaleInput = {
     id?: string
-    itemId: string
+    catalogItemId: string
     quantity: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13517,9 +13517,9 @@ export namespace Prisma {
     OR?: SaleItemScalarWhereInput[]
     NOT?: SaleItemScalarWhereInput | SaleItemScalarWhereInput[]
     id?: StringFilter<"SaleItem"> | string
-    itemId?: StringFilter<"SaleItem"> | string
+    catalogItemId?: StringFilter<"SaleItem"> | string
     quantity?: IntFilter<"SaleItem"> | number
-    priceAmount?: IntFilter<"SaleItem"> | number
+    priceAmountInCents?: IntFilter<"SaleItem"> | number
     priceSuffix?: StringFilter<"SaleItem"> | string
     saleId?: StringFilter<"SaleItem"> | string
     createdAt?: DateTimeFilter<"SaleItem"> | Date | string
@@ -13530,7 +13530,7 @@ export namespace Prisma {
     id: string
     operatorId: string
     catalogId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
     seller: SellerCreateNestedOneWithoutSalesInput
@@ -13543,7 +13543,7 @@ export namespace Prisma {
     operatorId: string
     catalogId: string
     operationId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13568,7 +13568,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seller?: SellerUpdateOneRequiredWithoutSalesNestedInput
@@ -13581,7 +13581,7 @@ export namespace Prisma {
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
     operationId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13591,7 +13591,7 @@ export namespace Prisma {
     sellerId: string
     operatorId: string
     catalogId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13600,7 +13600,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seller?: SellerUpdateOneRequiredWithoutSalesNestedInput
@@ -13612,7 +13612,7 @@ export namespace Prisma {
     sellerId?: StringFieldUpdateOperationsInput | string
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: SaleItemUncheckedUpdateManyWithoutSaleNestedInput
@@ -13623,7 +13623,7 @@ export namespace Prisma {
     sellerId?: StringFieldUpdateOperationsInput | string
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13658,7 +13658,7 @@ export namespace Prisma {
     operatorId: string
     catalogId: string
     operationId: string
-    totalAmount: number
+    totalAmountInCents: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13744,7 +13744,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     operation?: OperationUpdateOneRequiredWithoutSalesNestedInput
@@ -13756,7 +13756,7 @@ export namespace Prisma {
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
     operationId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: SaleItemUncheckedUpdateManyWithoutSaleNestedInput
@@ -13767,7 +13767,7 @@ export namespace Prisma {
     operatorId?: StringFieldUpdateOperationsInput | string
     catalogId?: StringFieldUpdateOperationsInput | string
     operationId?: StringFieldUpdateOperationsInput | string
-    totalAmount?: IntFieldUpdateOperationsInput | number
+    totalAmountInCents?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13775,7 +13775,7 @@ export namespace Prisma {
   export type CatalogItemCreateManyCatalogInput = {
     id: string
     name: string
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13784,7 +13784,7 @@ export namespace Prisma {
   export type CatalogItemUpdateWithoutCatalogInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13793,7 +13793,7 @@ export namespace Prisma {
   export type CatalogItemUncheckedUpdateWithoutCatalogInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13802,7 +13802,7 @@ export namespace Prisma {
   export type CatalogItemUncheckedUpdateManyWithoutCatalogInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13810,9 +13810,9 @@ export namespace Prisma {
 
   export type SaleItemCreateManySaleInput = {
     id?: string
-    itemId: string
+    catalogItemId: string
     quantity: number
-    priceAmount: number
+    priceAmountInCents: number
     priceSuffix: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13820,9 +13820,9 @@ export namespace Prisma {
 
   export type SaleItemUpdateWithoutSaleInput = {
     id?: StringFieldUpdateOperationsInput | string
-    itemId?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13830,9 +13830,9 @@ export namespace Prisma {
 
   export type SaleItemUncheckedUpdateWithoutSaleInput = {
     id?: StringFieldUpdateOperationsInput | string
-    itemId?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13840,9 +13840,9 @@ export namespace Prisma {
 
   export type SaleItemUncheckedUpdateManyWithoutSaleInput = {
     id?: StringFieldUpdateOperationsInput | string
-    itemId?: StringFieldUpdateOperationsInput | string
+    catalogItemId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
-    priceAmount?: IntFieldUpdateOperationsInput | number
+    priceAmountInCents?: IntFieldUpdateOperationsInput | number
     priceSuffix?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

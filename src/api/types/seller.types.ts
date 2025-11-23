@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType, Float } from "@nestjs/graphql";
+import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
 
 @ObjectType()
 export class OperatorType {
@@ -20,7 +20,7 @@ export class CatalogItemType {
   @Field()
   itemName!: string;
 
-  @Field(() => Float)
+  @Field(() => Int)
   itemPrice!: number;
 }
 
@@ -55,24 +55,6 @@ export class CreateSellerOutput {
 }
 
 @InputType()
-export class GetSellerInput {
-  @Field()
-  sellerId!: string;
-}
-
-@ObjectType()
-export class GetSellerOutput {
-  @Field()
-  sellerId!: string;
-
-  @Field()
-  name!: string;
-
-  @Field()
-  email!: string;
-}
-
-@InputType()
 export class AddOperatorToSellerPoolInput {
   @Field()
   sellerId!: string;
@@ -91,6 +73,54 @@ export class AddOperatorToSellerPoolOutput {
 
   @Field()
   operatorId!: string;
+}
+
+@InputType()
+export class UpdateCatalogItemInput {
+  @Field()
+  itemId!: string;
+
+  @Field()
+  itemName!: string;
+
+  @Field(() => Int)
+  itemPrice!: number;
+}
+
+@InputType()
+export class UpdateCatalogInput {
+  @Field()
+  sellerId!: string;
+
+  @Field()
+  catalogId!: string;
+
+  @Field({ nullable: true })
+  catalogName?: string;
+
+  @Field({ nullable: true })
+  catalogType?: string;
+
+  @Field(() => [UpdateCatalogItemInput], { nullable: true })
+  items?: UpdateCatalogItemInput[];
+}
+
+@InputType()
+export class GetSellerInput {
+  @Field()
+  sellerId!: string;
+}
+
+@ObjectType()
+export class GetSellerOutput {
+  @Field()
+  sellerId!: string;
+
+  @Field()
+  name!: string;
+
+  @Field()
+  email!: string;
 }
 
 @InputType()
@@ -133,36 +163,6 @@ export class GetCatalogInput {
 export class GetCatalogOutput {
   @Field(() => CatalogType)
   catalog!: CatalogType;
-}
-
-@InputType()
-export class UpdateCatalogItemInput {
-  @Field()
-  itemId!: string;
-
-  @Field()
-  itemName!: string;
-
-  @Field(() => Float)
-  itemPrice!: number;
-}
-
-@InputType()
-export class UpdateCatalogInput {
-  @Field()
-  sellerId!: string;
-
-  @Field()
-  catalogId!: string;
-
-  @Field({ nullable: true })
-  catalogName?: string;
-
-  @Field({ nullable: true })
-  catalogType?: string;
-
-  @Field(() => [UpdateCatalogItemInput], { nullable: true })
-  items?: UpdateCatalogItemInput[];
 }
 
 @ObjectType()

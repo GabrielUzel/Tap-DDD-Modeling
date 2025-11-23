@@ -158,7 +158,7 @@ exports.Prisma.CatalogScalarFieldEnum = {
 exports.Prisma.CatalogItemScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  priceAmount: 'priceAmount',
+  priceAmountInCents: 'priceAmountInCents',
   priceSuffix: 'priceSuffix',
   catalogId: 'catalogId',
   createdAt: 'createdAt',
@@ -181,16 +181,16 @@ exports.Prisma.SaleScalarFieldEnum = {
   operatorId: 'operatorId',
   catalogId: 'catalogId',
   operationId: 'operationId',
-  totalAmount: 'totalAmount',
+  totalAmountInCents: 'totalAmountInCents',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SaleItemScalarFieldEnum = {
   id: 'id',
-  itemId: 'itemId',
+  catalogItemId: 'catalogItemId',
   quantity: 'quantity',
-  priceAmount: 'priceAmount',
+  priceAmountInCents: 'priceAmountInCents',
   priceSuffix: 'priceSuffix',
   saleId: 'saleId',
   createdAt: 'createdAt',

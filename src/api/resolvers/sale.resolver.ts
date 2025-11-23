@@ -1,29 +1,38 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
-import { SaleQueries } from "src/application/services/queries/sale.queries";
-import { SaleCommands } from "src/application/services/commands/sale.commands";
+import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import {
   RegisterSaleInput,
   RegisterSaleOutput,
   GetSaleInput,
   GetSaleOutput,
 } from "../types/sale.types";
+import { RegisterSaleCommand } from "src/application/services/commands/dtos/register-sale.command";
+import { GetSaleQuery } from "src/application/services/queries/dtos/get-sale.query";
 
 @Resolver()
 export class SaleResolver {
   constructor(
-    private readonly saleQueries: SaleQueries,
-    private readonly saleCommands: SaleCommands,
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) {}
 
   @Mutation(() => RegisterSaleOutput)
   async registerSale(
     @Args("input") input: RegisterSaleInput,
   ): Promise<RegisterSaleOutput> {
-    return await this.saleCommands.registerSale(input);
+    return this.commandBus.execute(
+      new RegisterSaleCommand(
+        input.operationId,
+        input.sellerId,
+        input.operatorId,
+        input.catalogId,
+        input.items,
+      ),
+    );
   }
 
   @Query(() => GetSaleOutput)
   async getSale(@Args("input") input: GetSaleInput): Promise<GetSaleOutput> {
-    return await this.saleQueries.getSale(input);
+    return this.queryBus.execute(new GetSaleQuery(input.saleId));
   }
 }
