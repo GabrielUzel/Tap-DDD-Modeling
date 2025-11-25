@@ -23,26 +23,12 @@ export class OperationRepository implements IOperationRepository {
     });
   }
 
-  async findById(id: Uuid): Promise<{
-    id: string;
-    name: string;
-    status: string;
-    sellerIds: string[];
-  } | null> {
+  async findById(id: Uuid): Promise<OperationType | null> {
     const operation = await this.prisma.operation.findUnique({
       where: { id: id.getValue() },
     });
 
-    if (!operation) {
-      return null;
-    }
-
-    return {
-      id: operation.id,
-      name: operation.name,
-      status: operation.status,
-      sellerIds: operation.sellerIds.map((id) => id),
-    };
+    return operation;
   }
 
   async findAll(): Promise<
@@ -57,11 +43,13 @@ export class OperationRepository implements IOperationRepository {
       orderBy: { createdAt: "desc" },
     });
 
-    return operations.map((operation) => ({
-      id: operation.id,
-      name: operation.name,
-      status: operation.status,
-      sellerIds: operation.sellerIds.map((id) => id),
-    }));
+    return operations;
   }
 }
+
+type OperationType = {
+  id: string;
+  name: string;
+  status: string;
+  sellerIds: string[];
+};

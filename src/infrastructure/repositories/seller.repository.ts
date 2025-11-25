@@ -82,29 +82,7 @@ export class SellerRepository implements ISellerRepository {
 
   // ! Ambos findbyid e findmany, retornam todo o conteúdo de um seller, todos seus ooperators e catalogs, isso não é muita coisa?
   // Ou o próprio graphql consegue otimizar isso?
-  async findById(id: Uuid): Promise<{
-    id: string;
-    name: string;
-    email: string;
-    operators: { id: string; name: string; email: string }[];
-    catalogs: {
-      id: string;
-      name: string;
-      type: string;
-      items: {
-        id: string;
-        name: string;
-        priceAmountInCents: number;
-        priceSuffix: string;
-      }[];
-    }[];
-    assignments: {
-      id: string;
-      operatorId: string;
-      catalogId: string;
-      role: string;
-    }[];
-  } | null> {
+  async findById(id: Uuid): Promise<SellerType | null> {
     const seller = await this.prisma.seller.findUnique({
       where: { id: id.getValue() },
       include: {
@@ -118,68 +96,10 @@ export class SellerRepository implements ISellerRepository {
       },
     });
 
-    if (!seller) {
-      return null;
-    }
-
-    return {
-      id: seller.id,
-      name: seller.name,
-      email: seller.email,
-      operators: seller.operators.map((operator) => ({
-        id: operator.id,
-        name: operator.name,
-        email: operator.email,
-      })),
-      catalogs: seller.catalogs.map((catalog) => ({
-        id: catalog.id,
-        name: catalog.name,
-        type: catalog.type,
-        items: catalog.items.map((item) => ({
-          id: item.id,
-          name: item.name,
-          priceAmountInCents: item.priceAmountInCents,
-          priceSuffix: item.priceSuffix,
-        })),
-      })),
-      assignments: seller.assignments.map((assignment) => ({
-        id: assignment.id,
-        operatorId: assignment.operatorId,
-        catalogId: assignment.catalogId,
-        role: assignment.role,
-      })),
-    };
+    return seller;
   }
 
-  async findMany(ids: string[]): Promise<
-    {
-      id: string;
-      name: string;
-      email: string;
-      operators: {
-        id: string;
-        name: string;
-        email: string;
-      }[];
-      catalogs: {
-        id: string;
-        name: string;
-        type: string;
-        items: {
-          id: string;
-          name: string;
-          priceAmountInCents: number;
-          priceSuffix: string;
-        }[];
-      }[];
-      assignments: {
-        id: string;
-        operatorId: string;
-        catalogId: string;
-        role: string;
-      }[];
-    }[]
-  > {
+  async findMany(ids: string[]): Promise<SellerType[]> {
     const sellers = await this.prisma.seller.findMany({
       where: {
         id: {
@@ -197,32 +117,34 @@ export class SellerRepository implements ISellerRepository {
       },
     });
 
-    return sellers.map((seller) => ({
-      id: seller.id,
-      name: seller.name,
-      email: seller.email,
-      operators: seller.operators.map((operator) => ({
-        id: operator.id,
-        name: operator.name,
-        email: operator.email,
-      })),
-      catalogs: seller.catalogs.map((catalog) => ({
-        id: catalog.id,
-        name: catalog.name,
-        type: catalog.type,
-        items: catalog.items.map((item) => ({
-          id: item.id,
-          name: item.name,
-          priceAmountInCents: item.priceAmountInCents,
-          priceSuffix: item.priceSuffix,
-        })),
-      })),
-      assignments: seller.assignments.map((assignment) => ({
-        id: assignment.id,
-        operatorId: assignment.operatorId,
-        catalogId: assignment.catalogId,
-        role: assignment.role,
-      })),
-    }));
+    return sellers;
   }
 }
+
+type SellerType = {
+  id: string;
+  name: string;
+  email: string;
+  operators: {
+    id: string;
+    name: string;
+    email: string;
+  }[];
+  catalogs: {
+    id: string;
+    name: string;
+    type: string;
+    items: {
+      id: string;
+      name: string;
+      priceAmountInCents: number;
+      priceSuffix: string;
+    }[];
+  }[];
+  assignments: {
+    id: string;
+    operatorId: string;
+    catalogId: string;
+    role: string;
+  }[];
+};

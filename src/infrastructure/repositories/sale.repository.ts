@@ -29,20 +29,7 @@ export class SaleRepository implements ISaleRepository {
     });
   }
 
-  async findById(id: Uuid): Promise<{
-    id: string;
-    sellerId: string;
-    operatorId: string;
-    catalogId: string;
-    operationId: string;
-    totalAmountInCents: number;
-    items: {
-      catalogItemId: string;
-      quantity: number;
-      priceAmountInCents: number;
-      priceSuffix: string;
-    }[];
-  } | null> {
+  async findById(id: Uuid): Promise<SaleType | null> {
     const sale = await this.prisma.sale.findUnique({
       where: { id: id.getValue() },
       include: {
@@ -50,23 +37,21 @@ export class SaleRepository implements ISaleRepository {
       },
     });
 
-    if (!sale) {
-      return null;
-    }
-
-    return {
-      id: sale.id,
-      sellerId: sale.sellerId,
-      operatorId: sale.operatorId,
-      catalogId: sale.catalogId,
-      operationId: sale.operationId,
-      totalAmountInCents: sale.totalAmountInCents,
-      items: sale.items.map((item) => ({
-        catalogItemId: item.catalogItemId,
-        quantity: item.quantity,
-        priceAmountInCents: item.priceAmountInCents,
-        priceSuffix: item.priceSuffix,
-      })),
-    };
+    return sale;
   }
 }
+
+type SaleType = {
+  id: string;
+  sellerId: string;
+  operatorId: string;
+  catalogId: string;
+  operationId: string;
+  totalAmountInCents: number;
+  items: {
+    catalogItemId: string;
+    quantity: number;
+    priceAmountInCents: number;
+    priceSuffix: string;
+  }[];
+};
