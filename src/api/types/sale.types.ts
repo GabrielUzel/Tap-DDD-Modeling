@@ -9,10 +9,7 @@ export class SaleItem {
   quantity!: number;
 
   @Field(() => Int)
-  salePriceInCents!: number;
-
-  @Field(() => Int)
-  total!: number;
+  priceAmountInCents!: number;
 }
 
 @InputType()
@@ -60,7 +57,7 @@ export class GetSaleInput {
 @ObjectType()
 export class GetSaleOutput {
   @Field()
-  saleId!: string;
+  id!: string;
 
   @Field()
   sellerId!: string;

@@ -54,6 +54,26 @@ export class Catalog extends Entity {
     return item;
   }
 
+  public static fromJSON(json: {
+    id: string;
+    name: string;
+    type: string;
+    catalogItems: any[];
+  }): Catalog {
+    const catalog = new Catalog(
+      new Uuid(json.id),
+      json.name,
+      CatalogType.fromString(json.type),
+      [],
+    );
+
+    catalog._catalogItems = json.catalogItems.map((item: any) =>
+      CatalogItem.fromJSON(item),
+    );
+
+    return catalog;
+  }
+
   get name(): string {
     return this._name;
   }

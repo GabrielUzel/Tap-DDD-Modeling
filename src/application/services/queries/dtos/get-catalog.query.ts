@@ -1,17 +1,17 @@
 import { Query } from "@nestjs/cqrs";
 
 export class GetCatalogQuery extends Query<{
-  catalog: {
-    catalogId: string;
-    catalogName: string;
-    catalogType: string;
-    items: { itemId: string; itemName: string; itemPrice: number }[];
-  };
+  id: string;
+  name: string;
+  type: string;
+  items: {
+    id: string;
+    name: string;
+    priceAmountInCents: number;
+    priceSuffix: string;
+  }[];
 }> {
-  constructor(
-    public readonly sellerId: string,
-    public readonly catalogId: string,
-  ) {
+  constructor(public readonly catalogId: string) {
     super();
   }
 }

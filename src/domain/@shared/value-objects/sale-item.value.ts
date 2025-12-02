@@ -1,5 +1,5 @@
 import { ValueObject } from "../interfaces/value-object.interface";
-import { Money } from "./money.value";
+import { Money, MoneySufix } from "./money.value";
 import { Uuid } from "../interfaces/uuid";
 
 export class SaleItem implements ValueObject<SaleItemProps> {
@@ -35,6 +35,19 @@ export class SaleItem implements ValueObject<SaleItemProps> {
       quantity: this._quantity,
       salePrice: this._salePriceInCents,
     };
+  }
+
+  public static fromJSON(json: {
+    catalogItemId: string;
+    quantity: number;
+    salePriceInCents: number;
+    salePriceCurrency: string;
+  }): SaleItem {
+    return new SaleItem(
+      new Uuid(json.catalogItemId),
+      json.quantity,
+      Money.create(json.salePriceInCents, json.salePriceCurrency as MoneySufix),
+    );
   }
 
   public getTotal(): number {

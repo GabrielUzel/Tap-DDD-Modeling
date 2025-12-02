@@ -7,7 +7,7 @@ import { Uuid } from "src/domain/@shared/interfaces/uuid";
 
 @CommandHandler(CreateOperationCommand)
 export class CreateOperationHandler
-  implements ICommandHandler<CreateOperationCommand, { operationId: string }>
+  implements ICommandHandler<CreateOperationCommand>
 {
   constructor(
     @Inject("OperationRepository")

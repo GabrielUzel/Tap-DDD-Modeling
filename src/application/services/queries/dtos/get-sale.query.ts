@@ -1,7 +1,7 @@
 import { Query } from "@nestjs/cqrs";
 
 export class GetSaleQuery extends Query<{
-  saleId: string;
+  id: string;
   sellerId: string;
   operationId: string;
   operatorId: string;
@@ -10,8 +10,7 @@ export class GetSaleQuery extends Query<{
   items: {
     catalogItemId: string;
     quantity: number;
-    salePriceInCents: number;
-    total: number;
+    priceAmountInCents: number;
   }[];
 }> {
   constructor(public readonly saleId: string) {

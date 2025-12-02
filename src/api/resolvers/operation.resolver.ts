@@ -107,7 +107,7 @@ export class OperationResolver {
   }
 
   @Query(() => GetOperationsOutput)
-  async getOperations(): Promise<GetOperationsOutput> {
+  async getOperations(): Promise<GetOperationsOutput[]> {
     return this.queryBus.execute(new GetOperationsQuery());
   }
 
@@ -121,7 +121,7 @@ export class OperationResolver {
   @Query(() => GetSellersOutput)
   async getSellers(
     @Args("input") input: GetSellersInput,
-  ): Promise<GetSellersOutput> {
+  ): Promise<GetSellersOutput[]> {
     return this.queryBus.execute(new GetSellersQuery(input.operationId));
   }
 }

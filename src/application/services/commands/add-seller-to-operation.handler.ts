@@ -4,15 +4,10 @@ import { AddSellerToOperationCommand } from "./dtos/add-seller-to-operation.comm
 import { IOperationRepository } from "src/infrastructure/repositories/interfaces/operation-repository.interface";
 import { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
-import { OperationMapper } from "../@shared/operation.mapper";
 
 @CommandHandler(AddSellerToOperationCommand)
 export class AddSellerToOperationHandler
-  implements
-    ICommandHandler<
-      AddSellerToOperationCommand,
-      { operationId: string; sellerId: string }
-    >
+  implements ICommandHandler<AddSellerToOperationCommand>
 {
   constructor(
     @Inject("OperationRepository")
@@ -38,12 +33,11 @@ export class AddSellerToOperationHandler
       throw new NotFoundException("Seller not found");
     }
 
-    const operationEntity = OperationMapper.toDomain(operation);
-    operationEntity.addSeller(sellerId);
-    await this.operationRepository.save(operationEntity);
+    operation.addSeller(sellerId);
+    await this.operationRepository.save(operation);
 
     return {
-      operationId: operationEntity.id.getValue(),
+      operationId: operation.id.getValue(),
       sellerId: sellerId.getValue(),
     };
   }

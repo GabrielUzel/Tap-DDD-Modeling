@@ -3,16 +3,14 @@ import { Inject, NotFoundException } from "@nestjs/common";
 import { StartOperationCommand } from "./dtos/start-operation.command";
 import { IOperationRepository } from "src/infrastructure/repositories/interfaces/operation-repository.interface";
 import { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
-import { StartOperationDomainService } from "src/domain/services/start-operation.service";
+import { OperationDomainService } from "src/domain/services/operation-domain-service";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
-import { OperationMapper } from "../@shared/operation.mapper";
-import { SellerMapper } from "../@shared/seller.mapper";
 
 @CommandHandler(StartOperationCommand)
 export class StartOperationHandler
-  implements ICommandHandler<StartOperationCommand, { operationId: string }>
+  implements ICommandHandler<StartOperationCommand>
 {
-  private readonly startOperationDomainService: StartOperationDomainService;
+  private readonly operationDomainService: OperationDomainService;
 
   constructor(
     @Inject("OperationRepository")
@@ -20,7 +18,7 @@ export class StartOperationHandler
     @Inject("SellerRepository")
     private readonly sellerRepository: ISellerRepository,
   ) {
-    this.startOperationDomainService = new StartOperationDomainService();
+    this.operationDomainService = new OperationDomainService();
   }
 
   async execute(
@@ -35,24 +33,11 @@ export class StartOperationHandler
 
     const sellers = await this.sellerRepository.findMany(operation.sellerIds);
 
-    const sellersEntities = sellers.map((seller) =>
-      SellerMapper.toDomain(seller),
-    );
-
-    this.startOperationDomainService.validateOperationCanStart(sellersEntities);
-
-    const operationEntity = OperationMapper.toDomain({
-      id: operation.id,
-      name: operation.name,
-      status: operation.status,
-      sellerIds: operation.sellerIds,
-    });
-
-    operationEntity.startOperation();
-    await this.operationRepository.save(operationEntity);
+    this.operationDomainService.startOperation(operation, sellers);
+    await this.operationRepository.save(operation);
 
     return {
-      operationId: operationEntity.id.getValue(),
+      operationId: operation.id.getValue(),
     };
   }
 }

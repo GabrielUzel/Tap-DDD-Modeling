@@ -59,6 +59,18 @@ export class Assignment implements ValueObject<AssignmentProps> {
     return this._role.isCashier();
   }
 
+  public static fromJSON(json: {
+    operatorId: string;
+    catalogId: string;
+    role: string;
+  }): Assignment {
+    const operatorId = new Uuid(json.operatorId);
+    const catalogId = new Uuid(json.catalogId);
+    const role = Role.fromString(json.role);
+
+    return new Assignment(operatorId, catalogId, role);
+  }
+
   get operatorId(): Uuid {
     return this._operatorId;
   }

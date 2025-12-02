@@ -4,24 +4,15 @@ import { RegisterSaleCommand } from "./dtos/register-sale.command";
 import { IOperationRepository } from "src/infrastructure/repositories/interfaces/operation-repository.interface";
 import { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
 import { ISaleRepository } from "src/infrastructure/repositories/interfaces/sale-repository.interface";
-import { RegisterSaleDomainService } from "src/domain/services/register-sale.service";
+import { SaleDomainService } from "src/domain/services/sale-domain-service";
 import { SaleItem } from "src/domain/@shared/value-objects/sale-item.value";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
-import { OperationMapper } from "../@shared/operation.mapper";
-import { SellerMapper } from "../@shared/seller.mapper";
 
 @CommandHandler(RegisterSaleCommand)
 export class RegisterSaleHandler
-  implements
-    ICommandHandler<
-      RegisterSaleCommand,
-      {
-        saleId: string;
-        totalAmount: number;
-      }
-    >
+  implements ICommandHandler<RegisterSaleCommand>
 {
-  private readonly registerSaleDomainService: RegisterSaleDomainService;
+  private readonly saleDomainService: SaleDomainService;
 
   constructor(
     @Inject("OperationRepository")
@@ -31,7 +22,7 @@ export class RegisterSaleHandler
     @Inject("SaleRepository")
     private readonly saleRepository: ISaleRepository,
   ) {
-    this.registerSaleDomainService = new RegisterSaleDomainService();
+    this.saleDomainService = new SaleDomainService();
   }
 
   async execute(command: RegisterSaleCommand): Promise<{
@@ -54,16 +45,7 @@ export class RegisterSaleHandler
       throw new NotFoundException("Seller not found");
     }
 
-    const operationEntity = OperationMapper.toDomain(operation);
-    const sellerEntity = SellerMapper.toDomain(seller);
-
-    this.registerSaleDomainService.validateCanRegisterSale(
-      sellerEntity,
-      operatorId,
-      catalogId,
-    );
-
-    const catalog = sellerEntity.getCatalog(catalogId);
+    const catalog = seller.getCatalog(catalogId);
 
     const saleItems = command.items.map((item) => {
       const catalogItemId = new Uuid(item.itemId);
@@ -76,8 +58,9 @@ export class RegisterSaleHandler
       );
     });
 
-    const sale = operationEntity.registerSale(
-      sellerId,
+    const sale = this.saleDomainService.registerSale(
+      operation,
+      seller,
       operatorId,
       catalogId,
       saleItems,

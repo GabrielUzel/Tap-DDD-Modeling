@@ -1,36 +1,23 @@
 import { Inject, NotFoundException } from "@nestjs/common";
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
-import type { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
-import { Uuid } from "src/domain/@shared/interfaces/uuid";
+import { PrismaService } from "src/infrastructure/prisma/prisma.service";
 import { GetSellerQuery } from "./dtos/get-seller.query";
 
 @QueryHandler(GetSellerQuery)
-export class GetSellerHandler
-  implements
-    IQueryHandler<
-      GetSellerQuery,
-      { sellerId: string; name: string; email: string }
-    >
-{
-  constructor(
-    @Inject("SellerRepository")
-    private readonly sellerRepository: ISellerRepository,
-  ) {}
+export class GetSellerHandler implements IQueryHandler<GetSellerQuery> {
+  constructor(@Inject() private readonly prisma: PrismaService) {}
 
   async execute(
     query: GetSellerQuery,
-  ): Promise<{ sellerId: string; name: string; email: string }> {
-    const sellerId = new Uuid(query.sellerId);
-    const seller = await this.sellerRepository.findById(sellerId);
+  ): Promise<{ id: string; name: string; email: string }> {
+    const seller = await this.prisma.seller.findUnique({
+      where: { id: query.sellerId },
+    });
 
     if (!seller) {
       throw new NotFoundException("Seller not found");
     }
 
-    return {
-      sellerId: seller.id,
-      name: seller.name,
-      email: seller.email,
-    };
+    return seller;
   }
 }

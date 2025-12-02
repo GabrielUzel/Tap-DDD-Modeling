@@ -5,22 +5,10 @@ import { IOperationRepository } from "src/infrastructure/repositories/interfaces
 import { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
 import { Role } from "src/domain/@shared/value-objects/role.value";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
-import { OperationMapper } from "../@shared/operation.mapper";
-import { SellerMapper } from "../@shared/seller.mapper";
 
 @CommandHandler(CreateAssignmentCommand)
 export class CreateAssignmentHandler
-  implements
-    ICommandHandler<
-      CreateAssignmentCommand,
-      {
-        operationId: string;
-        sellerId: string;
-        operatorId: string;
-        catalogId: string;
-        role: string;
-      }
-    >
+  implements ICommandHandler<CreateAssignmentCommand>
 {
   constructor(
     @Inject("OperationRepository")
@@ -50,9 +38,7 @@ export class CreateAssignmentHandler
       throw new NotFoundException("Seller not found");
     }
 
-    const operationEntity = OperationMapper.toDomain(operation);
-
-    if (!operationEntity.hasSeller(sellerId)) {
+    if (!operation.hasSeller(sellerId)) {
       throw new Error("Seller does not belong to this operation");
     }
 
@@ -60,12 +46,11 @@ export class CreateAssignmentHandler
     const catalogId = new Uuid(command.catalogId);
     const role = Role.fromString(command.role);
 
-    const sellerEntity = SellerMapper.toDomain(seller);
-    sellerEntity.assignOperator(operatorId, catalogId, role);
-    await this.sellerRepository.save(sellerEntity);
+    seller.assignOperator(operatorId, catalogId, role);
+    await this.sellerRepository.save(seller);
 
     return {
-      operationId: operation.id,
+      operationId: operation.id.getValue(),
       sellerId: sellerId.getValue(),
       operatorId: operatorId.getValue(),
       catalogId: catalogId.getValue(),

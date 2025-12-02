@@ -1,5 +1,5 @@
 import { Entity } from "../@shared/interfaces/entity.abstract";
-import { Money } from "../@shared/value-objects/money.value";
+import { Money, MoneySufix } from "../@shared/value-objects/money.value";
 import { Uuid } from "../@shared/interfaces/uuid";
 
 export class CatalogItem extends Entity {
@@ -17,6 +17,22 @@ export class CatalogItem extends Entity {
     if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
+
+    return new CatalogItem(id, name, price);
+  }
+
+  public static fromJSON(json: {
+    id: string;
+    name: string;
+    priceInCents: number;
+    priceCurrency: string;
+  }): CatalogItem {
+    const id = new Uuid(json.id);
+    const name = json.name;
+    const price = new Money(
+      json.priceInCents,
+      json.priceCurrency as MoneySufix,
+    );
 
     return new CatalogItem(id, name, price);
   }

@@ -1,7 +1,7 @@
 import { Query } from "@nestjs/cqrs";
 
 export class GetOperationByIdQuery extends Query<{
-  operationId: string;
+  id: string;
   name: string;
   status: string;
 }> {

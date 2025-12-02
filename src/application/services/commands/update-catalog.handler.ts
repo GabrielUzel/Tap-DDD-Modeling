@@ -3,11 +3,10 @@ import { Inject, NotFoundException } from "@nestjs/common";
 import type { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
 import { UpdateCatalogCommand } from "./dtos/update-catalog.command";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
-import { SellerMapper } from "../@shared/seller.mapper";
 
 @CommandHandler(UpdateCatalogCommand)
 export class UpdateCatalogHandler
-  implements ICommandHandler<UpdateCatalogCommand, { catalogId: string }>
+  implements ICommandHandler<UpdateCatalogCommand>
 {
   constructor(
     @Inject("SellerRepository")
@@ -22,16 +21,14 @@ export class UpdateCatalogHandler
       throw new NotFoundException("Seller not found");
     }
 
-    const sellerEntity = SellerMapper.toDomain(seller);
-
-    sellerEntity.updateCatalog(
+    seller.updateCatalog(
       new Uuid(command.catalogId),
       command.catalogName,
       command.catalogType,
       undefined,
     );
 
-    await this.sellerRepository.save(sellerEntity);
+    await this.sellerRepository.save(seller);
 
     return { catalogId: command.catalogId };
   }

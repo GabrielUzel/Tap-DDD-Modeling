@@ -1,28 +1,28 @@
 import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
 
-@ObjectType()
-export class OperationType {
-  @Field()
-  operationId!: string;
+// @ObjectType()
+// export class OperationType {
+//   @Field()
+//   operationId!: string;
 
-  @Field()
-  name!: string;
+//   @Field()
+//   name!: string;
 
-  @Field()
-  status!: string;
-}
+//   @Field()
+//   status!: string;
+// }
 
-@ObjectType()
-export class SellerType {
-  @Field()
-  sellerId!: string;
+// @ObjectType()
+// export class SellerType {
+//   @Field()
+//   sellerId!: string;
 
-  @Field()
-  name!: string;
+//   @Field()
+//   name!: string;
 
-  @Field()
-  email!: string;
-}
+//   @Field()
+//   email!: string;
+// }
 
 @InputType()
 export class CreateOperationInput {
@@ -167,8 +167,14 @@ export class StartOperationOutput {
 
 @ObjectType()
 export class GetOperationsOutput {
-  @Field(() => [OperationType])
-  operations!: OperationType[];
+  @Field()
+  id!: string;
+
+  @Field()
+  name!: string;
+
+  @Field()
+  status!: string;
 }
 
 @InputType()
@@ -180,7 +186,7 @@ export class GetOperationByIdInput {
 @ObjectType()
 export class GetOperationByIdOutput {
   @Field()
-  operationId!: string;
+  id!: string;
 
   @Field()
   name!: string;
@@ -198,8 +204,11 @@ export class GetSellersInput {
 @ObjectType()
 export class GetSellersOutput {
   @Field()
-  operationId!: string;
+  id!: string;
 
-  @Field(() => [SellerType])
-  sellers!: SellerType[];
+  @Field()
+  name!: string;
+
+  @Field()
+  email!: string;
 }

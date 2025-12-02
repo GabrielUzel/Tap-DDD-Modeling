@@ -143,25 +143,49 @@ export class Seller extends AggregateRoot {
     );
   }
 
-  public canRegisterSale(operatorId: Uuid, catalogId: Uuid): boolean {
+  public validateSaleRegistration(operatorId: Uuid, catalogId: Uuid): void {
     if (!this.hasCatalog(catalogId)) {
-      return false;
+      throw new Error("Catalog not found");
     }
 
     if (!this.operatorIsInPool(operatorId)) {
-      return false;
+      throw new Error("Operator not in pool");
     }
 
     const assignment = this.getAssignment(operatorId, catalogId);
+
     if (!assignment) {
-      return false;
+      throw new Error("Assignment not found");
     }
 
     if (!assignment.operatorCanRegisterSale()) {
-      return false;
+      throw new Error("Operator cannot register sale");
     }
+  }
 
-    return true;
+  public static fromJSON(json: any): Seller {
+    const seller = new Seller(
+      new Uuid(json.id),
+      json.name,
+      Email.create(json.email),
+      [],
+      [],
+      [],
+    );
+
+    seller._catalogs = json.catalogs.map((catalog: any) =>
+      Catalog.fromJSON(catalog),
+    );
+
+    seller._operators = json.operators.map((operator: any) =>
+      Operator.fromJSON(operator),
+    );
+
+    seller._assignments = json.assignments.map((assignment: any) =>
+      Assignment.fromJSON(assignment),
+    );
+
+    return seller;
   }
 
   get name(): string {

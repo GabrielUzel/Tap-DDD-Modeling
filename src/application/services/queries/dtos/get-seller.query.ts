@@ -1,7 +1,7 @@
 import { Query } from "@nestjs/cqrs";
 
 export class GetSellerQuery extends Query<{
-  sellerId: string;
+  id: string;
   name: string;
   email: string;
 }> {

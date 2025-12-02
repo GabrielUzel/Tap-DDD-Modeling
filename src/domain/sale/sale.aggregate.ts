@@ -46,6 +46,26 @@ export class Sale extends AggregateRoot {
     );
   }
 
+  public static fromJSON(json: any): Sale {
+    const id = new Uuid(json.id);
+    const sellerId = new Uuid(json.sellerId);
+    const operatorId = new Uuid(json.operatorId);
+    const catalogId = new Uuid(json.catalogId);
+    const operationId = new Uuid(json.operationId);
+    const items = json.items.map((item: any) => SaleItem.fromJSON(item));
+    const totalAmountInCents = json.totalAmountInCents;
+
+    return new Sale(
+      id,
+      sellerId,
+      operatorId,
+      catalogId,
+      operationId,
+      items,
+      totalAmountInCents,
+    );
+  }
+
   get sellerId(): Uuid {
     return this._sellerId;
   }

@@ -8,7 +8,7 @@ import { CreateSellerCommand } from "./dtos/create-seller.command";
 
 @CommandHandler(CreateSellerCommand)
 export class CreateSellerHandler
-  implements ICommandHandler<CreateSellerCommand, { sellerId: string }>
+  implements ICommandHandler<CreateSellerCommand>
 {
   constructor(
     @Inject("SellerRepository")

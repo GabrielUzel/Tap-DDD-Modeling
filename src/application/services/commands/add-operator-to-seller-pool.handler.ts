@@ -5,15 +5,10 @@ import { AddOperatorToSellerPoolCommand } from "./dtos/add-operator-to-seller-po
 import { Operator } from "src/domain/seller/operator.entity";
 import { Email } from "src/domain/@shared/value-objects/email.value";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
-import { SellerMapper } from "../@shared/seller.mapper";
 
 @CommandHandler(AddOperatorToSellerPoolCommand)
 export class AddOperatorToSellerPoolHandler
-  implements
-    ICommandHandler<
-      AddOperatorToSellerPoolCommand,
-      { sellerId: string; operatorId: string }
-    >
+  implements ICommandHandler<AddOperatorToSellerPoolCommand>
 {
   constructor(
     @Inject("SellerRepository")
@@ -36,9 +31,8 @@ export class AddOperatorToSellerPoolHandler
       Email.create(command.operatorEmail),
     );
 
-    const sellerEntity = SellerMapper.toDomain(seller);
-    sellerEntity.addOperatorToPool(operator);
-    await this.sellerRepository.save(sellerEntity);
+    seller.addOperatorToPool(operator);
+    await this.sellerRepository.save(seller);
 
     return {
       sellerId: sellerId.getValue(),

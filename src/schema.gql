@@ -24,16 +24,10 @@ type AddSellerToOperationOutput {
 }
 
 type CatalogItemType {
-  itemId: String!
-  itemName: String!
-  itemPrice: Int!
-}
-
-type CatalogType {
-  catalogId: String!
-  catalogName: String!
-  catalogType: String!
-  items: [CatalogItemType!]!
+  id: String!
+  name: String!
+  priceAmountInCents: Int!
+  priceSuffix: String!
 }
 
 input CreateAssignmentInput {
@@ -104,7 +98,10 @@ input GetCatalogInput {
 }
 
 type GetCatalogOutput {
-  catalog: CatalogType!
+  id: String!
+  items: [CatalogItemType!]!
+  name: String!
+  type: String!
 }
 
 input GetOperationByIdInput {
@@ -112,13 +109,15 @@ input GetOperationByIdInput {
 }
 
 type GetOperationByIdOutput {
+  id: String!
   name: String!
-  operationId: String!
   status: String!
 }
 
 type GetOperationsOutput {
-  operations: [OperationType!]!
+  id: String!
+  name: String!
+  status: String!
 }
 
 input GetOperatorsInput {
@@ -126,7 +125,9 @@ input GetOperatorsInput {
 }
 
 type GetOperatorsOutput {
-  operators: [OperatorType!]!
+  email: String!
+  id: String!
+  name: String!
 }
 
 input GetSaleInput {
@@ -135,10 +136,10 @@ input GetSaleInput {
 
 type GetSaleOutput {
   catalogId: String!
+  id: String!
   items: [SaleItem!]!
   operationId: String!
   operatorId: String!
-  saleId: String!
   sellerId: String!
   totalAmountInCents: Int!
 }
@@ -149,8 +150,8 @@ input GetSellerInput {
 
 type GetSellerOutput {
   email: String!
+  id: String!
   name: String!
-  sellerId: String!
 }
 
 input GetSellersInput {
@@ -158,8 +159,9 @@ input GetSellersInput {
 }
 
 type GetSellersOutput {
-  operationId: String!
-  sellers: [SellerType!]!
+  email: String!
+  id: String!
+  name: String!
 }
 
 type Mutation {
@@ -174,18 +176,6 @@ type Mutation {
   removeCatalogItemFromCatalog(input: RemoveCatalogItemFromCatalogInput!): RemoveCatalogItemFromCatalogOutput!
   startOperation(input: StartOperationInput!): StartOperationOutput!
   updateCatalog(input: UpdateCatalogInput!): UpdateCatalogOutput!
-}
-
-type OperationType {
-  name: String!
-  operationId: String!
-  status: String!
-}
-
-type OperatorType {
-  operatorEmail: String!
-  operatorId: String!
-  operatorName: String!
 }
 
 type Query {
@@ -225,9 +215,8 @@ type RemoveCatalogItemFromCatalogOutput {
 
 type SaleItem {
   catalogItemId: String!
+  priceAmountInCents: Int!
   quantity: Int!
-  salePriceInCents: Int!
-  total: Int!
 }
 
 input SaleItemToRegister {
@@ -242,12 +231,6 @@ input SellerHasOperatorInput {
 
 type SellerHasOperatorOutput {
   hasOperator: Boolean!
-}
-
-type SellerType {
-  email: String!
-  name: String!
-  sellerId: String!
 }
 
 input StartOperationInput {

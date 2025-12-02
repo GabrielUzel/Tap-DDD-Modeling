@@ -6,16 +6,10 @@ import { ISellerRepository } from "src/infrastructure/repositories/interfaces/se
 import { Catalog } from "src/domain/seller/catalog.entity";
 import { CatalogType } from "src/domain/@shared/value-objects/catalog-type.value";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
-import { OperationMapper } from "../@shared/operation.mapper";
-import { SellerMapper } from "../@shared/seller.mapper";
 
 @CommandHandler(CreateCatalogCommand)
 export class CreateCatalogHandler
-  implements
-    ICommandHandler<
-      CreateCatalogCommand,
-      { operationId: string; sellerId: string; catalogId: string }
-    >
+  implements ICommandHandler<CreateCatalogCommand>
 {
   constructor(
     @Inject("OperationRepository")
@@ -41,9 +35,7 @@ export class CreateCatalogHandler
       throw new NotFoundException("Seller not found");
     }
 
-    const operationEntity = OperationMapper.toDomain(operation);
-
-    if (!operationEntity.hasSeller(sellerId)) {
+    if (!operation.hasSeller(sellerId)) {
       throw new Error("Seller does not belong to this operation");
     }
 
@@ -53,10 +45,8 @@ export class CreateCatalogHandler
       CatalogType.fromString(command.catalogType),
     );
 
-    const sellerEntity = SellerMapper.toDomain(seller);
-
-    sellerEntity.addCatalog(catalog);
-    await this.sellerRepository.save(sellerEntity);
+    seller.addCatalog(catalog);
+    await this.sellerRepository.save(seller);
 
     return {
       operationId: operationId.getValue(),

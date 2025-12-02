@@ -23,33 +23,15 @@ export class OperationRepository implements IOperationRepository {
     });
   }
 
-  async findById(id: Uuid): Promise<OperationType | null> {
+  async findById(id: Uuid): Promise<Operation | null> {
     const operation = await this.prisma.operation.findUnique({
       where: { id: id.getValue() },
     });
 
-    return operation;
-  }
+    if (!operation) {
+      return null;
+    }
 
-  async findAll(): Promise<
-    {
-      id: string;
-      name: string;
-      status: string;
-      sellerIds: string[];
-    }[]
-  > {
-    const operations = await this.prisma.operation.findMany({
-      orderBy: { createdAt: "desc" },
-    });
-
-    return operations;
+    return Operation.fromJSON(operation);
   }
 }
-
-type OperationType = {
-  id: string;
-  name: string;
-  status: string;
-  sellerIds: string[];
-};

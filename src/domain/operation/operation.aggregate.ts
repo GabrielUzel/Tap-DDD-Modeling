@@ -56,6 +56,7 @@ export class Operation extends AggregateRoot {
     }
 
     const saleId = Uuid.generate();
+
     const sale = Sale.create(
       saleId,
       sellerId,
@@ -70,6 +71,20 @@ export class Operation extends AggregateRoot {
 
   public hasSeller(sellerId: Uuid): boolean {
     return this._sellerIds.some((id) => id.equals(sellerId));
+  }
+
+  public static fromJSON(json: {
+    id: string;
+    name: string;
+    status: string;
+    sellerIds: string[];
+  }): Operation {
+    const id = new Uuid(json.id);
+    const name = json.name;
+    const status = Status.fromString(json.status);
+    const sellerIds = json.sellerIds.map((id) => new Uuid(id));
+
+    return new Operation(id, name, status, sellerIds);
   }
 
   get name(): string {

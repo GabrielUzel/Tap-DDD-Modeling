@@ -80,9 +80,7 @@ export class SellerRepository implements ISellerRepository {
     });
   }
 
-  // ! Ambos findbyid e findmany, retornam todo o conteúdo de um seller, todos seus ooperators e catalogs, isso não é muita coisa?
-  // Ou o próprio graphql consegue otimizar isso?
-  async findById(id: Uuid): Promise<SellerType | null> {
+  async findById(id: Uuid): Promise<Seller | null> {
     const seller = await this.prisma.seller.findUnique({
       where: { id: id.getValue() },
       include: {
@@ -96,14 +94,22 @@ export class SellerRepository implements ISellerRepository {
       },
     });
 
-    return seller;
+    if (!seller) {
+      return null;
+    }
+
+    return Seller.fromJSON(seller);
   }
 
-  async findMany(ids: string[]): Promise<SellerType[]> {
+  async findMany(ids: Uuid[]): Promise<Seller[]> {
+    if (!ids.length) {
+      return [];
+    }
+
     const sellers = await this.prisma.seller.findMany({
       where: {
         id: {
-          in: ids.map((id) => id),
+          in: ids.map((id) => id.getValue()),
         },
       },
       include: {
@@ -117,34 +123,6 @@ export class SellerRepository implements ISellerRepository {
       },
     });
 
-    return sellers;
+    return sellers.map(Seller.fromJSON);
   }
 }
-
-type SellerType = {
-  id: string;
-  name: string;
-  email: string;
-  operators: {
-    id: string;
-    name: string;
-    email: string;
-  }[];
-  catalogs: {
-    id: string;
-    name: string;
-    type: string;
-    items: {
-      id: string;
-      name: string;
-      priceAmountInCents: number;
-      priceSuffix: string;
-    }[];
-  }[];
-  assignments: {
-    id: string;
-    operatorId: string;
-    catalogId: string;
-    role: string;
-  }[];
-};

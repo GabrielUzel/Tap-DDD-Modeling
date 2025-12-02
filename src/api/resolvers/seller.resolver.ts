@@ -15,8 +15,6 @@ import {
   GetCatalogOutput,
   UpdateCatalogInput,
   UpdateCatalogOutput,
-  AddCatalogItemToCatalogInput,
-  AddCatalogItemToCatalogOutput,
   RemoveCatalogItemFromCatalogInput,
   RemoveCatalogItemFromCatalogOutput,
 } from "../types/seller.types";
@@ -104,7 +102,7 @@ export class SellerResolver {
   @Query(() => GetOperatorsOutput)
   async getOperators(
     @Args("input") input: GetOperatorsInput,
-  ): Promise<GetOperatorsOutput> {
+  ): Promise<GetOperatorsOutput[]> {
     return this.queryBus.execute(new GetOperatorsQuery(input.sellerId));
   }
 
@@ -112,8 +110,6 @@ export class SellerResolver {
   async getCatalog(
     @Args("input") input: GetCatalogInput,
   ): Promise<GetCatalogOutput> {
-    return this.queryBus.execute(
-      new GetCatalogQuery(input.sellerId, input.catalogId),
-    );
+    return this.queryBus.execute(new GetCatalogQuery(input.catalogId));
   }
 }

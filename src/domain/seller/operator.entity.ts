@@ -21,6 +21,18 @@ export class Operator extends Entity {
     return new Operator(id, name, email);
   }
 
+  public static fromJSON(json: {
+    id: string;
+    name: string;
+    email: string;
+  }): Operator {
+    const id = new Uuid(json.id);
+    const name = json.name;
+    const email = new Email(json.email);
+
+    return new Operator(id, name, email);
+  }
+
   get name(): string {
     return this._name;
   }

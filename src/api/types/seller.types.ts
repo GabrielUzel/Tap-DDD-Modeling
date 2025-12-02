@@ -1,42 +1,18 @@
 import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
 
 @ObjectType()
-export class OperatorType {
-  @Field()
-  operatorId!: string;
-
-  @Field()
-  operatorName!: string;
-
-  @Field()
-  operatorEmail!: string;
-}
-
-@ObjectType()
 export class CatalogItemType {
   @Field()
-  itemId!: string;
+  id!: string;
 
   @Field()
-  itemName!: string;
+  name!: string;
 
   @Field(() => Int)
-  itemPrice!: number;
-}
-
-@ObjectType()
-export class CatalogType {
-  @Field()
-  catalogId!: string;
+  priceAmountInCents!: number;
 
   @Field()
-  catalogName!: string;
-
-  @Field()
-  catalogType!: string;
-
-  @Field(() => [CatalogItemType])
-  items!: CatalogItemType[];
+  priceSuffix!: string;
 }
 
 @InputType()
@@ -105,7 +81,7 @@ export class GetSellerInput {
 @ObjectType()
 export class GetSellerOutput {
   @Field()
-  sellerId!: string;
+  id!: string;
 
   @Field()
   name!: string;
@@ -137,8 +113,14 @@ export class GetOperatorsInput {
 
 @ObjectType()
 export class GetOperatorsOutput {
-  @Field(() => [OperatorType])
-  operators!: OperatorType[];
+  @Field()
+  id!: string;
+
+  @Field()
+  name!: string;
+
+  @Field()
+  email!: string;
 }
 
 @InputType()
@@ -152,44 +134,17 @@ export class GetCatalogInput {
 
 @ObjectType()
 export class GetCatalogOutput {
-  @Field(() => CatalogType)
-  catalog!: CatalogType;
-}
-
-@InputType()
-export class AddCatalogItemToCatalogInput {
   @Field()
-  operationId!: string;
+  id!: string;
 
   @Field()
-  sellerId!: string;
+  name!: string;
 
   @Field()
-  catalogId!: string;
+  type!: string;
 
-  @Field()
-  itemName!: string;
-
-  @Field(() => Int)
-  itemPriceAmount!: number;
-
-  @Field()
-  itemPriceSufix!: string;
-}
-
-@ObjectType()
-export class AddCatalogItemToCatalogOutput {
-  @Field()
-  operationId!: string;
-
-  @Field()
-  sellerId!: string;
-
-  @Field()
-  catalogId!: string;
-
-  @Field()
-  itemId!: string;
+  @Field(() => [CatalogItemType])
+  items!: CatalogItemType[];
 }
 
 @InputType()
