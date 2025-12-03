@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "nest start --watch",
     "start": "nest start",
-    "db:generate": "prisma generate --schema=src/infrastructure/prisma/schema.prisma",
-    "db:migrate": "prisma migrate dev --schema=src/infrastructure/prisma/schema.prisma",
-    "db:studio": "prisma studio --schema=src/infrastructure/prisma/schema.prisma",
+    "prisma:reset": "bun prisma migrate reset",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio",
     "build": "nest build"
   },
   "devDependencies": {
@@ -28,9 +29,9 @@
     "@nestjs/cqrs": "^11.0.3",
     "@nestjs/graphql": "^13.2.0",
     "@nestjs/platform-fastify": "^11.1.6",
-    "@prisma/client": "^7.0.0",
+    "@prisma/client": "^7.0.1",
     "graphql": "^16.11.0",
-    "prisma": "^7.0.0",
+    "prisma": "^7.0.1",
     "uuid": "^9.0.1",
     "uuid-validate": "latest"
   }
