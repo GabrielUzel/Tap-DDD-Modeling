@@ -23,6 +23,14 @@ type AddSellerToOperationOutput {
   sellerId: String!
 }
 
+input CancelTicketInput {
+  ticketId: String!
+}
+
+type CancelTicketOutput {
+  ticketId: String!
+}
+
 type CatalogItemType {
   id: String!
   name: String!
@@ -90,6 +98,19 @@ input CreateSellerInput {
 
 type CreateSellerOutput {
   sellerId: String!
+}
+
+input CreateTicketInput {
+  catalogId: String!
+  items: [TicketItemToCreate!]!
+  operationId: String!
+  operatorId: String!
+  sellerId: String!
+}
+
+type CreateTicketOutput {
+  ticketId: String!
+  totalAmountInCents: Int!
 }
 
 input GetCatalogInput {
@@ -164,15 +185,25 @@ type GetSellersOutput {
   name: String!
 }
 
+input MarkTicketAsPaidInput {
+  ticketId: String!
+}
+
+type MarkTicketAsPaidOutput {
+  ticketId: String!
+}
+
 type Mutation {
   addOperatorToSellerPool(input: AddOperatorToSellerPoolInput!): AddOperatorToSellerPoolOutput!
   addSellerToOperation(input: AddSellerToOperationInput!): AddSellerToOperationOutput!
+  cancelTicket(input: CancelTicketInput!): CancelTicketOutput!
   createAssignment(input: CreateAssignmentInput!): CreateAssignmentOutput!
   createCatalog(input: CreateCatalogInput!): CreateCatalogOutput!
   createCatalogItem(input: CreateCatalogItemInput!): CreateCatalogItemOutput!
   createOperation(input: CreateOperationInput!): CreateOperationOutput!
   createSeller(input: CreateSellerInput!): CreateSellerOutput!
-  registerSale(input: RegisterSaleInput!): RegisterSaleOutput!
+  createTicket(input: CreateTicketInput!): CreateTicketOutput!
+  markTicketAsPaid(input: MarkTicketAsPaidInput!): MarkTicketAsPaidOutput!
   removeCatalogItemFromCatalog(input: RemoveCatalogItemFromCatalogInput!): RemoveCatalogItemFromCatalogOutput!
   startOperation(input: StartOperationInput!): StartOperationOutput!
   updateCatalog(input: UpdateCatalogInput!): UpdateCatalogOutput!
@@ -187,19 +218,6 @@ type Query {
   getSeller(input: GetSellerInput!): GetSellerOutput!
   getSellers(input: GetSellersInput!): GetSellersOutput!
   sellerHasOperator(input: SellerHasOperatorInput!): SellerHasOperatorOutput!
-}
-
-input RegisterSaleInput {
-  catalogId: String!
-  items: [SaleItemToRegister!]!
-  operationId: String!
-  operatorId: String!
-  sellerId: String!
-}
-
-type RegisterSaleOutput {
-  saleId: String!
-  totalAmountInCents: Int!
 }
 
 input RemoveCatalogItemFromCatalogInput {
@@ -219,11 +237,6 @@ type SaleItem {
   quantity: Int!
 }
 
-input SaleItemToRegister {
-  itemId: String!
-  quantity: Int!
-}
-
 input SellerHasOperatorInput {
   operatorId: String!
   sellerId: String!
@@ -239,6 +252,11 @@ input StartOperationInput {
 
 type StartOperationOutput {
   operationId: String!
+}
+
+input TicketItemToCreate {
+  itemId: String!
+  quantity: Int!
 }
 
 input UpdateCatalogInput {

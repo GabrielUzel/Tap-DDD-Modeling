@@ -9,8 +9,6 @@ export class CatalogItem extends Entity {
     private _priceInCents: Money,
   ) {
     super(id);
-    this._name = _name;
-    this._priceInCents = _priceInCents;
   }
 
   static create(id: Uuid, name: string, price: Money): CatalogItem {

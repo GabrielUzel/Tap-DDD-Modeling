@@ -27,6 +27,8 @@ import {
   SellerHasOperatorHandler,
 } from "./services/queries/__index__";
 
+import { RegisterSaleOnTicketPaidHandler } from "./events/ticket-paid.handler";
+
 const COMMAND_HANDLERS = [
   CreateAssignmentHandler,
   CreateCatalogItemHandler,
@@ -52,9 +54,11 @@ const QUERY_HANDLERS = [
   SellerHasOperatorHandler,
 ];
 
+const EVENT_HANDLERS = [RegisterSaleOnTicketPaidHandler];
+
 @Module({
   imports: [CqrsModule, InfrastructureModule],
-  providers: [...COMMAND_HANDLERS, ...QUERY_HANDLERS],
+  providers: [...COMMAND_HANDLERS, ...QUERY_HANDLERS, ...EVENT_HANDLERS],
   exports: [CqrsModule],
 })
 export class ApplicationModule {}

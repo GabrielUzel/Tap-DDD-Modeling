@@ -16,6 +16,7 @@ export class SaleRepository implements ISaleRepository {
         operatorId: sale.operatorId.getValue(),
         catalogId: sale.catalogId.getValue(),
         operationId: sale.operationId.getValue(),
+        ticketId: sale.ticketId.getValue(),
         totalAmountInCents: sale.totalAmountInCents,
         items: {
           create: sale.items.map((item) => ({

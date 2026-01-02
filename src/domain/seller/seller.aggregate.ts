@@ -18,8 +18,6 @@ export class Seller extends AggregateRoot {
     private _assignments: Assignment[],
   ) {
     super(id);
-    this._name = _name;
-    this._email = _email;
   }
 
   static create(id: Uuid, name: string, email: Email): Seller {

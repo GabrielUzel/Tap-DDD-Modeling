@@ -24,12 +24,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 7.0.0
- * Query Engine version: 0c19ccc313cf9911a90d99d2ac2eb0280c76c513
+ * Prisma Client JS version: 7.0.1
+ * Query Engine version: f09f2815f091dbba658cdcd2264306d88bb5bda6
  */
 Prisma.prismaVersion = {
-  client: "7.0.0",
-  engine: "0c19ccc313cf9911a90d99d2ac2eb0280c76c513"
+  client: "7.0.1",
+  engine: "f09f2815f091dbba658cdcd2264306d88bb5bda6"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -181,6 +181,7 @@ exports.Prisma.SaleScalarFieldEnum = {
   operatorId: 'operatorId',
   catalogId: 'catalogId',
   operationId: 'operationId',
+  ticketId: 'ticketId',
   totalAmountInCents: 'totalAmountInCents',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -197,6 +198,30 @@ exports.Prisma.SaleItemScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TicketScalarFieldEnum = {
+  id: 'id',
+  sellerId: 'sellerId',
+  operatorId: 'operatorId',
+  catalogId: 'catalogId',
+  operationId: 'operationId',
+  status: 'status',
+  totalAmountInCents: 'totalAmountInCents',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TicketItemScalarFieldEnum = {
+  id: 'id',
+  catalogItemId: 'catalogItemId',
+  quantity: 'quantity',
+  priceAmountInCents: 'priceAmountInCents',
+  priceSuffix: 'priceSuffix',
+  ticketId: 'ticketId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -205,6 +230,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 
 
@@ -216,7 +246,9 @@ exports.Prisma.ModelName = {
   CatalogItem: 'CatalogItem',
   Assignment: 'Assignment',
   Sale: 'Sale',
-  SaleItem: 'SaleItem'
+  SaleItem: 'SaleItem',
+  Ticket: 'Ticket',
+  TicketItem: 'TicketItem'
 };
 
 /**

@@ -13,6 +13,7 @@ model Operation {
   status    String
   sellerIds String[]
   sales     Sale[]
+  tickets   Ticket[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -27,6 +28,7 @@ model Seller {
   catalogs    Catalog[]
   assignments Assignment[]
   sales       Sale[]
+  tickets     Ticket[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
@@ -95,6 +97,8 @@ model Sale {
   catalogId          String
   operationId        String
   operation          Operation  @relation(fields: [operationId], references: [id], onDelete: Restrict)
+  ticketId           String     @unique
+  ticket             Ticket     @relation(fields: [ticketId], references: [id], onDelete: Restrict)
   totalAmountInCents Int
   items              SaleItem[]
   createdAt          DateTime   @default(now())
@@ -118,4 +122,41 @@ model SaleItem {
 
   @@index([saleId])
   @@map("sale_items")
+}
+
+model Ticket {
+  id                 String       @id
+  sellerId           String
+  seller             Seller       @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+  operatorId         String
+  catalogId          String
+  operationId        String
+  operation          Operation    @relation(fields: [operationId], references: [id], onDelete: Restrict)
+  sale               Sale?
+  status             String
+  totalAmountInCents Int
+  paidAt             DateTime?
+  items              TicketItem[]
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([operationId])
+  @@index([sellerId])
+  @@index([status])
+  @@map("tickets")
+}
+
+model TicketItem {
+  id                 String   @id @default(uuid())
+  catalogItemId      String
+  quantity           Int
+  priceAmountInCents Int
+  priceSuffix        String
+  ticketId           String
+  ticket             Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([ticketId])
+  @@map("ticket_items")
 }

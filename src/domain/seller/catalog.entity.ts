@@ -11,9 +11,6 @@ export class Catalog extends Entity {
     private _catalogItems: CatalogItem[],
   ) {
     super(id);
-    this._name = _name;
-    this._type = _type;
-    this._catalogItems = _catalogItems;
   }
 
   static create(id: Uuid, name: string, type: CatalogType): Catalog {

@@ -1,7 +1,7 @@
 import { Command } from "@nestjs/cqrs";
 
-export class RegisterSaleCommand extends Command<{
-  saleId: string;
+export class CreateTicketCommand extends Command<{
+  ticketId: string;
   totalAmountInCents: number;
 }> {
   constructor(
@@ -13,7 +13,6 @@ export class RegisterSaleCommand extends Command<{
       itemId: string;
       quantity: number;
     }[],
-    public readonly ticketId: string,
   ) {
     super();
   }

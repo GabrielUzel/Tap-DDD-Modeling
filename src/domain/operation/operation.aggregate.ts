@@ -1,7 +1,7 @@
 import { AggregateRoot } from "../@shared/interfaces/aggregate-root.abstract";
 import { Sale } from "../sale/sale.aggregate";
 import { Seller } from "../seller/seller.aggregate";
-import { Status } from "../@shared/value-objects/status.value";
+import { OperationStatus } from "../@shared/value-objects/operation-status.value";
 import { SaleItem } from "../@shared/value-objects/sale-item.value";
 import { Uuid } from "../@shared/interfaces/uuid";
 
@@ -9,13 +9,10 @@ export class Operation extends AggregateRoot {
   constructor(
     id: Uuid,
     private _name: string,
-    private _status: Status,
+    private _status: OperationStatus,
     private _sellerIds: Uuid[],
   ) {
     super(id);
-    this._name = _name;
-    this._status = _status;
-    this._sellerIds = _sellerIds;
   }
 
   static create(id: Uuid, name: string): Operation {
@@ -23,7 +20,7 @@ export class Operation extends AggregateRoot {
       throw new Error("Name cannot be empty");
     }
 
-    return new Operation(id, name, Status.PLANNED, []);
+    return new Operation(id, name, OperationStatus.PLANNED, []);
   }
 
   addSeller(sellerId: Uuid): void {
@@ -53,7 +50,7 @@ export class Operation extends AggregateRoot {
       );
     }
 
-    this._status = Status.ON_GOING;
+    this._status = OperationStatus.ON_GOING;
   }
 
   registerSale(
@@ -61,6 +58,7 @@ export class Operation extends AggregateRoot {
     operatorId: Uuid,
     catalogId: Uuid,
     items: SaleItem[],
+    ticketId: Uuid,
   ): Sale {
     if (!this._status.isOnGoing()) {
       throw new Error("Operation must be on_going to register a sale");
@@ -79,6 +77,7 @@ export class Operation extends AggregateRoot {
       catalogId,
       this.getId(),
       items,
+      ticketId,
     );
   }
 
@@ -94,7 +93,7 @@ export class Operation extends AggregateRoot {
   }): Operation {
     const id = new Uuid(json.id);
     const name = json.name;
-    const status = Status.fromString(json.status);
+    const status = OperationStatus.fromString(json.status);
     const sellerIds = json.sellerIds.map((id) => new Uuid(id));
 
     return new Operation(id, name, status, sellerIds);
@@ -104,7 +103,7 @@ export class Operation extends AggregateRoot {
     return this._name;
   }
 
-  get status(): Status {
+  get status(): OperationStatus {
     return this._status;
   }
 

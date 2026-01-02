@@ -1,8 +1,9 @@
 import { AggregateRoot } from "../@shared/interfaces/aggregate-root.abstract";
-import { SaleItem } from "../@shared/value-objects/sale-item.value";
 import { Uuid } from "../@shared/interfaces/uuid";
+import { SaleItem } from "../@shared/value-objects/sale-item.value";
+import { TicketStatus } from "../@shared/value-objects/ticket-status.value";
 
-export class Sale extends AggregateRoot {
+export class Ticket extends AggregateRoot {
   constructor(
     id: Uuid,
     private _sellerId: Uuid,
@@ -11,7 +12,8 @@ export class Sale extends AggregateRoot {
     private _operationId: Uuid,
     private _items: SaleItem[],
     private _totalAmountInCents: number,
-    private _ticketId: Uuid,
+    private _status: TicketStatus,
+    private _paidAt: Date | null,
   ) {
     super(id);
   }
@@ -23,15 +25,14 @@ export class Sale extends AggregateRoot {
     catalogId: Uuid,
     operationId: Uuid,
     items: SaleItem[],
-    ticketId: Uuid,
-  ): Sale {
-    if (items.length === 0) {
-      throw new Error("Sale must contain at least one item");
+  ): Ticket {
+    if (!items || items.length === 0) {
+      throw new Error("Ticket must contain at least one item");
     }
 
     const total = items.reduce((sum, item) => sum + item.getTotal(), 0);
 
-    return new Sale(
+    return new Ticket(
       id,
       sellerId,
       operatorId,
@@ -39,21 +40,42 @@ export class Sale extends AggregateRoot {
       operationId,
       items,
       total,
-      ticketId,
+      TicketStatus.OPEN,
+      null,
     );
   }
 
-  static fromJSON(json: any): Sale {
+  markAsPaid(paidAt: Date = new Date()): void {
+    if (!this._status.isOpen()) {
+      throw new Error("Only open tickets can be marked as paid");
+    }
+
+    this._status = TicketStatus.PAID;
+    this._paidAt = paidAt;
+  }
+
+  cancel(): void {
+    if (!this._status.isOpen()) {
+      throw new Error("Only open tickets can be cancelled");
+    }
+
+    this._status = TicketStatus.CANCELLED;
+  }
+
+  static fromJSON(json: any): Ticket {
     const id = new Uuid(json.id);
     const sellerId = new Uuid(json.sellerId);
     const operatorId = new Uuid(json.operatorId);
     const catalogId = new Uuid(json.catalogId);
     const operationId = new Uuid(json.operationId);
-    const items = json.items.map((item: any) => SaleItem.fromJSON(item));
+    const items = (json.items ?? []).map((item: any) =>
+      SaleItem.fromJSON(item),
+    );
     const totalAmountInCents = json.totalAmountInCents;
-    const ticketId = new Uuid(json.ticketId);
+    const status = TicketStatus.fromString(json.status);
+    const paidAt = json.paidAt ? new Date(json.paidAt) : null;
 
-    return new Sale(
+    return new Ticket(
       id,
       sellerId,
       operatorId,
@@ -61,7 +83,8 @@ export class Sale extends AggregateRoot {
       operationId,
       items,
       totalAmountInCents,
-      ticketId,
+      status,
+      paidAt,
     );
   }
 
@@ -89,7 +112,11 @@ export class Sale extends AggregateRoot {
     return this._totalAmountInCents;
   }
 
-  get ticketId(): Uuid {
-    return this._ticketId;
+  get status(): TicketStatus {
+    return this._status;
+  }
+
+  get paidAt(): Date | null {
+    return this._paidAt;
   }
 }

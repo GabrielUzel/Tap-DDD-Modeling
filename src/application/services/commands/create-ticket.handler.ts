@@ -1,34 +1,34 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { Inject, NotFoundException } from "@nestjs/common";
-import { RegisterSaleCommand } from "./dtos/register-sale.command";
+import { CreateTicketCommand } from "./dtos/create-ticket.command";
 import { IOperationRepository } from "src/infrastructure/repositories/interfaces/operation-repository.interface";
 import { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
-import { ISaleRepository } from "src/infrastructure/repositories/interfaces/sale-repository.interface";
-import { SaleItem } from "src/domain/@shared/value-objects/sale-item.value";
+import { ITicketRepository } from "src/infrastructure/repositories/interfaces/ticket-repository.interface";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
+import { SaleItem } from "src/domain/@shared/value-objects/sale-item.value";
+import { Ticket } from "src/domain/ticket/ticket.aggregate";
 
-@CommandHandler(RegisterSaleCommand)
-export class RegisterSaleHandler
-  implements ICommandHandler<RegisterSaleCommand>
+@CommandHandler(CreateTicketCommand)
+export class CreateTicketHandler
+  implements ICommandHandler<CreateTicketCommand>
 {
   constructor(
     @Inject("OperationRepository")
     private readonly operationRepository: IOperationRepository,
     @Inject("SellerRepository")
     private readonly sellerRepository: ISellerRepository,
-    @Inject("SaleRepository")
-    private readonly saleRepository: ISaleRepository,
+    @Inject("TicketRepository")
+    private readonly ticketRepository: ITicketRepository,
   ) {}
 
-  async execute(command: RegisterSaleCommand): Promise<{
-    saleId: string;
+  async execute(command: CreateTicketCommand): Promise<{
+    ticketId: string;
     totalAmountInCents: number;
   }> {
     const operationId = new Uuid(command.operationId);
     const sellerId = new Uuid(command.sellerId);
     const operatorId = new Uuid(command.operatorId);
     const catalogId = new Uuid(command.catalogId);
-    const ticketId = new Uuid(command.ticketId);
     const operation = await this.operationRepository.findById(operationId);
 
     if (!operation) {
@@ -43,7 +43,7 @@ export class RegisterSaleHandler
 
     const catalog = seller.getCatalog(catalogId);
 
-    const saleItems = command.items.map((item) => {
+    const items = command.items.map((item) => {
       const catalogItemId = new Uuid(item.itemId);
       const catalogItem = catalog.findItem(catalogItemId);
 
@@ -54,19 +54,20 @@ export class RegisterSaleHandler
       );
     });
 
-    const sale = operation.registerSale(
-      seller,
+    const ticket = Ticket.create(
+      Uuid.generate(),
+      seller.getId(),
       operatorId,
       catalogId,
-      saleItems,
-      ticketId,
+      operation.getId(),
+      items,
     );
 
-    await this.saleRepository.save(sale);
+    await this.ticketRepository.save(ticket);
 
     return {
-      saleId: sale.getId().getValue(),
-      totalAmountInCents: sale.totalAmountInCents,
+      ticketId: ticket.getId().getValue(),
+      totalAmountInCents: ticket.totalAmountInCents,
     };
   }
 }
