@@ -1,5 +1,6 @@
 import { AggregateRoot } from "../@shared/interfaces/aggregate-root.abstract";
 import { Sale } from "../sale/sale.aggregate";
+import { Seller } from "../seller/seller.aggregate";
 import { Status } from "../@shared/value-objects/status.value";
 import { SaleItem } from "../@shared/value-objects/sale-item.value";
 import { Uuid } from "../@shared/interfaces/uuid";
@@ -17,7 +18,7 @@ export class Operation extends AggregateRoot {
     this._sellerIds = _sellerIds;
   }
 
-  public static create(id: Uuid, name: string): Operation {
+  static create(id: Uuid, name: string): Operation {
     if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
@@ -25,7 +26,7 @@ export class Operation extends AggregateRoot {
     return new Operation(id, name, Status.PLANNED, []);
   }
 
-  public addSeller(sellerId: Uuid): void {
+  addSeller(sellerId: Uuid): void {
     if (this._sellerIds.some((id) => id.equals(sellerId))) {
       throw new Error("Seller already added to the operation");
     }
@@ -33,16 +34,30 @@ export class Operation extends AggregateRoot {
     this._sellerIds.push(sellerId);
   }
 
-  public startOperation(): void {
+  startOperation(sellers: Seller[]): void {
     if (!this._status.isPlanned()) {
       throw new Error("Only planned operations can be started");
+    }
+
+    if (!sellers || sellers.length === 0) {
+      throw new Error("Operation must have at least one seller");
+    }
+
+    const hasValidSeller = sellers.some((seller) =>
+      seller.hasCatalogWithItems(),
+    );
+
+    if (!hasValidSeller) {
+      throw new Error(
+        "Operation must have at least one seller with a catalog containing items",
+      );
     }
 
     this._status = Status.ON_GOING;
   }
 
-  public registerSale(
-    sellerId: Uuid,
+  registerSale(
+    seller: Seller,
     operatorId: Uuid,
     catalogId: Uuid,
     items: SaleItem[],
@@ -51,29 +66,27 @@ export class Operation extends AggregateRoot {
       throw new Error("Operation must be on_going to register a sale");
     }
 
-    if (!this.hasSeller(sellerId)) {
+    if (!this.hasSeller(seller.getId())) {
       throw new Error("Seller does not belong to this operation");
     }
 
-    const saleId = Uuid.generate();
+    seller.assertCanRegisterSale(operatorId, catalogId);
 
-    const sale = Sale.create(
-      saleId,
-      sellerId,
+    return Sale.create(
+      Uuid.generate(),
+      seller.getId(),
       operatorId,
       catalogId,
       this.getId(),
       items,
     );
-
-    return sale;
   }
 
-  public hasSeller(sellerId: Uuid): boolean {
+  hasSeller(sellerId: Uuid): boolean {
     return this._sellerIds.some((id) => id.equals(sellerId));
   }
 
-  public static fromJSON(json: {
+  static fromJSON(json: {
     id: string;
     name: string;
     status: string;

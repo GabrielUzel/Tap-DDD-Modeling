@@ -16,7 +16,7 @@ export class Catalog extends Entity {
     this._catalogItems = _catalogItems;
   }
 
-  public static create(id: Uuid, name: string, type: CatalogType): Catalog {
+  static create(id: Uuid, name: string, type: CatalogType): Catalog {
     if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
@@ -24,11 +24,11 @@ export class Catalog extends Entity {
     return new Catalog(id, name, type, []);
   }
 
-  public addItem(catalogItem: CatalogItem) {
+  addItem(catalogItem: CatalogItem) {
     this._catalogItems.push(catalogItem);
   }
 
-  public removeItem(itemId: Uuid): void {
+  removeItem(itemId: Uuid): void {
     const index = this._catalogItems.findIndex((item) =>
       item.getId().equals(itemId),
     );
@@ -40,11 +40,11 @@ export class Catalog extends Entity {
     this._catalogItems.splice(index, 1);
   }
 
-  public hasAnyItem(): boolean {
+  hasAnyItem(): boolean {
     return this._catalogItems.length > 0;
   }
 
-  public findItem(itemId: Uuid): CatalogItem {
+  findItem(itemId: Uuid): CatalogItem {
     const item = this._catalogItems.find((item) => item.id.equals(itemId));
 
     if (!item) {
@@ -54,7 +54,7 @@ export class Catalog extends Entity {
     return item;
   }
 
-  public static fromJSON(json: {
+  static fromJSON(json: {
     id: string;
     name: string;
     type: string;

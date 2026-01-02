@@ -13,7 +13,7 @@ export class CatalogItem extends Entity {
     this._priceInCents = _priceInCents;
   }
 
-  public static create(id: Uuid, name: string, price: Money): CatalogItem {
+  static create(id: Uuid, name: string, price: Money): CatalogItem {
     if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
@@ -21,7 +21,7 @@ export class CatalogItem extends Entity {
     return new CatalogItem(id, name, price);
   }
 
-  public static fromJSON(json: {
+  static fromJSON(json: {
     id: string;
     name: string;
     priceInCents: number;

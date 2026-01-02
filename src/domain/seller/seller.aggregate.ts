@@ -22,7 +22,7 @@ export class Seller extends AggregateRoot {
     this._email = _email;
   }
 
-  public static create(id: Uuid, name: string, email: Email): Seller {
+  static create(id: Uuid, name: string, email: Email): Seller {
     if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
@@ -34,7 +34,7 @@ export class Seller extends AggregateRoot {
     return new Seller(id, name, email, [], [], []);
   }
 
-  public addCatalog(catalog: Catalog): void {
+  addCatalog(catalog: Catalog): void {
     if (this.hasCatalog(catalog.getId())) {
       throw new Error("Catalog already belongs to this seller");
     }
@@ -42,11 +42,11 @@ export class Seller extends AggregateRoot {
     this._catalogs.push(catalog);
   }
 
-  public hasCatalog(catalogId: Uuid): boolean {
+  hasCatalog(catalogId: Uuid): boolean {
     return this._catalogs.some((catalog) => catalog.getId().equals(catalogId));
   }
 
-  public getCatalog(catalogId: Uuid): Catalog {
+  getCatalog(catalogId: Uuid): Catalog {
     const catalog = this._catalogs.find((catalog) =>
       catalog.getId().equals(catalogId),
     );
@@ -58,7 +58,7 @@ export class Seller extends AggregateRoot {
     return catalog;
   }
 
-  public updateCatalog(
+  updateCatalog(
     catalogId: Uuid,
     name?: string,
     type?: string,
@@ -79,21 +79,21 @@ export class Seller extends AggregateRoot {
     }
   }
 
-  public addItemToCatalog(catalogId: Uuid, item: CatalogItem): void {
+  addItemToCatalog(catalogId: Uuid, item: CatalogItem): void {
     const catalog = this.getCatalog(catalogId);
     catalog.addItem(item);
   }
 
-  public removeItemFromCatalog(catalogId: Uuid, itemId: Uuid): void {
+  removeItemFromCatalog(catalogId: Uuid, itemId: Uuid): void {
     const catalog = this.getCatalog(catalogId);
     catalog.removeItem(itemId);
   }
 
-  public hasCatalogWithItems(): boolean {
+  hasCatalogWithItems(): boolean {
     return this._catalogs.some((catalog) => catalog.hasAnyItem());
   }
 
-  public addOperatorToPool(operator: Operator): void {
+  addOperatorToPool(operator: Operator): void {
     if (this.operatorIsInPool(operator.getId())) {
       throw new Error("Operator already in pool");
     }
@@ -101,13 +101,13 @@ export class Seller extends AggregateRoot {
     this._operators.push(operator);
   }
 
-  public operatorIsInPool(operatorId: Uuid): boolean {
+  operatorIsInPool(operatorId: Uuid): boolean {
     return this._operators.some((operator) =>
       operator.getId().equals(operatorId),
     );
   }
 
-  public assignOperator(operatorId: Uuid, catalogId: Uuid, role: Role): void {
+  assignOperator(operatorId: Uuid, catalogId: Uuid, role: Role): void {
     if (!this.operatorIsInPool(operatorId)) {
       throw new Error("Operator is not in the pool");
     }
@@ -123,7 +123,7 @@ export class Seller extends AggregateRoot {
     this._assignments.push(Assignment.create(operatorId, catalogId, role));
   }
 
-  public isOperatorAlreadyAssigned(operatorId: Uuid, catalogId: Uuid): boolean {
+  isOperatorAlreadyAssigned(operatorId: Uuid, catalogId: Uuid): boolean {
     return this._assignments.some((assignment) => {
       return (
         assignment.operatorId.equals(operatorId) &&
@@ -132,7 +132,7 @@ export class Seller extends AggregateRoot {
     });
   }
 
-  public getAssignment(operatorId: Uuid, catalogId: Uuid): Assignment | null {
+  getAssignment(operatorId: Uuid, catalogId: Uuid): Assignment | null {
     return (
       this._assignments.find((assignment) => {
         return (
@@ -143,7 +143,7 @@ export class Seller extends AggregateRoot {
     );
   }
 
-  public validateSaleRegistration(operatorId: Uuid, catalogId: Uuid): void {
+  assertCanRegisterSale(operatorId: Uuid, catalogId: Uuid): void {
     if (!this.hasCatalog(catalogId)) {
       throw new Error("Catalog not found");
     }
@@ -163,7 +163,7 @@ export class Seller extends AggregateRoot {
     }
   }
 
-  public static fromJSON(json: any): Seller {
+  static fromJSON(json: any): Seller {
     const seller = new Seller(
       new Uuid(json.id),
       json.name,

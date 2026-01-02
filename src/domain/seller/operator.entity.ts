@@ -13,7 +13,7 @@ export class Operator extends Entity {
     this._email = _email;
   }
 
-  public static create(id: Uuid, name: string, email: Email): Operator {
+  static create(id: Uuid, name: string, email: Email): Operator {
     if (!name.trim()) {
       throw new Error("Name cannot be empty");
     }
@@ -21,11 +21,7 @@ export class Operator extends Entity {
     return new Operator(id, name, email);
   }
 
-  public static fromJSON(json: {
-    id: string;
-    name: string;
-    email: string;
-  }): Operator {
+  static fromJSON(json: { id: string; name: string; email: string }): Operator {
     const id = new Uuid(json.id);
     const name = json.name;
     const email = new Email(json.email);

@@ -4,7 +4,6 @@ import { RegisterSaleCommand } from "./dtos/register-sale.command";
 import { IOperationRepository } from "src/infrastructure/repositories/interfaces/operation-repository.interface";
 import { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
 import { ISaleRepository } from "src/infrastructure/repositories/interfaces/sale-repository.interface";
-import { SaleDomainService } from "src/domain/services/sale-domain-service";
 import { SaleItem } from "src/domain/@shared/value-objects/sale-item.value";
 import { Uuid } from "src/domain/@shared/interfaces/uuid";
 
@@ -12,8 +11,6 @@ import { Uuid } from "src/domain/@shared/interfaces/uuid";
 export class RegisterSaleHandler
   implements ICommandHandler<RegisterSaleCommand>
 {
-  private readonly saleDomainService: SaleDomainService;
-
   constructor(
     @Inject("OperationRepository")
     private readonly operationRepository: IOperationRepository,
@@ -21,9 +18,7 @@ export class RegisterSaleHandler
     private readonly sellerRepository: ISellerRepository,
     @Inject("SaleRepository")
     private readonly saleRepository: ISaleRepository,
-  ) {
-    this.saleDomainService = new SaleDomainService();
-  }
+  ) {}
 
   async execute(command: RegisterSaleCommand): Promise<{
     saleId: string;
@@ -58,8 +53,7 @@ export class RegisterSaleHandler
       );
     });
 
-    const sale = this.saleDomainService.registerSale(
-      operation,
+    const sale = operation.registerSale(
       seller,
       operatorId,
       catalogId,

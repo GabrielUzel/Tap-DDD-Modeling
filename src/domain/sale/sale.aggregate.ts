@@ -21,7 +21,7 @@ export class Sale extends AggregateRoot {
     this._totalAmountInCents = _totalAmountInCents;
   }
 
-  public static create(
+  static create(
     id: Uuid,
     sellerId: Uuid,
     operatorId: Uuid,
@@ -46,7 +46,7 @@ export class Sale extends AggregateRoot {
     );
   }
 
-  public static fromJSON(json: any): Sale {
+  static fromJSON(json: any): Sale {
     const id = new Uuid(json.id);
     const sellerId = new Uuid(json.sellerId);
     const operatorId = new Uuid(json.operatorId);
