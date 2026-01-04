@@ -73,13 +73,13 @@ export class UpdateCatalogOutput {
 }
 
 @InputType()
-export class GetSellerInput {
+export class GetSellerByIdInput {
   @Field()
   sellerId!: string;
 }
 
 @ObjectType()
-export class GetSellerOutput {
+export class GetSellerByIdOutput {
   @Field()
   id!: string;
 
@@ -124,7 +124,7 @@ export class GetOperatorsOutput {
 }
 
 @InputType()
-export class GetCatalogInput {
+export class GetCatalogByIdInput {
   @Field()
   sellerId!: string;
 
@@ -133,7 +133,7 @@ export class GetCatalogInput {
 }
 
 @ObjectType()
-export class GetCatalogOutput {
+export class GetCatalogByIdOutput {
   @Field()
   id!: string;
 

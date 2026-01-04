@@ -3,32 +3,43 @@ import type { ValueObject } from "../interfaces/value-object.interface";
 export type RoleType = "cashier" | "manager" | "admin" | "stocker";
 
 export class Role implements ValueObject<RoleType> {
+  private constructor(private readonly value: RoleType) {}
+
   static readonly CASHIER = new Role("cashier");
   static readonly MANAGER = new Role("manager");
   static readonly ADMIN = new Role("admin");
   static readonly STOCKER = new Role("stocker");
 
-  private static readonly VALID_ROLES = [
-    "cashier",
-    "manager",
-    "admin",
-    "stocker",
-  ] as const;
+  isCashier(): boolean {
+    return this.value === "cashier";
+  }
 
-  private readonly value: RoleType;
+  isManager(): boolean {
+    return this.value === "manager";
+  }
 
-  private constructor(value: RoleType) {
-    this.value = value;
+  isAdmin(): boolean {
+    return this.value === "admin";
+  }
+
+  isStocker(): boolean {
+    return this.value === "stocker";
+  }
+
+  getValue(): RoleType {
+    return this.value;
+  }
+
+  equals(other: this): boolean {
+    return this.value === other.value;
+  }
+
+  toString(): string {
+    return this.value;
   }
 
   static fromString(value: string): Role {
-    const lowerValue = value.toLowerCase();
-
-    if (!this.isValid(lowerValue)) {
-      throw new Error("Invalid role type");
-    }
-
-    switch (lowerValue) {
+    switch ((value ?? "").toLowerCase()) {
       case "cashier":
         return Role.CASHIER;
       case "manager":
@@ -40,37 +51,5 @@ export class Role implements ValueObject<RoleType> {
       default:
         throw new Error("Invalid role type");
     }
-  }
-
-  private static isValid(value: string): boolean {
-    return this.VALID_ROLES.includes(value as RoleType);
-  }
-
-  getValue(): RoleType {
-    return this.value;
-  }
-
-  equals(other: this): boolean {
-    return this.value === other.value;
-  }
-
-  isCashier(): boolean {
-    return this === Role.CASHIER;
-  }
-
-  isManager(): boolean {
-    return this === Role.MANAGER;
-  }
-
-  isAdmin(): boolean {
-    return this === Role.ADMIN;
-  }
-
-  isStocker(): boolean {
-    return this === Role.STOCKER;
-  }
-
-  toString(): string {
-    return this.value;
   }
 }

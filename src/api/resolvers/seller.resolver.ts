@@ -1,31 +1,32 @@
 import { Resolver, Mutation, Query, Args } from "@nestjs/graphql";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
+import { CreateSellerCommand } from "src/application/commands/dtos/create-seller.command";
+import { AddOperatorToSellerPoolCommand } from "src/application/commands/dtos/add-operator-to-seller-pool.command";
+import { UpdateCatalogCommand } from "src/application/commands/dtos/update-catalog.command";
+import { RemoveCatalogItemFromCatalogCommand } from "src/application/commands/dtos/remove-catalog-item-from-catalog.command";
+import { GetSellerByIdQuery } from "src/application/queries/dtos/get-seller-by-id.query";
+import { SellerHasOperatorQuery } from "src/application/queries/dtos/seller-has-operator.query";
+import { GetOperatorsQuery } from "src/application/queries/dtos/get-operators.query";
+import { GetCatalogByIdQuery } from "src/application/queries/dtos/get-catalog-by-id.query";
+
 import {
   CreateSellerInput,
   CreateSellerOutput,
   AddOperatorToSellerPoolInput,
   AddOperatorToSellerPoolOutput,
-  GetSellerInput,
-  GetSellerOutput,
-  SellerHasOperatorInput,
-  SellerHasOperatorOutput,
-  GetOperatorsInput,
-  GetOperatorsOutput,
-  GetCatalogInput,
-  GetCatalogOutput,
   UpdateCatalogInput,
   UpdateCatalogOutput,
   RemoveCatalogItemFromCatalogInput,
   RemoveCatalogItemFromCatalogOutput,
+  GetSellerByIdInput,
+  GetSellerByIdOutput,
+  SellerHasOperatorInput,
+  SellerHasOperatorOutput,
+  GetOperatorsInput,
+  GetOperatorsOutput,
+  GetCatalogByIdInput,
+  GetCatalogByIdOutput,
 } from "../types/seller.types";
-import { CreateSellerCommand } from "src/application/services/commands/dtos/create-seller.command";
-import { AddOperatorToSellerPoolCommand } from "src/application/services/commands/dtos/add-operator-to-seller-pool.command";
-import { UpdateCatalogCommand } from "src/application/services/commands/dtos/update-catalog.command";
-import { RemoveCatalogItemFromCatalogCommand } from "src/application/services/commands/dtos/remove-catalog-item-from-catalog.command";
-import { GetSellerQuery } from "src/application/services/queries/dtos/get-seller.query";
-import { SellerHasOperatorQuery } from "src/application/services/queries/dtos/seller-has-operator.query";
-import { GetOperatorsQuery } from "src/application/services/queries/dtos/get-operators.query";
-import { GetCatalogQuery } from "src/application/services/queries/dtos/get-catalog.query";
 
 @Resolver()
 export class SellerResolver {
@@ -83,11 +84,11 @@ export class SellerResolver {
     );
   }
 
-  @Query(() => GetSellerOutput)
+  @Query(() => GetSellerByIdOutput)
   async getSeller(
-    @Args("input") input: GetSellerInput,
-  ): Promise<GetSellerOutput> {
-    return this.queryBus.execute(new GetSellerQuery(input.sellerId));
+    @Args("input") input: GetSellerByIdInput,
+  ): Promise<GetSellerByIdOutput> {
+    return this.queryBus.execute(new GetSellerByIdQuery(input.sellerId));
   }
 
   @Query(() => SellerHasOperatorOutput)
@@ -99,17 +100,17 @@ export class SellerResolver {
     );
   }
 
-  @Query(() => GetOperatorsOutput)
+  @Query(() => [GetOperatorsOutput])
   async getOperators(
     @Args("input") input: GetOperatorsInput,
   ): Promise<GetOperatorsOutput[]> {
     return this.queryBus.execute(new GetOperatorsQuery(input.sellerId));
   }
 
-  @Query(() => GetCatalogOutput)
-  async getCatalog(
-    @Args("input") input: GetCatalogInput,
-  ): Promise<GetCatalogOutput> {
-    return this.queryBus.execute(new GetCatalogQuery(input.catalogId));
+  @Query(() => GetCatalogByIdOutput)
+  async getCatalogById(
+    @Args("input") input: GetCatalogByIdInput,
+  ): Promise<GetCatalogByIdOutput> {
+    return this.queryBus.execute(new GetCatalogByIdQuery(input.catalogId));
   }
 }

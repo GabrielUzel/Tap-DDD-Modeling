@@ -1,5 +1,15 @@
 import { Mutation, Query, Resolver, Args } from "@nestjs/graphql";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
+import { CreateOperationCommand } from "src/application/commands/dtos/create-operation.command";
+import { AddSellerToOperationCommand } from "src/application/commands/dtos/add-seller-to-operation.command";
+import { CreateCatalogCommand } from "src/application/commands/dtos/create-catalog.command";
+import { CreateCatalogItemCommand } from "src/application/commands/dtos/create-catalog-item.command";
+import { CreateAssignmentCommand } from "src/application/commands/dtos/create-assignment.command";
+import { StartOperationCommand } from "src/application/commands/dtos/start-operation.command";
+import { GetOperationsQuery } from "src/application/queries/dtos/get-operations.query";
+import { GetOperationByIdQuery } from "src/application/queries/dtos/get-operation-by-id.query";
+import { GetSellersQuery } from "src/application/queries/dtos/get-sellers.query";
+
 import {
   CreateOperationInput,
   CreateOperationOutput,
@@ -19,15 +29,6 @@ import {
   GetSellersInput,
   GetSellersOutput,
 } from "../types/operation.types";
-import { CreateOperationCommand } from "src/application/services/commands/dtos/create-operation.command";
-import { AddSellerToOperationCommand } from "src/application/services/commands/dtos/add-seller-to-operation.command";
-import { CreateCatalogCommand } from "src/application/services/commands/dtos/create-catalog.command";
-import { CreateCatalogItemCommand } from "src/application/services/commands/dtos/create-catalog-item.command";
-import { CreateAssignmentCommand } from "src/application/services/commands/dtos/create-assignment.command";
-import { StartOperationCommand } from "src/application/services/commands/dtos/start-operation.command";
-import { GetOperationsQuery } from "src/application/services/queries/dtos/get-operations.query";
-import { GetOperationByIdQuery } from "src/application/services/queries/dtos/get-operation-by-id.query";
-import { GetSellersQuery } from "src/application/services/queries/dtos/get-sellers.query";
 
 @Resolver()
 export class OperationResolver {
@@ -106,7 +107,7 @@ export class OperationResolver {
     );
   }
 
-  @Query(() => GetOperationsOutput)
+  @Query(() => [GetOperationsOutput])
   async getOperations(): Promise<GetOperationsOutput[]> {
     return this.queryBus.execute(new GetOperationsQuery());
   }
@@ -118,7 +119,7 @@ export class OperationResolver {
     return this.queryBus.execute(new GetOperationByIdQuery(input.operationId));
   }
 
-  @Query(() => GetSellersOutput)
+  @Query(() => [GetSellersOutput])
   async getSellers(
     @Args("input") input: GetSellersInput,
   ): Promise<GetSellersOutput[]> {

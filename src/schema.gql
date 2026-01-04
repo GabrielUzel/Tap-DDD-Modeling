@@ -113,12 +113,12 @@ type CreateTicketOutput {
   totalAmountInCents: Int!
 }
 
-input GetCatalogInput {
+input GetCatalogByIdInput {
   catalogId: String!
   sellerId: String!
 }
 
-type GetCatalogOutput {
+type GetCatalogByIdOutput {
   id: String!
   items: [CatalogItemType!]!
   name: String!
@@ -151,11 +151,11 @@ type GetOperatorsOutput {
   name: String!
 }
 
-input GetSaleInput {
+input GetSaleByIdInput {
   saleId: String!
 }
 
-type GetSaleOutput {
+type GetSaleByIdOutput {
   catalogId: String!
   id: String!
   items: [SaleItem!]!
@@ -165,11 +165,39 @@ type GetSaleOutput {
   totalAmountInCents: Int!
 }
 
-input GetSellerInput {
+input GetSaleByTicketIdInput {
+  ticketId: String!
+}
+
+type GetSaleByTicketIdOutput {
+  catalogId: String!
+  id: String!
+  items: [SaleItem!]!
+  operationId: String!
+  operatorId: String!
+  sellerId: String!
+  totalAmountInCents: Int!
+}
+
+input GetSalesByOperationIdInput {
+  operationId: String!
+}
+
+type GetSalesByOperationIdOutput {
+  catalogId: String!
+  id: String!
+  items: [SaleItem!]!
+  operationId: String!
+  operatorId: String!
+  sellerId: String!
+  totalAmountInCents: Int!
+}
+
+input GetSellerByIdInput {
   sellerId: String!
 }
 
-type GetSellerOutput {
+type GetSellerByIdOutput {
   email: String!
   id: String!
   name: String!
@@ -183,6 +211,50 @@ type GetSellersOutput {
   email: String!
   id: String!
   name: String!
+}
+
+input GetTicketByIdInput {
+  ticketId: String!
+}
+
+type GetTicketByIdOutput {
+  id: String!
+  items: [TicketItem!]!
+  totalAmountInCents: Int!
+}
+
+input GetTicketsByOperationIdInput {
+  operationId: String!
+}
+
+type GetTicketsByOperationIdOutput {
+  catalogId: String!
+  createdAt: Timestamp!
+  id: String!
+  items: [TicketItem!]!
+  operationId: String!
+  operatorId: String!
+  paidAt: Timestamp
+  sellerId: String!
+  status: String!
+  totalAmountInCents: Int!
+}
+
+input GetTicketsBySellerIdInput {
+  sellerId: String!
+}
+
+type GetTicketsBySellerIdOutput {
+  catalogId: String!
+  createdAt: Timestamp!
+  id: String!
+  items: [TicketItem!]!
+  operationId: String!
+  operatorId: String!
+  paidAt: Timestamp
+  sellerId: String!
+  status: String!
+  totalAmountInCents: Int!
 }
 
 input MarkTicketAsPaidInput {
@@ -210,13 +282,18 @@ type Mutation {
 }
 
 type Query {
-  getCatalog(input: GetCatalogInput!): GetCatalogOutput!
+  getCatalogById(input: GetCatalogByIdInput!): GetCatalogByIdOutput!
   getOperationById(input: GetOperationByIdInput!): GetOperationByIdOutput!
-  getOperations: GetOperationsOutput!
-  getOperators(input: GetOperatorsInput!): GetOperatorsOutput!
-  getSale(input: GetSaleInput!): GetSaleOutput!
-  getSeller(input: GetSellerInput!): GetSellerOutput!
-  getSellers(input: GetSellersInput!): GetSellersOutput!
+  getOperations: [GetOperationsOutput!]!
+  getOperators(input: GetOperatorsInput!): [GetOperatorsOutput!]!
+  getSale(input: GetSaleByIdInput!): GetSaleByIdOutput!
+  getSaleByTicketId(input: GetSaleByTicketIdInput!): GetSaleByTicketIdOutput
+  getSalesByOperationId(input: GetSalesByOperationIdInput!): [GetSalesByOperationIdOutput!]!
+  getSeller(input: GetSellerByIdInput!): GetSellerByIdOutput!
+  getSellers(input: GetSellersInput!): [GetSellersOutput!]!
+  getTicketById(input: GetTicketByIdInput!): GetTicketByIdOutput!
+  getTicketsByOperationId(input: GetTicketsByOperationIdInput!): [GetTicketsByOperationIdOutput!]!
+  getTicketsBySellerId(input: GetTicketsBySellerIdInput!): [GetTicketsBySellerIdOutput!]!
   sellerHasOperator(input: SellerHasOperatorInput!): SellerHasOperatorOutput!
 }
 
@@ -254,10 +331,22 @@ type StartOperationOutput {
   operationId: String!
 }
 
+type TicketItem {
+  catalogItemId: String!
+  priceAmountInCents: Int!
+  priceSuffix: String!
+  quantity: Int!
+}
+
 input TicketItemToCreate {
   itemId: String!
   quantity: Int!
 }
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
 
 input UpdateCatalogInput {
   catalogId: String!

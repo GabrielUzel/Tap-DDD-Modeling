@@ -1,0 +1,36 @@
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { Inject, NotFoundException } from "@nestjs/common";
+import { StartOperationCommand } from "./dtos/start-operation.command";
+import type { IOperationRepository } from "src/infrastructure/repositories/interfaces/operation-repository.interface";
+import type { ISellerRepository } from "src/infrastructure/repositories/interfaces/seller-repository.interface";
+import { Uuid } from "src/domain/@shared/interfaces/uuid";
+
+@CommandHandler(StartOperationCommand)
+export class StartOperationHandler implements ICommandHandler<StartOperationCommand> {
+  constructor(
+    @Inject("OperationRepository")
+    private readonly operationRepository: IOperationRepository,
+    @Inject("SellerRepository")
+    private readonly sellerRepository: ISellerRepository,
+  ) {}
+
+  async execute(
+    command: StartOperationCommand,
+  ): Promise<{ operationId: string }> {
+    const operationId = new Uuid(command.operationId);
+    const operation = await this.operationRepository.findById(operationId);
+
+    if (!operation) {
+      throw new NotFoundException("Operation not found");
+    }
+
+    const sellers = await this.sellerRepository.findMany(operation.sellerIds);
+
+    operation.startOperation(sellers);
+    await this.operationRepository.save(operation);
+
+    return {
+      operationId: operation.id.getValue(),
+    };
+  }
+}

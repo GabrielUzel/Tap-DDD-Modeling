@@ -3,54 +3,70 @@ import { CqrsModule } from "@nestjs/cqrs";
 import { InfrastructureModule } from "src/infrastructure/infrastructure.module";
 
 import {
+  AddOperatorToSellerPoolHandler,
+  AddSellerToOperationHandler,
+  CancelTicketHandler,
   CreateAssignmentHandler,
   CreateCatalogItemHandler,
   CreateCatalogHandler,
-  AddOperatorToSellerPoolHandler,
-  AddSellerToOperationHandler,
   CreateOperationHandler,
   CreateSellerHandler,
+  CreateTicketHandler,
+  MarkTicketAsPaidHandler,
   RegisterSaleHandler,
+  RemoveCatalogItemFromCatalogHandler,
   StartOperationHandler,
   UpdateCatalogHandler,
-  RemoveCatalogItemFromCatalogHandler,
-} from "./services/commands/__index__";
+} from "./commands/__index__";
 
 import {
-  GetCatalogHandler,
+  GetCatalogByIdHandler,
   GetOperationByIdHandler,
   GetOperationsHandler,
   GetOperatorsHandler,
-  GetSaleHandler,
-  GetSellerHandler,
+  GetSaleByIdHandler,
+  GetSaleByTicketIdHandler,
+  GetSalesByOperationIdHandler,
+  GetSellerByIdHandler,
   GetSellersHandler,
+  GetTicketByIdHandler,
+  GetTicketsByOperationIdHandler,
+  GetTicketsBySellerIdHandler,
   SellerHasOperatorHandler,
-} from "./services/queries/__index__";
+} from "./queries/__index__";
 
 import { RegisterSaleOnTicketPaidHandler } from "./events/ticket-paid.handler";
 
 const COMMAND_HANDLERS = [
+  AddOperatorToSellerPoolHandler,
+  AddSellerToOperationHandler,
+  CancelTicketHandler,
   CreateAssignmentHandler,
   CreateCatalogItemHandler,
   CreateCatalogHandler,
-  AddOperatorToSellerPoolHandler,
-  AddSellerToOperationHandler,
   CreateOperationHandler,
   CreateSellerHandler,
+  CreateTicketHandler,
+  MarkTicketAsPaidHandler,
   RegisterSaleHandler,
+  RemoveCatalogItemFromCatalogHandler,
   StartOperationHandler,
   UpdateCatalogHandler,
-  RemoveCatalogItemFromCatalogHandler,
 ];
 
 const QUERY_HANDLERS = [
-  GetCatalogHandler,
+  GetCatalogByIdHandler,
   GetOperationByIdHandler,
   GetOperationsHandler,
   GetOperatorsHandler,
-  GetSaleHandler,
-  GetSellerHandler,
+  GetSaleByIdHandler,
+  GetSaleByTicketIdHandler,
+  GetSalesByOperationIdHandler,
+  GetSellerByIdHandler,
   GetSellersHandler,
+  GetTicketByIdHandler,
+  GetTicketsByOperationIdHandler,
+  GetTicketsBySellerIdHandler,
   SellerHasOperatorHandler,
 ];
 

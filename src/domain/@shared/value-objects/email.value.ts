@@ -18,7 +18,7 @@ export class Email implements ValueObject<string> {
   }
 
   private static emailIsValid(email: string): boolean {
-    const regex = new RegExp("[a-z0-9]+@[a-z]+\.[a-z]{2,3}");
+    const regex = new RegExp("[a-z0-9]+@[a-zA-Z]+\.[a-z]{2,3}");
 
     return regex.test(email);
   }

@@ -1,29 +1,5 @@
 import { Field, InputType, ObjectType, Int } from "@nestjs/graphql";
 
-// @ObjectType()
-// export class OperationType {
-//   @Field()
-//   operationId!: string;
-
-//   @Field()
-//   name!: string;
-
-//   @Field()
-//   status!: string;
-// }
-
-// @ObjectType()
-// export class SellerType {
-//   @Field()
-//   sellerId!: string;
-
-//   @Field()
-//   name!: string;
-
-//   @Field()
-//   email!: string;
-// }
-
 @InputType()
 export class CreateOperationInput {
   @Field()

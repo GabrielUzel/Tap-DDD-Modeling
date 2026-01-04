@@ -5,9 +5,9 @@ export type OperationStatusType = "PLANNED" | "ON_GOING" | "FINISHED";
 export class OperationStatus implements ValueObject<OperationStatusType> {
   private constructor(private readonly value: OperationStatusType) {}
 
-  static PLANNED = new OperationStatus("PLANNED");
-  static ON_GOING = new OperationStatus("ON_GOING");
-  static FINISHED = new OperationStatus("FINISHED");
+  static readonly PLANNED = new OperationStatus("PLANNED");
+  static readonly ON_GOING = new OperationStatus("ON_GOING");
+  static readonly FINISHED = new OperationStatus("FINISHED");
 
   isPlanned(): boolean {
     return this.value === "PLANNED";
